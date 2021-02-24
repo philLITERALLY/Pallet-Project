@@ -1,16 +1,16 @@
-#!/usr/bin/python3
+'''This module handles the main threads'''
+
 import threading
 import time
 import PySimpleGUI as sg
 import cv2
-import PIL.Image
-import numpy as np
 from os import listdir
 from os.path import isfile, join
 
 # my modules
 import layouts          # UI Layouts
 import program_state    # Programs State
+import image_handling   # Handles image
 
 sg.theme('Light Brown 3')
 
@@ -22,69 +22,7 @@ IMG_NUM = 0
 OUT3 = False
 IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, IN8 = False, False, False, False, True, False, False, False, False
 
-PLANK_TOP = 240
-PLANK_BOT = 380
-    
-# transform positions
-topLeftX, topLeftY = 0, 50
-topRightX, topRightY = 0, 232
-bottomLeftY, bottomRightY = 20, 278
-
-# plot circles on image
-def plotCircles(origImg):
-    _, width, _ = origImg.shape # img size
-
-    cv2.circle(origImg, (topLeftX, topLeftY), 5, (0, 0, 255), 2)   # Top-Left
-    cv2.circle(origImg, (topRightX, topRightY), 5, (0, 0, 255), 2)  # Top-Right
-    cv2.circle(origImg, (width, bottomLeftY), 5, (0, 0, 255), 2)  # Bottom-Left
-    cv2.circle(origImg, (width, bottomRightY), 5, (0, 0, 255), 2) # Bottom-Right
-    
-    cv2.line(origImg, (topLeftX, topLeftY), (width, bottomLeftY), (255,0,0), 1) # Top-Left to Bottom-Left
-    cv2.line(origImg, (topRightX, topRightY), (width, bottomRightY), (255,0,0), 1) # Top-Right to Bottom-Right
-    
-    return origImg
-
-# transform white light image
-def transform(origImg):
-    height, width, _ = origImg.shape # img size
-
-    pts1 = np.float32([[topLeftX, topLeftY], [width, bottomLeftY], [topRightX, topRightY], [width, bottomRightY]])
-    pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
-
-    transformed = cv2.getPerspectiveTransform(pts1, pts2)
-    return cv2.warpPerspective(origImg, transformed, (width, height))
-
-def hangle_img(origImg): 
-    # height of orig img
-    origHeight = origImg.shape[0]
-    origWidth = origImg.shape[1]
-
-    test1 = int(origWidth / 2 - 340)
-    test2 = int(origWidth / 2 + 240)
-
-    origImg = origImg[0:origHeight, test1:test2]
-    origImg = cv2.transpose(origImg) # rotate image
-    
-    # heigh, width and ratio of cropped and rotated img
-    newHeight = origImg.shape[0]
-    newWidth = origImg.shape[1]
-    ratio = newHeight / newWidth
-    
-    # adjust width to image ratio
-    new_width = int(layouts.row_size / ratio)
-
-    # resize image to fit window
-    origImg = cv2.resize(origImg, (new_width, layouts.row_size), PIL.Image.ANTIALIAS)
-
-    # show transform
-    # origImg = plotCircles(origImg)
-
-    # perform transform
-    origImg = transform(origImg)
-
-    return cv2.imencode('.png', origImg)[1].tobytes()
-
-def wait_flag(flag, state):
+def wait_flag(flag, state):    
     while globals()[flag] != state:
         if not program_state.RUN_MODE:
             return False
@@ -114,7 +52,7 @@ def main_thread(window):
             # board in position L & R
             window.FindElement('-OUT-0-').Update(button_color=sg.theme_button_color()) # turn converyor off
             window.FindElement('-OUT-1-').Update(button_color=('black', 'yellow'))     # turn clamp on                
-            time.sleep(2) # time.sleep(0.05)                                           # sleep 50 ms
+            time.sleep(4) # time.sleep(0.05)                                           # sleep 50 ms
             
             if IN7 or IN8:                                                             # if clamps are not closed okay
                 window.FindElement('-OUT-5-').Update(button_color=('black', 'yellow')) # flag fault      
@@ -132,8 +70,8 @@ def main_thread(window):
             frame1 = cv2.imread(CAM2_IMG)                                              # grab camera 1
             frame2 = cv2.imread(CAM1_IMG)                                              # grab camera 2
             
-            side1cam1 = hangle_img(frame1)                                             # process camera 1
-            side1cam2 = hangle_img(frame2)                                             # process camera 2
+            side1cam1 = image_handling.hangle_img(frame1)                              # process camera 1
+            side1cam2 = image_handling.hangle_img(frame2)                              # process camera 2
 
             window['-SIDE-1-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
             window['-SIDE-1-CAM-2-'].update(data=side1cam2)                            # update img for side 1 camera 2
@@ -143,7 +81,6 @@ def main_thread(window):
                 IMG_NUM = 0
             CAM1_IMG = cam1_path + cam1_imgs[IMG_NUM]
             CAM2_IMG = cam2_path + cam2_imgs[IMG_NUM]
-            print('CAM1_IMG: ', CAM1_IMG)
 
             if OUT3:                                                                    # Change Rotate state
                 window.FindElement('-OUT-3-').Update(button_color=sg.theme_button_color())     
@@ -162,8 +99,8 @@ def main_thread(window):
             frame1 = cv2.imread(CAM2_IMG)                                              # grab camera 1
             frame2 = cv2.imread(CAM1_IMG)                                              # grab camera 2
             
-            side1cam1 = hangle_img(frame1)                                             # process camera 1
-            side1cam2 = hangle_img(frame2)                                             # process camera 2
+            side1cam1 = image_handling.hangle_img(frame1)                              # process camera 1
+            side1cam2 = image_handling.hangle_img(frame2)                              # process camera 2
 
             window['-SIDE-2-CAM-1-'].update(data=side1cam1)                            # update img for side 2 camera 1
             window['-SIDE-2-CAM-2-'].update(data=side1cam2)                            # update img for side 2 camera 2
@@ -238,7 +175,6 @@ def main_thread(window):
             OUT3 = False
             IN0, IN1, IN2, IN3, IN4, IN5, IN6, IN7, IN8 = False, False, False, False, True, False, False, False, False
 
-
 # get image files
 cam1_path = 'C:/Users/The Beast/Documents/Paul Pallet/Pallet Project/final_cam/cam1/'
 cam1_imgs = [f for f in listdir(cam1_path) if isfile(join(cam1_path, f))]
@@ -264,7 +200,6 @@ def the_gui(window):
             
         # When the reset button is pressed
         if event == '-RESET-':
-            print('RESET')
             program_state.stop_program()
             break
             
