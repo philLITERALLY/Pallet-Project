@@ -11,6 +11,7 @@ from os.path import isfile, join
 import layouts          # UI Layouts
 import program_state    # Programs State
 import image_handling   # Handles image
+import aio
 
 sg.theme('Light Brown 3')
 
@@ -52,7 +53,7 @@ def main_thread(window):
             # board in position L & R
             window.FindElement('-OUT-0-').Update(button_color=sg.theme_button_color()) # turn converyor off
             window.FindElement('-OUT-1-').Update(button_color=('black', 'yellow'))     # turn clamp on                
-            time.sleep(4) # time.sleep(0.05)                                           # sleep 50 ms
+            time.sleep(2) # time.sleep(0.05)                                           # sleep 50 ms
             
             if IN7 or IN8:                                                             # if clamps are not closed okay
                 window.FindElement('-OUT-5-').Update(button_color=('black', 'yellow')) # flag fault      
@@ -67,11 +68,11 @@ def main_thread(window):
             
             # _, frame1 = camera1.read()
             # _, frame2 = camera2.read()
-            frame1 = cv2.imread(CAM2_IMG)                                              # grab camera 1
-            frame2 = cv2.imread(CAM1_IMG)                                              # grab camera 2
+            frame1 = cv2.imread(CAM1_IMG)                                              # grab camera 1
+            frame2 = cv2.imread(CAM2_IMG)                                              # grab camera 2
             
-            side1cam1 = image_handling.hangle_img(frame1)                              # process camera 1
-            side1cam2 = image_handling.hangle_img(frame2)                              # process camera 2
+            side1cam1 = image_handling.handle_img(frame1, 1)                           # process camera 1
+            side1cam2 = image_handling.handle_img(frame2, 2)                           # process camera 2
 
             window['-SIDE-1-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
             window['-SIDE-1-CAM-2-'].update(data=side1cam2)                            # update img for side 1 camera 2
@@ -96,11 +97,11 @@ def main_thread(window):
             
             # _, frame1 = camera1.read()
             # _, frame2 = camera2.read()
-            frame1 = cv2.imread(CAM2_IMG)                                              # grab camera 1
-            frame2 = cv2.imread(CAM1_IMG)                                              # grab camera 2
+            frame1 = cv2.imread(CAM1_IMG)                                              # grab camera 1
+            frame2 = cv2.imread(CAM2_IMG)                                              # grab camera 2
             
-            side1cam1 = image_handling.hangle_img(frame1)                              # process camera 1
-            side1cam2 = image_handling.hangle_img(frame2)                              # process camera 2
+            side1cam1 = image_handling.handle_img(frame1, 1)                           # process camera 1
+            side1cam2 = image_handling.handle_img(frame2, 2)                           # process camera 2
 
             window['-SIDE-2-CAM-1-'].update(data=side1cam1)                            # update img for side 2 camera 1
             window['-SIDE-2-CAM-2-'].update(data=side1cam2)                            # update img for side 2 camera 2
@@ -214,16 +215,56 @@ def the_gui(window):
             program_state.set_run_mode(False)
 
         # When the increase reject value is pressed
-        if event == '-REJECT+-' and REJECT < 2:
-            REJECT += 1
-            window['-REJECT-LEVEL-'].update(REJECT)
+        if event == '-REJECT+-':
+            # MANUALLY CHOSE IMAGES
+            if IMG_NUM < len(cam1_imgs) - 1:
+                IMG_NUM += 1
+                CAM1_IMG = cam1_path + cam1_imgs[IMG_NUM]
+                CAM2_IMG = cam2_path + cam2_imgs[IMG_NUM]
+                
+                frame1 = cv2.imread(CAM1_IMG)                                              # grab camera 1
+                frame2 = cv2.imread(CAM2_IMG)                                              # grab camera 2
+                
+                side1cam1 = image_handling.handle_img(frame1, 1)                           # process camera 1
+                side1cam2 = image_handling.handle_img(frame2, 2)                           # process camera 2
+
+                window['-SIDE-1-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
+                window['-SIDE-1-CAM-2-'].update(data=side1cam2)    
+                window['-SIDE-2-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
+                window['-SIDE-2-CAM-2-'].update(data=side1cam2)                           # update img for side 1 camera 2
+
+            # TO CHOSE WHICH SIDE
+            # REJECT += 1
+            # window['-REJECT-LEVEL-'].update(REJECT)
+
+            # REJECT %
             # rejectStr = str(REJECT) + '%'
             # window['-REJECT-LEVEL-'].update(rejectStr)
             
         # When the decrease reject value is pressed
-        if event == '-REJECT--' and REJECT > 0:
-            REJECT -= 1
-            window['-REJECT-LEVEL-'].update(REJECT)
+        if event == '-REJECT--':
+            # MANUALLY CHOSE IMAGES
+            if IMG_NUM > 0:
+                IMG_NUM -= 1
+                CAM1_IMG = cam1_path + cam1_imgs[IMG_NUM]
+                CAM2_IMG = cam2_path + cam2_imgs[IMG_NUM]
+
+                frame1 = cv2.imread(CAM1_IMG)                                              # grab camera 1
+                frame2 = cv2.imread(CAM2_IMG)                                              # grab camera 2
+                
+                side1cam1 = image_handling.handle_img(frame1, 1)                           # process camera 1
+                side1cam2 = image_handling.handle_img(frame2, 2)                           # process camera 2
+
+                window['-SIDE-1-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
+                window['-SIDE-1-CAM-2-'].update(data=side1cam2)  
+                window['-SIDE-2-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
+                window['-SIDE-2-CAM-2-'].update(data=side1cam2)                           # update img for side 1 camera 2
+
+            # TO CHOSE WHICH SIDE
+            # REJECT -= 1
+            # window['-REJECT-LEVEL-'].update(REJECT)
+
+            # REJECT %
             # rejectStr = str(REJECT) + '%'
             # window['-REJECT-LEVEL-'].update(rejectStr)
 

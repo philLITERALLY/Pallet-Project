@@ -10,11 +10,13 @@ screen_width, screen_height = sg.Window.get_screen_size()
 
 # calculate row size
 row_padding = default_vert_padding * 5
-row_size = int((screen_height - row_padding) / 5)
+row_size = int((screen_height - row_padding) / 3)
 
 # calculate col size
 full_width = screen_width - (default_horz_padding * 2)
+half_width = int((screen_width - (default_horz_padding * 3)) / 2)
 
+img_width = full_width / 2
 col_padding = default_horz_padding * 3
 col_width = int((full_width - col_padding) / 4)
 
@@ -87,10 +89,14 @@ button_layout = [
 ]
 
 main_layout = [
-    [sg.Image(key='-SIDE-1-CAM-1-', size=(full_width, row_size))],
-    [sg.Image(key='-SIDE-1-CAM-2-', size=(full_width, row_size))],
-    [sg.Image(key='-SIDE-2-CAM-1-', size=(full_width, row_size))],
-    [sg.Image(key='-SIDE-2-CAM-2-', size=(full_width, row_size))],
+    [
+        sg.Image(key='-SIDE-1-CAM-1-', pad=(0, 0), size=(half_width, row_size)),
+        sg.Image(key='-SIDE-1-CAM-2-', pad=(0, 0), size=(half_width, row_size)),
+    ],
+    [
+        sg.Image(key='-SIDE-2-CAM-1-', pad=(0, 0), size=(half_width, row_size)),
+        sg.Image(key='-SIDE-2-CAM-2-', pad=(0, 0), size=(half_width, row_size)),
+    ],
     [
         sg.Column(side1_layout, element_justification='c', size=(col_width, row_size)),
         sg.Column(side2_layout, element_justification='c', size=(col_width, row_size)),
@@ -106,6 +112,7 @@ window = sg.Window(
     main_layout, 
     no_titlebar=True, 
     location=(0,0), 
+    margins=(0,0),
     size=(screen_width,screen_height), 
     # keep_on_top=True,
     element_justification='center',
