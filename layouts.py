@@ -25,7 +25,7 @@ side1_layout = [
     [sg.Text('SIDE 1')],
     [
         sg.Text('% BARK\t\t'),
-        sg.Text('100%', key='-%-BARK-1-')
+        sg.Text('100.0%', key='-%-BARK-1-')
     ],
     [
         sg.Text('% REJECT\t'), 
@@ -38,7 +38,7 @@ side2_layout = [
     [sg.Text('SIDE 2')],
     [
         sg.Text('% BARK\t\t'),
-        sg.Text('100%', key='-%-BARK-2-')
+        sg.Text('100.0%', key='-%-BARK-2-')
     ],
     [
         sg.Text('% REJECT\t'), 

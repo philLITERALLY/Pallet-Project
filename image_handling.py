@@ -15,7 +15,7 @@ planeOffset = 100
 topBoxBound = 100
 botBoxBound = 120
 
-# thresh values for camera 1 boxes
+# thresh settings for camera 1
 cam1BoxCount = 12
 cam1BoxThresh = [
     80,
@@ -36,40 +36,100 @@ cam1BoxThresh = [
     120
 ]
 cam1LeftPositons = [
-    186,
-    306,
-    426,
-    546,
-    676,
-    796,
-    926,
-    1056,
-    1186,
-    1316,
-    1446,
-    1576,
-    1706,
-    1836,
-    1966,
+    195,
+    315,
+    435,
+    560,
+    690,
+    820,
+    950,
+    1075,
+    1205,
+    1335,
+    1470,
+    1600,
+    1725,
+    1850,
+    1975,
     2096
 ]
 cam1RightPositions = [
-    266,
-    386,
-    506,
-    626,
-    756, 
-    886, 
-    1016,
-    1146, 
-    1276,
-    1416,
-    1546,
-    1676,
-    1806,
+    285,
+    400,
+    520,
+    645,
+    775, 
+    900, 
+    1040,
+    1165, 
+    1298,
+    1428,
+    1560,
+    1685,
+    1815,
     1936,
     2066,
     2160
+]
+
+# thresh settings for camera 2
+cam2BoxCount = 15
+cam2BoxThresh = [
+    120, 
+    120, 
+    120,
+    120, 
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    120,
+    100,
+    100,
+    80,
+    80,
+    80
+]
+cam2LeftPositons = [
+    0,
+    55,
+    175,
+    300,
+    430,
+    560,
+    682,
+    820,
+    950,
+    1080,
+    1210,
+    1335,
+    1475,
+    1600,
+    1720,
+    1845,
+    1965
+]
+cam2RightPositions = [
+    25,
+    150,
+    270,
+    400,
+    520,
+    650,
+    790, 
+    915,
+    1045,
+    1180,
+    1310,
+    1440,
+    1570,
+    1700,
+    1815,
+    1935,
+    2030
 ]
 
 # crop image to plank based on offset
@@ -94,30 +154,38 @@ def cropImg(origImg, camera):
     return origImg
 
 # plot transformation circles on image
-def plotCircles(origImg):
+def plotCircles(origImg, camera):
     height, width, _ = origImg.shape # img size
+    
+    leftOffset = 90
+    rightOffset = width - 85
+            
+    if camera == 2:
+        leftOffset = 60
+        rightOffset = width - 110
 
-    leftBound = planeOffset
-    rightBound = width - planeOffset
-
-    cv2.circle(origImg, (leftBound, 0), 5, (0, 0, 255), 2)   # Top-Left
-    cv2.circle(origImg, (rightBound, 0), 5, (0, 0, 255), 2)  # Top-Right
+    cv2.circle(origImg, (leftOffset, 0), 5, (0, 0, 255), 2)   # Top-Left
+    cv2.circle(origImg, (rightOffset, 0), 5, (0, 0, 255), 2)  # Top-Right
     cv2.circle(origImg, (0, height), 5, (0, 0, 255), 2)  # Bottom-Left
     cv2.circle(origImg, (width, height), 5, (0, 0, 255), 2) # Bottom-Right
     
-    cv2.line(origImg, (leftBound, 0), (0, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
-    cv2.line(origImg, (rightBound, 0), (width, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
+    cv2.line(origImg, (leftOffset, 0), (0, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
+    cv2.line(origImg, (rightOffset, 0), (width, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
     
     return origImg
 
 # transform image to plane
-def transform(origImg):
+def transform(origImg, camera):
     height, width, _ = origImg.shape # img size
+    
+    leftOffset = 110
+    rightOffset = width - 105
+            
+    if camera == 2:
+        leftOffset = 90
+        rightOffset = width - 130
 
-    leftBound = planeOffset
-    rightBound = width - planeOffset
-
-    pts1 = np.float32([[leftBound, 0], [rightBound, 0], [0, height], [width, height]])
+    pts1 = np.float32([[leftOffset, 0], [rightOffset, 0], [0, height], [width, height]])
     pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
 
     transformed = cv2.getPerspectiveTransform(pts1, pts2)
@@ -132,8 +200,8 @@ def rotateImg(origImg, camera):
 
     return origImg
 
+# thresh image and return black vs white count
 def threshImg(origImg, camera):
-    # heigh, width and ratio of cropped and rotated img
     origHeight, _, _ = origImg.shape
 
     # grey image
@@ -154,10 +222,24 @@ def threshImg(origImg, camera):
             else:
                 threshImg = cv2.hconcat([threshImg, newThresh])
     else:
-        _, threshImg = cv2.threshold(greyImg, 140, 255, 0)
+        for x in range(0, cam2BoxCount):
+            origImg = cv2.rectangle(origImg, (cam2LeftPositons[x], topBoxBound), (cam2RightPositions[x], origHeight - botBoxBound), (255, 0, 0), 5)
+            
+            newThresh = greyImg[topBoxBound:origHeight - botBoxBound, cam2LeftPositons[x]:cam2RightPositions[x]].copy()
+            _, newThresh = cv2.threshold(newThresh, cam2BoxThresh[x], 255, 0)
 
-    return threshImg, 12
+            if threshImg is None:
+                threshImg = newThresh
+            else:
+                threshImg = cv2.hconcat([threshImg, newThresh])
 
+    totalPixels = threshImg.size
+    whitePixels = cv2.countNonZero(threshImg)
+    blackPixels = totalPixels - whitePixels
+
+    return threshImg, str(round(blackPixels / totalPixels * 100, 2)) + '%'
+
+# resize img to fit ui
 def resizeImg(origImg):    
     # heigh, width and ratio of cropped and rotated img
     origHeight, origWidth = origImg.shape[0], origImg.shape[1]
@@ -195,19 +277,19 @@ def handle_img(origImg, camera):
     origImg = cropImg(origImg, camera)
 
     # show transform
-    # origImg = plotCircles(origImg)
+    # origImg = plotCircles(origImg, camera)
 
     # perform transform
-    origImg = transform(origImg)
+    origImg = transform(origImg, camera)
     
     # crop image to plank
     origImg = rotateImg(origImg, camera)
 
     # calculate thresh values
-    threshedImg, percent = threshImg(origImg, camera)
+    threshedImg, barkPercent = threshImg(origImg, camera)
 
     # crop image to plank
-    # origImg = resizeImg(origImg)
-    origImg = resizeImg(threshedImg)
+    origImg = resizeImg(origImg)
+    # origImg = resizeImg(threshedImg)
 
-    return cv2.imencode('.png', origImg)[1].tobytes()
+    return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent

@@ -11,7 +11,7 @@ from os.path import isfile, join
 import layouts          # UI Layouts
 import program_state    # Programs State
 import image_handling   # Handles image
-import aio
+# import aio
 
 sg.theme('Light Brown 3')
 
@@ -46,8 +46,9 @@ def main_thread(window):
             
             rPosition = wait_flag('IN0', True)                                         # wait for board to be in position R
             lPosition = wait_flag('IN1', True)                                         # wait for board to be in position L
-           
-            if not rPosition or not lPosition:                                         # if board is not in position or program is stopped
+            # rPosition = aio.waitInputState(0, True)
+            # lPosition = aio.waitInputState(1, True)           
+            if not rPosition or not lPosition:                                         # if program is stopped
                 continue                                                               # exit loop
 
             # board in position L & R
@@ -55,6 +56,9 @@ def main_thread(window):
             window.FindElement('-OUT-1-').Update(button_color=('black', 'yellow'))     # turn clamp on                
             time.sleep(2) # time.sleep(0.05)                                           # sleep 50 ms
             
+            # FIGURE THIS OUT!!!!!
+            # clampR = aio.getInputState(7)
+            # clampL = aio.getInputState(8)
             if IN7 or IN8:                                                             # if clamps are not closed okay
                 window.FindElement('-OUT-5-').Update(button_color=('black', 'yellow')) # flag fault      
                 program_state.set_run_mode(False)                                      # stop program
@@ -63,6 +67,7 @@ def main_thread(window):
             window.FindElement('-OUT-2-').Update(button_color=('black', 'yellow'))     # turn lift on   
             
             liftUp = wait_flag('IN3', True)                                            # wait for lift up
+            # liftUp = aio.waitInputState(3, True)
             if not liftUp:                                                             # if program is stopped
                 continue                                                               # exit loop
             
@@ -90,8 +95,12 @@ def main_thread(window):
                 window.FindElement('-OUT-3-').Update(button_color=('black', 'yellow'))
                 OUT3 = True
 
+            # currentCCW = aio.getInputState(4)
+            # currentCW = aio.getInputState(5)
             ccwState = wait_flag('IN4', not IN4)                                       # wait for CCW state change
             cwState = wait_flag('IN5', not IN5)                                        # wait for CW state change
+            # ccwState = aio.waitInputState(4, not currentCCW)
+            # cwState = aio.waitInputState(5, not currentCW)
             if not ccwState or not cwState:                                            # if program is stopped
                 continue                                                               # exit loop
             
@@ -133,19 +142,25 @@ def main_thread(window):
                     window.FindElement('-OUT-3-').Update(button_color=('black', 'yellow'))
                     OUT3 = True
 
+                # currentCCW = aio.getInputState(4)
+                # currentCW = aio.getInputState(5)
                 ccwState = wait_flag('IN4', not IN4)                                       # wait for CCW state change
                 cwState = wait_flag('IN5', not IN5)                                        # wait for CW state change
+                # ccwState = aio.waitInputState(4, not currentCCW)
+                # cwState = aio.waitInputState(5, not currentCW)
                 if not ccwState or not cwState:                                            # if program is stopped
                     continue                                                               # exit loop
 
             # if side 1 or 2
             window.FindElement('-OUT-2-').Update(button_color=sg.theme_button_color()) # turn lift off
-            liftDown = wait_flag('IN2', True)                                          # wait for lift down
+            liftDown = wait_flag('IN2', True)                                          # wait for lift down            
+            # liftDown = aio.waitInputState(2, True)
             if not liftDown:                                                           # if program is stopped
                 continue                                                               # exit loop
 
             window.FindElement('-OUT-1-').Update(button_color=sg.theme_button_color()) # turn clamp off  
             clampOpen = wait_flag('IN6', True)                                         # wait for clamp open
+            # clampOpen = aio.waitInputState(6, True)
             if not clampOpen:                                                          # if program is stopped
                 continue                                                               # exit loop  
 
@@ -225,13 +240,16 @@ def the_gui(window):
                 frame1 = cv2.imread(CAM1_IMG)                                              # grab camera 1
                 frame2 = cv2.imread(CAM2_IMG)                                              # grab camera 2
                 
-                side1cam1 = image_handling.handle_img(frame1, 1)                           # process camera 1
-                side1cam2 = image_handling.handle_img(frame2, 2)                           # process camera 2
+                side1cam1, side1cam1Bark = image_handling.handle_img(frame1, 1)                           # process camera 1
+                side1cam2, side1cam2Bark = image_handling.handle_img(frame2, 2)                           # process camera 2
 
                 window['-SIDE-1-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
                 window['-SIDE-1-CAM-2-'].update(data=side1cam2)    
                 window['-SIDE-2-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
                 window['-SIDE-2-CAM-2-'].update(data=side1cam2)                           # update img for side 1 camera 2
+
+                window['-%-BARK-1-'].update(side1cam1Bark)
+                window['-%-BARK-2-'].update(side1cam2Bark)
 
             # TO CHOSE WHICH SIDE
             # REJECT += 1
@@ -252,13 +270,16 @@ def the_gui(window):
                 frame1 = cv2.imread(CAM1_IMG)                                              # grab camera 1
                 frame2 = cv2.imread(CAM2_IMG)                                              # grab camera 2
                 
-                side1cam1 = image_handling.handle_img(frame1, 1)                           # process camera 1
-                side1cam2 = image_handling.handle_img(frame2, 2)                           # process camera 2
+                side1cam1, side1cam1Bark = image_handling.handle_img(frame1, 1)            # process camera 1
+                side1cam2, side1cam2Bark = image_handling.handle_img(frame2, 2)            # process camera 2
 
                 window['-SIDE-1-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
-                window['-SIDE-1-CAM-2-'].update(data=side1cam2)  
+                window['-SIDE-1-CAM-2-'].update(data=side1cam2)                            # update img for side 1 camera 1 
                 window['-SIDE-2-CAM-1-'].update(data=side1cam1)                            # update img for side 1 camera 1
-                window['-SIDE-2-CAM-2-'].update(data=side1cam2)                           # update img for side 1 camera 2
+                window['-SIDE-2-CAM-2-'].update(data=side1cam2)                            # update img for side 1 camera 2
+
+                window['-%-BARK-1-'].update(side1cam1Bark)
+                window['-%-BARK-2-'].update(side1cam2Bark)
 
             # TO CHOSE WHICH SIDE
             # REJECT -= 1
