@@ -7,6 +7,7 @@ import PIL.Image
 # my modules
 import layouts          # UI Layouts
 import program_state    # Programs State
+import admin_settings   # Admin settings
 
 plankWidth = 300
 midOffsetCam1 = -40
@@ -20,132 +21,132 @@ botBoxBound = 120
 cam1BoxCount = 12
 def cam1BoxThresh():
     return [
-        80 + program_state.CAM1_THRESH,
-        80 + program_state.CAM1_THRESH,
-        100 + program_state.CAM1_THRESH,
-        100 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH, 
-        120 + program_state.CAM1_THRESH, 
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH, 
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH,
-        120 + program_state.CAM1_THRESH
+        80 + admin_settings.CAM1_THRESH,
+        80 + admin_settings.CAM1_THRESH,
+        100 + admin_settings.CAM1_THRESH,
+        100 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH, 
+        120 + admin_settings.CAM1_THRESH, 
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH, 
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH,
+        120 + admin_settings.CAM1_THRESH
     ]
 def cam1LeftPositions():
     return [
-        195 + program_state.CAM1_BOX_POS_LR,
-        315 + program_state.CAM1_BOX_POS_LR,
-        435 + program_state.CAM1_BOX_POS_LR,
-        560 + program_state.CAM1_BOX_POS_LR,
-        690 + program_state.CAM1_BOX_POS_LR,
-        820 + program_state.CAM1_BOX_POS_LR,
-        950 + program_state.CAM1_BOX_POS_LR,
-        1075 + program_state.CAM1_BOX_POS_LR,
-        1205 + program_state.CAM1_BOX_POS_LR,
-        1335 + program_state.CAM1_BOX_POS_LR,
-        1470 + program_state.CAM1_BOX_POS_LR,
-        1600 + program_state.CAM1_BOX_POS_LR,
-        1725 + program_state.CAM1_BOX_POS_LR,
-        1850 + program_state.CAM1_BOX_POS_LR,
-        1975 + program_state.CAM1_BOX_POS_LR,
-        2096 + program_state.CAM1_BOX_POS_LR
+        195 + admin_settings.CAM1_BOX_POS_LR,
+        315 + admin_settings.CAM1_BOX_POS_LR,
+        435 + admin_settings.CAM1_BOX_POS_LR,
+        560 + admin_settings.CAM1_BOX_POS_LR,
+        690 + admin_settings.CAM1_BOX_POS_LR,
+        820 + admin_settings.CAM1_BOX_POS_LR,
+        950 + admin_settings.CAM1_BOX_POS_LR,
+        1075 + admin_settings.CAM1_BOX_POS_LR,
+        1205 + admin_settings.CAM1_BOX_POS_LR,
+        1335 + admin_settings.CAM1_BOX_POS_LR,
+        1470 + admin_settings.CAM1_BOX_POS_LR,
+        1600 + admin_settings.CAM1_BOX_POS_LR,
+        1725 + admin_settings.CAM1_BOX_POS_LR,
+        1850 + admin_settings.CAM1_BOX_POS_LR,
+        1975 + admin_settings.CAM1_BOX_POS_LR,
+        2096 + admin_settings.CAM1_BOX_POS_LR
     ]
 def cam1RightPositions():
     return [
-        285 + program_state.CAM1_BOX_POS_LR,
-        400 + program_state.CAM1_BOX_POS_LR,
-        520 + program_state.CAM1_BOX_POS_LR,
-        645 + program_state.CAM1_BOX_POS_LR,
-        775 + program_state.CAM1_BOX_POS_LR, 
-        900 + program_state.CAM1_BOX_POS_LR, 
-        1040 + program_state.CAM1_BOX_POS_LR,
-        1165 + program_state.CAM1_BOX_POS_LR, 
-        1298 + program_state.CAM1_BOX_POS_LR,
-        1428 + program_state.CAM1_BOX_POS_LR,
-        1560 + program_state.CAM1_BOX_POS_LR,
-        1685 + program_state.CAM1_BOX_POS_LR,
-        1815 + program_state.CAM1_BOX_POS_LR,
-        1936 + program_state.CAM1_BOX_POS_LR,
-        2066 + program_state.CAM1_BOX_POS_LR,
-        2160 + program_state.CAM1_BOX_POS_LR
+        285 + admin_settings.CAM1_BOX_POS_LR,
+        400 + admin_settings.CAM1_BOX_POS_LR,
+        520 + admin_settings.CAM1_BOX_POS_LR,
+        645 + admin_settings.CAM1_BOX_POS_LR,
+        775 + admin_settings.CAM1_BOX_POS_LR, 
+        900 + admin_settings.CAM1_BOX_POS_LR, 
+        1040 + admin_settings.CAM1_BOX_POS_LR,
+        1165 + admin_settings.CAM1_BOX_POS_LR, 
+        1298 + admin_settings.CAM1_BOX_POS_LR,
+        1428 + admin_settings.CAM1_BOX_POS_LR,
+        1560 + admin_settings.CAM1_BOX_POS_LR,
+        1685 + admin_settings.CAM1_BOX_POS_LR,
+        1815 + admin_settings.CAM1_BOX_POS_LR,
+        1936 + admin_settings.CAM1_BOX_POS_LR,
+        2066 + admin_settings.CAM1_BOX_POS_LR,
+        2160 + admin_settings.CAM1_BOX_POS_LR
     ]
 def cam1TopBound():
-    return topBoxBound + program_state.CAM1_BOX_POS_UD - program_state.BOARD_WIDTH
+    return topBoxBound + admin_settings.CAM1_BOX_POS_UD - admin_settings.BOARD_WIDTH
 def cam1BotBound():
-    return botBoxBound - program_state.CAM1_BOX_POS_UD - program_state.BOARD_WIDTH
+    return botBoxBound - admin_settings.CAM1_BOX_POS_UD - admin_settings.BOARD_WIDTH
 
 # thresh settings for camera 2
 cam2BoxCount = 15
 def cam2BoxThresh():
     return [
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        120 + program_state.CAM2_THRESH,
-        100 + program_state.CAM2_THRESH,
-        100 + program_state.CAM2_THRESH,
-        80 + program_state.CAM2_THRESH,
-        80 + program_state.CAM2_THRESH,
-        80 + program_state.CAM2_THRESH
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        120 + admin_settings.CAM2_THRESH,
+        100 + admin_settings.CAM2_THRESH,
+        100 + admin_settings.CAM2_THRESH,
+        80 + admin_settings.CAM2_THRESH,
+        80 + admin_settings.CAM2_THRESH,
+        80 + admin_settings.CAM2_THRESH
     ]
 def cam2LeftPositons():
     return [
-        0 + program_state.CAM2_BOX_POS_LR,
-        55 + program_state.CAM2_BOX_POS_LR,
-        175 + program_state.CAM2_BOX_POS_LR,
-        300 + program_state.CAM2_BOX_POS_LR,
-        430 + program_state.CAM2_BOX_POS_LR,
-        560 + program_state.CAM2_BOX_POS_LR,
-        682 + program_state.CAM2_BOX_POS_LR,
-        820 + program_state.CAM2_BOX_POS_LR,
-        950 + program_state.CAM2_BOX_POS_LR,
-        1080 + program_state.CAM2_BOX_POS_LR,
-        1210 + program_state.CAM2_BOX_POS_LR,
-        1335 + program_state.CAM2_BOX_POS_LR,
-        1475 + program_state.CAM2_BOX_POS_LR,
-        1600 + program_state.CAM2_BOX_POS_LR,
-        1720 + program_state.CAM2_BOX_POS_LR,
-        1845 + program_state.CAM2_BOX_POS_LR,
-        1965 + program_state.CAM2_BOX_POS_LR
+        0 + admin_settings.CAM2_BOX_POS_LR,
+        55 + admin_settings.CAM2_BOX_POS_LR,
+        175 + admin_settings.CAM2_BOX_POS_LR,
+        300 + admin_settings.CAM2_BOX_POS_LR,
+        430 + admin_settings.CAM2_BOX_POS_LR,
+        560 + admin_settings.CAM2_BOX_POS_LR,
+        682 + admin_settings.CAM2_BOX_POS_LR,
+        820 + admin_settings.CAM2_BOX_POS_LR,
+        950 + admin_settings.CAM2_BOX_POS_LR,
+        1080 + admin_settings.CAM2_BOX_POS_LR,
+        1210 + admin_settings.CAM2_BOX_POS_LR,
+        1335 + admin_settings.CAM2_BOX_POS_LR,
+        1475 + admin_settings.CAM2_BOX_POS_LR,
+        1600 + admin_settings.CAM2_BOX_POS_LR,
+        1720 + admin_settings.CAM2_BOX_POS_LR,
+        1845 + admin_settings.CAM2_BOX_POS_LR,
+        1965 + admin_settings.CAM2_BOX_POS_LR
     ]
 def cam2RightPositions():
     return [
-        25 + program_state.CAM2_BOX_POS_LR,
-        150 + program_state.CAM2_BOX_POS_LR,
-        270 + program_state.CAM2_BOX_POS_LR,
-        400 + program_state.CAM2_BOX_POS_LR,
-        520 + program_state.CAM2_BOX_POS_LR,
-        650 + program_state.CAM2_BOX_POS_LR,
-        790 + program_state.CAM2_BOX_POS_LR, 
-        915 + program_state.CAM2_BOX_POS_LR,
-        1045 + program_state.CAM2_BOX_POS_LR,
-        1180 + program_state.CAM2_BOX_POS_LR,
-        1310 + program_state.CAM2_BOX_POS_LR,
-        1440 + program_state.CAM2_BOX_POS_LR,
-        1570 + program_state.CAM2_BOX_POS_LR,
-        1700 + program_state.CAM2_BOX_POS_LR,
-        1815 + program_state.CAM2_BOX_POS_LR,
-        1935 + program_state.CAM2_BOX_POS_LR,
-        2030 + program_state.CAM2_BOX_POS_LR
+        25 + admin_settings.CAM2_BOX_POS_LR,
+        150 + admin_settings.CAM2_BOX_POS_LR,
+        270 + admin_settings.CAM2_BOX_POS_LR,
+        400 + admin_settings.CAM2_BOX_POS_LR,
+        520 + admin_settings.CAM2_BOX_POS_LR,
+        650 + admin_settings.CAM2_BOX_POS_LR,
+        790 + admin_settings.CAM2_BOX_POS_LR, 
+        915 + admin_settings.CAM2_BOX_POS_LR,
+        1045 + admin_settings.CAM2_BOX_POS_LR,
+        1180 + admin_settings.CAM2_BOX_POS_LR,
+        1310 + admin_settings.CAM2_BOX_POS_LR,
+        1440 + admin_settings.CAM2_BOX_POS_LR,
+        1570 + admin_settings.CAM2_BOX_POS_LR,
+        1700 + admin_settings.CAM2_BOX_POS_LR,
+        1815 + admin_settings.CAM2_BOX_POS_LR,
+        1935 + admin_settings.CAM2_BOX_POS_LR,
+        2030 + admin_settings.CAM2_BOX_POS_LR
     ]
 def cam2TopBound():
-    return topBoxBound + program_state.CAM2_BOX_POS_UD - program_state.BOARD_WIDTH
+    return topBoxBound + admin_settings.CAM2_BOX_POS_UD - admin_settings.BOARD_WIDTH
 def cam2BotBound():
-    return botBoxBound - program_state.CAM2_BOX_POS_UD - program_state.BOARD_WIDTH
+    return botBoxBound - admin_settings.CAM2_BOX_POS_UD - admin_settings.BOARD_WIDTH
 
 # crop image to plank based on offset
 def cropImg(origImg, camera):
@@ -172,12 +173,12 @@ def cropImg(origImg, camera):
 def plotCircles(origImg, camera):
     height, width, _ = origImg.shape # img size
     
-    leftOffset = program_state.CAM1_TRANS_LEFT
-    rightOffset = width - program_state.CAM1_TRANS_RIGHT
+    leftOffset = admin_settings.CAM1_TRANS_LEFT
+    rightOffset = width - admin_settings.CAM1_TRANS_RIGHT
             
     if camera == 2:
-        leftOffset = program_state.CAM2_TRANS_LEFT
-        rightOffset = width - program_state.CAM2_TRANS_RIGHT
+        leftOffset = admin_settings.CAM2_TRANS_LEFT
+        rightOffset = width - admin_settings.CAM2_TRANS_RIGHT
 
     cv2.circle(origImg, (leftOffset, 0), 5, (0, 0, 255), 2)   # Top-Left
     cv2.circle(origImg, (rightOffset, 0), 5, (0, 0, 255), 2)  # Top-Right
@@ -193,12 +194,12 @@ def plotCircles(origImg, camera):
 def transform(origImg, camera):
     height, width, _ = origImg.shape # img size
     
-    leftOffset = program_state.CAM1_TRANS_LEFT
-    rightOffset = width - program_state.CAM1_TRANS_RIGHT
+    leftOffset = admin_settings.CAM1_TRANS_LEFT
+    rightOffset = width - admin_settings.CAM1_TRANS_RIGHT
             
     if camera == 2:
-        leftOffset = program_state.CAM2_TRANS_LEFT
-        rightOffset = width - program_state.CAM2_TRANS_RIGHT
+        leftOffset = admin_settings.CAM2_TRANS_LEFT
+        rightOffset = width - admin_settings.CAM2_TRANS_RIGHT
 
     pts1 = np.float32([[leftOffset, 0], [rightOffset, 0], [0, height], [width, height]])
     pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
@@ -289,7 +290,7 @@ def resizeImg(origImg):
     return origImg
 
 # main img function
-def handle_img(origImg, camera, ignoreFlags): 
+def main(origImg, camera, ignoreFlags): 
 
     # crop image to plank
     origImg = cropImg(origImg, camera)

@@ -26,7 +26,7 @@ board_settings = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [sg.Text('BOARD WIDTH')],
     [
-        sg.Button('X', key='-WIDTH-X-', size=(4, 2)),
+        sg.Button('70', key='-WIDTH-70-', size=(4, 2)),
         sg.Button('96', key='-WIDTH-96-', size=(4, 2), button_color=('black', 'yellow')), # default value
         sg.Button('120', key='-WIDTH-120-', size=(4, 2))
     ],
@@ -42,8 +42,8 @@ stats_layout = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [sg.Button('RESET', key='-RESET-', size=(8, 2))],
     [sg.Image(size=(col_width, 20))], # extra padding
-    [sg.Text('% PASSED:- 100.00%')],
-    [sg.Text('TOTAL INSPECTED:- 1234')],
+    [sg.Text('% PASSED:- 0%', key='-TOTAL-PASSED-')],
+    [sg.Text('TOTAL INSPECTED:- 0', key='-TOTAL-INSPECTED-')],
 ]
 
 reject_layout = [
@@ -147,33 +147,6 @@ cancel_layout = [
     [sg.Button('CANCEL', key='-CANCEL-', size=(15, 5))]
 ]
 
-in_out_layout = [
-    [sg.Image(size=(col_width, 1))], # to help center items
-    [sg.Text('INPUTS')],
-    [
-        sg.Button('R', key='-IN-0-'),
-        sg.Button('L', key='-IN-1-'),
-        sg.Button('DWN', key='-IN-2-'),
-        sg.Button('UP', key='-IN-3-'),
-        sg.Button('CCW', key='-IN-4-', button_color=('black', 'yellow'))
-    ],
-    [
-        sg.Button('CW', key='-IN-5-'),
-        sg.Button('OPN', key='-IN-6-'),
-        sg.Button('CLDR', key='-IN-7-'),
-        sg.Button('CLDL', key='-IN-8-')
-    ],
-    [sg.Text('OUTPUTS')],
-    [
-        sg.Button('CVYR', key='-OUT-0-'),
-        sg.Button('CLMP', key='-OUT-1-'),
-        sg.Button('LIFT', key='-OUT-2-'),
-        sg.Button('ROT', key='-OUT-3-'),
-        sg.Button('REJ', key='-OUT-4-'),
-        sg.Button('FLT', key='-OUT-5-')
-    ]
-]
-
 view = False
 admin = True
 
@@ -200,11 +173,10 @@ main_layout = [
     [
         # view layout
         sg.Column([[
+            sg.Column(setup_layout, element_justification='c', size=(col_width, row_size), visible=True),   # admin setup button
             sg.Column(board_settings, element_justification='c', size=(col_width, row_size)), # board settings (width/height)
             sg.Column(stats_layout, element_justification='c', size=(col_width, row_size)),   # stats of current run
             sg.Column(reject_layout, element_justification='c', size=(col_width, row_size)),  # bark reject settings
-            sg.Column(setup_layout, element_justification='c', size=(col_width, row_size), visible=True),   # admin setup button
-            sg.Column(in_out_layout, element_justification='c', size=(col_width, row_size), visible=False), # in/out buttons
         ]], key='-VIEW-LAYOUT-', visible=True),
         # admin layout
         sg.Column([[
@@ -227,6 +199,6 @@ window = sg.Window(
     size=(screen_width,screen_height), 
     # keep_on_top=True,
     element_justification='center',
-    font=("Helvetica", font_size),
+    font=('Helvetica', font_size),
     finalize=True
 )

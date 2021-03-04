@@ -2,7 +2,8 @@
 import PySimpleGUI as sg
 
 # my modules
-import program_state
+import program_state    # Programs State
+import admin_settings   # Admin settings
 
 def admin(event, window):
     window.FindElement('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
@@ -67,115 +68,104 @@ def admin(event, window):
         window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
 
 def board(event, window):
-    if event == '-WIDTH-X-':
-        program_state.set_board_width(30)
-        window.FindElement('-WIDTH-X-').Update(button_color=('black', 'yellow'))
+    if event == '-WIDTH-70-': # 70
+        admin_settings.set_board_width(-52)
+        window.FindElement('-WIDTH-70-').Update(button_color=('black', 'yellow'))
 
         window.FindElement('-WIDTH-96-').Update(button_color=sg.theme_button_color())
         window.FindElement('-WIDTH-120-').Update(button_color=sg.theme_button_color())
     
     if event == '-WIDTH-96-':
-        program_state.set_board_width(0) # 0 is neutral
+        admin_settings.set_board_width(0) # 0 is neutral
         window.FindElement('-WIDTH-96-').Update(button_color=('black', 'yellow'))
         
-        window.FindElement('-WIDTH-X-').Update(button_color=sg.theme_button_color())
+        window.FindElement('-WIDTH-70-').Update(button_color=sg.theme_button_color())
         window.FindElement('-WIDTH-120-').Update(button_color=sg.theme_button_color())
     
     if event == '-WIDTH-120-':
-        program_state.set_board_width(47)
+        admin_settings.set_board_width(47)
         window.FindElement('-WIDTH-120-').Update(button_color=('black', 'yellow'))
         
-        window.FindElement('-WIDTH-X-').Update(button_color=sg.theme_button_color())
+        window.FindElement('-WIDTH-70-').Update(button_color=sg.theme_button_color())
         window.FindElement('-WIDTH-96-').Update(button_color=sg.theme_button_color())
 
     if event == '-LENGTH--':
-        newLength = program_state.BOARD_LENGTH - 10
-        program_state.set_board_length(newLength)
-        window['-BOARD-LENGTH-'].update(str(newLength))
+        newLength = admin_settings.BOARD_LENGTH - 10
+        admin_settings.set_board_length(newLength)
+        window.FindElement('-BOARD-LENGTH-').update(str(newLength))
 
     if event == '-LENGTH+-':
-        newLength = program_state.BOARD_LENGTH + 10
-        program_state.set_board_length(newLength)
-        window['-BOARD-LENGTH-'].update(str(newLength))
+        newLength = admin_settings.BOARD_LENGTH + 10
+        admin_settings.set_board_length(newLength)
+        window.FindElement('-BOARD-LENGTH-').update(str(newLength))
 
 def transform(event, window):
     if event == '-CAM1-TOP--':
-        program_state.set_cam1_trans_right(2)
+        admin_settings.set_cam1_trans_right(2)
 
     if event == '-CAM1-TOP+-':
-        program_state.set_cam1_trans_right(-2)
+        admin_settings.set_cam1_trans_right(-2)
 
     if event == '-CAM1-BOT--':
-        program_state.set_cam1_trans_left(-2)
+        admin_settings.set_cam1_trans_left(-2)
 
     if event == '-CAM1-BOT+-':
-        program_state.set_cam1_trans_left(2)
+        admin_settings.set_cam1_trans_left(2)
 
     if event == '-CAM2-TOP--':
-        program_state.set_cam2_trans_left(2)
+        admin_settings.set_cam2_trans_left(2)
 
     if event == '-CAM2-TOP+-':
-        program_state.set_cam2_trans_left(-2)
+        admin_settings.set_cam2_trans_left(-2)
 
     if event == '-CAM2-BOT--':
-        program_state.set_cam2_trans_right(-2)
+        admin_settings.set_cam2_trans_right(-2)
 
     if event == '-CAM2-BOT+-':
-        program_state.set_cam2_trans_right(2)
+        admin_settings.set_cam2_trans_right(2)
 
-    window['-CAM1-TOP-'].update(str(program_state.CAM1_TRANS_RIGHT))
-    window['-CAM1-BOT-'].update(str(program_state.CAM1_TRANS_LEFT))
-    window['-CAM2-TOP-'].update(str(program_state.CAM2_TRANS_LEFT))
-    window['-CAM2-BOT-'].update(str(program_state.CAM2_TRANS_RIGHT))
+    window.FindElement('-CAM1-TOP-').update(str(admin_settings.CAM1_TRANS_RIGHT))
+    window.FindElement('-CAM1-BOT-').update(str(admin_settings.CAM1_TRANS_LEFT))
+    window.FindElement('-CAM2-TOP-').update(str(admin_settings.CAM2_TRANS_LEFT))
+    window.FindElement('-CAM2-BOT-').update(str(admin_settings.CAM2_TRANS_RIGHT))
 
 def boxes(event):
     if event == '-CAM1-LEFT-':
-        program_state.set_cam1_box_lr(-5)
+        admin_settings.set_cam1_box_lr(-5)
 
     if event == '-CAM1-RIGHT-':
-        program_state.set_cam1_box_lr(5)
+        admin_settings.set_cam1_box_lr(5)
 
     if event == '-CAM1-UP-':
-        program_state.set_cam1_box_ud(-5)
+        admin_settings.set_cam1_box_ud(-5)
 
     if event == '-CAM1-DOWN-':
-        program_state.set_cam1_box_ud(5)
+        admin_settings.set_cam1_box_ud(5)
 
     if event == '-CAM2-LEFT-':
-        program_state.set_cam2_box_lr(-5)
+        admin_settings.set_cam2_box_lr(-5)
 
     if event == '-CAM2-RIGHT-':
-        program_state.set_cam2_box_lr(5)
+        admin_settings.set_cam2_box_lr(5)
 
     if event == '-CAM2-UP-':
-        program_state.set_cam2_box_ud(-5)
+        admin_settings.set_cam2_box_ud(-5)
 
     if event == '-CAM2-DOWN-':
-        program_state.set_cam2_box_ud(5)
+        admin_settings.set_cam2_box_ud(5)
 
 def thresh(event, window):
     if event == '-CAM1-THRESH--':
-        program_state.set_cam1_thresh(-5)
+        admin_settings.set_cam1_thresh(-5)
 
     if event == '-CAM1-THRESH+-':
-        program_state.set_cam1_thresh(5)
+        admin_settings.set_cam1_thresh(5)
 
     if event == '-CAM2-THRESH--':
-        program_state.set_cam2_thresh(-5)
+        admin_settings.set_cam2_thresh(-5)
 
     if event == '-CAM2-THRESH+-':
-        program_state.set_cam2_thresh(5)
+        admin_settings.set_cam2_thresh(5)
     
-    window['-CAM1-THRESH-'].update(str(program_state.CAM1_THRESH))
-    window['-CAM2-THRESH-'].update(str(program_state.CAM2_THRESH))
-
-
-
-
-
-
-
-
-
-
-
+    window.FindElement('-CAM1-THRESH-').update(str(admin_settings.CAM1_THRESH))
+    window.FindElement('-CAM2-THRESH-').update(str(admin_settings.CAM2_THRESH))
