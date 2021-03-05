@@ -1,6 +1,7 @@
 '''This module handles the programs state'''
 
 RUN_MODE = False
+FAULT = False
 STOP_PROGRAM = False
 SHOW_TRANSFORM = False
 THRESH_MODE = False
@@ -14,6 +15,10 @@ ROTATE_STATE = 0
 def set_run_mode(value):
     global RUN_MODE
     RUN_MODE = value
+
+def set_fault(value):
+    global FAULT
+    FAULT = value
 
 def stop_program():
     global STOP_PROGRAM

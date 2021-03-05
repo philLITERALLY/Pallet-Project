@@ -39,41 +39,41 @@ def cam1BoxThresh():
     ]
 def cam1LeftPositions():
     return [
-        195 + admin_settings.CAM1_BOX_POS_LR,
-        315 + admin_settings.CAM1_BOX_POS_LR,
-        435 + admin_settings.CAM1_BOX_POS_LR,
-        560 + admin_settings.CAM1_BOX_POS_LR,
-        690 + admin_settings.CAM1_BOX_POS_LR,
-        820 + admin_settings.CAM1_BOX_POS_LR,
-        950 + admin_settings.CAM1_BOX_POS_LR,
-        1075 + admin_settings.CAM1_BOX_POS_LR,
-        1205 + admin_settings.CAM1_BOX_POS_LR,
-        1335 + admin_settings.CAM1_BOX_POS_LR,
-        1470 + admin_settings.CAM1_BOX_POS_LR,
-        1600 + admin_settings.CAM1_BOX_POS_LR,
-        1725 + admin_settings.CAM1_BOX_POS_LR,
-        1850 + admin_settings.CAM1_BOX_POS_LR,
-        1975 + admin_settings.CAM1_BOX_POS_LR,
-        2096 + admin_settings.CAM1_BOX_POS_LR
+        225 + admin_settings.CAM1_BOX_POS_LR,
+        345 + admin_settings.CAM1_BOX_POS_LR,
+        465 + admin_settings.CAM1_BOX_POS_LR,
+        590 + admin_settings.CAM1_BOX_POS_LR,
+        715 + admin_settings.CAM1_BOX_POS_LR,
+        845 + admin_settings.CAM1_BOX_POS_LR,
+        970 + admin_settings.CAM1_BOX_POS_LR,
+        1100 + admin_settings.CAM1_BOX_POS_LR,
+        1225 + admin_settings.CAM1_BOX_POS_LR,
+        1355 + admin_settings.CAM1_BOX_POS_LR,
+        1485 + admin_settings.CAM1_BOX_POS_LR,
+        1615 + admin_settings.CAM1_BOX_POS_LR,
+        1740 + admin_settings.CAM1_BOX_POS_LR,
+        1865 + admin_settings.CAM1_BOX_POS_LR,
+        1990 + admin_settings.CAM1_BOX_POS_LR,
+        2111 + admin_settings.CAM1_BOX_POS_LR
     ]
 def cam1RightPositions():
     return [
-        285 + admin_settings.CAM1_BOX_POS_LR,
-        400 + admin_settings.CAM1_BOX_POS_LR,
-        520 + admin_settings.CAM1_BOX_POS_LR,
-        645 + admin_settings.CAM1_BOX_POS_LR,
-        775 + admin_settings.CAM1_BOX_POS_LR, 
-        900 + admin_settings.CAM1_BOX_POS_LR, 
-        1040 + admin_settings.CAM1_BOX_POS_LR,
-        1165 + admin_settings.CAM1_BOX_POS_LR, 
-        1298 + admin_settings.CAM1_BOX_POS_LR,
-        1428 + admin_settings.CAM1_BOX_POS_LR,
-        1560 + admin_settings.CAM1_BOX_POS_LR,
-        1685 + admin_settings.CAM1_BOX_POS_LR,
-        1815 + admin_settings.CAM1_BOX_POS_LR,
-        1936 + admin_settings.CAM1_BOX_POS_LR,
-        2066 + admin_settings.CAM1_BOX_POS_LR,
-        2160 + admin_settings.CAM1_BOX_POS_LR
+        315 + admin_settings.CAM1_BOX_POS_LR,
+        435 + admin_settings.CAM1_BOX_POS_LR,
+        555 + admin_settings.CAM1_BOX_POS_LR,
+        680 + admin_settings.CAM1_BOX_POS_LR,
+        810 + admin_settings.CAM1_BOX_POS_LR,
+        930 + admin_settings.CAM1_BOX_POS_LR,
+        1060 + admin_settings.CAM1_BOX_POS_LR,
+        1185 + admin_settings.CAM1_BOX_POS_LR,
+        1318 + admin_settings.CAM1_BOX_POS_LR,
+        1448 + admin_settings.CAM1_BOX_POS_LR,
+        1575 + admin_settings.CAM1_BOX_POS_LR,
+        1700 + admin_settings.CAM1_BOX_POS_LR,
+        1830 + admin_settings.CAM1_BOX_POS_LR,
+        1951 + admin_settings.CAM1_BOX_POS_LR,
+        2081 + admin_settings.CAM1_BOX_POS_LR,
+        2175 + admin_settings.CAM1_BOX_POS_LR
     ]
 def cam1TopBound():
     return topBoxBound + admin_settings.CAM1_BOX_POS_UD - admin_settings.BOARD_WIDTH
@@ -115,11 +115,11 @@ def cam2LeftPositons():
         1080 + admin_settings.CAM2_BOX_POS_LR,
         1210 + admin_settings.CAM2_BOX_POS_LR,
         1335 + admin_settings.CAM2_BOX_POS_LR,
-        1475 + admin_settings.CAM2_BOX_POS_LR,
-        1600 + admin_settings.CAM2_BOX_POS_LR,
-        1720 + admin_settings.CAM2_BOX_POS_LR,
-        1845 + admin_settings.CAM2_BOX_POS_LR,
-        1965 + admin_settings.CAM2_BOX_POS_LR
+        1468 + admin_settings.CAM2_BOX_POS_LR,
+        1595 + admin_settings.CAM2_BOX_POS_LR,
+        1723 + admin_settings.CAM2_BOX_POS_LR,
+        1851 + admin_settings.CAM2_BOX_POS_LR,
+        1973 + admin_settings.CAM2_BOX_POS_LR
     ]
 def cam2RightPositions():
     return [
@@ -134,12 +134,12 @@ def cam2RightPositions():
         1045 + admin_settings.CAM2_BOX_POS_LR,
         1180 + admin_settings.CAM2_BOX_POS_LR,
         1310 + admin_settings.CAM2_BOX_POS_LR,
-        1440 + admin_settings.CAM2_BOX_POS_LR,
-        1570 + admin_settings.CAM2_BOX_POS_LR,
-        1700 + admin_settings.CAM2_BOX_POS_LR,
-        1815 + admin_settings.CAM2_BOX_POS_LR,
-        1935 + admin_settings.CAM2_BOX_POS_LR,
-        2030 + admin_settings.CAM2_BOX_POS_LR
+        1435 + admin_settings.CAM2_BOX_POS_LR,
+        1565 + admin_settings.CAM2_BOX_POS_LR,
+        1690 + admin_settings.CAM2_BOX_POS_LR,
+        1818 + admin_settings.CAM2_BOX_POS_LR,
+        1941 + admin_settings.CAM2_BOX_POS_LR,
+        2038 + admin_settings.CAM2_BOX_POS_LR
     ]
 def cam2TopBound():
     return topBoxBound + admin_settings.CAM2_BOX_POS_UD - admin_settings.BOARD_WIDTH
@@ -290,22 +290,24 @@ def resizeImg(origImg):
 # main img function
 def main(origImg, camera, ignoreFlags): 
 
-    # crop image to plank
-    origImg = cropImg(origImg, camera)
+    # # crop image to plank
+    # origImg = cropImg(origImg, camera)
 
-    # show transform
-    if not ignoreFlags and program_state.SHOW_TRANSFORM:
-        origImg = plotCircles(origImg, camera)
+    # # show transform
+    # if not ignoreFlags and program_state.SHOW_TRANSFORM:
+    #     origImg = plotCircles(origImg, camera)
 
-    # perform transform
-    if ignoreFlags or not program_state.SHOW_TRANSFORM:
-        origImg = transform(origImg, camera)
+    # # perform transform
+    # if ignoreFlags or not program_state.SHOW_TRANSFORM:
+    #     origImg = transform(origImg, camera)
     
-    # crop image to plank
-    origImg = rotateImg(origImg, camera)
+    # # crop image to plank
+    # origImg = rotateImg(origImg, camera)
 
-    if ignoreFlags:
-        cv2.imwrite('test_' + str(camera) + '.png', origImg) 
+    if camera == 1:        
+        origImg = cv2.imread("left_side_ruler.png")
+    else:
+        origImg = cv2.imread("right_side_ruler.png")
 
     # calculate thresh values
     threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)
@@ -316,5 +318,6 @@ def main(origImg, camera, ignoreFlags):
     # if thresh mode show thresh image
     if not ignoreFlags and program_state.THRESH_MODE:
         origImg = resizeImg(threshedImg)
+        cv2.imwrite('camera' + str(camera) + '.png', origImg) 
 
     return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent

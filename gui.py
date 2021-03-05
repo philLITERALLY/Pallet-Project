@@ -67,5 +67,18 @@ def main(window):
 
             program_state.set_reject_limit(REJECT)
 
+        # When fault is flagged
+        if event == '-FAULT-':
+            sg.Popup(                               # show popup
+                'Fault',
+                'Clamps not closed correctly',
+                background_color='red',
+                font=("Helvetica", 25),
+                no_titlebar=True,
+                keep_on_top=True
+            )
+            program_state.set_run_mode(False)       # stop running
+            program_state.set_fault(False)          # stop fault
+
     # if user exits the window, then close the window and exit the GUI func
     window.close()

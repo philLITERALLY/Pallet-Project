@@ -189,7 +189,6 @@ main_layout = [
 ]
 
 font_size = int(screen_height / 75) # FIX
-# sg.theme('Light Brown 3')
 window = sg.Window(
     'Pallet Project', 
     main_layout, 

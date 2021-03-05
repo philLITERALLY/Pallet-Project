@@ -4,8 +4,8 @@ import image_handling # image handling
 
 BOARD_WIDTH = 0
 BOARD_LENGTH = 1200
-CAM1_BOX_COUNT = 12
-CAM2_BOX_COUNT = 15
+CAM1_BOX_COUNT = 13
+CAM2_BOX_COUNT = 14
 CAM1_TRANS_LEFT = 110
 CAM2_TRANS_LEFT = 90
 CAM1_TRANS_RIGHT = 105
@@ -25,68 +25,73 @@ def set_board_length(value):
     global BOARD_LENGTH, CAM1_BOX_COUNT, CAM2_BOX_COUNT
     BOARD_LENGTH = value
     
-    pixelValueCam1 = value * (1533 / 1200) # using ratio of plank to pixel find value for cam 1
-    pixelValueCam2 = value * (1848 / 1200) # using ratio of plank to pixel find value for cam 2
-
-    if pixelValueCam1 < 200:
+    if value < 30 * 2:
         CAM1_BOX_COUNT = 1
-    elif pixelValueCam1 < 327:
+    elif value < 80 * 2:
         CAM1_BOX_COUNT = 2
-    elif pixelValueCam1 < 454:
+    elif value < 120 * 2:
         CAM1_BOX_COUNT = 3
-    elif pixelValueCam1 < 580:
+    elif value < 170 * 2:
         CAM1_BOX_COUNT = 4
-    elif pixelValueCam1 < 710:
+    elif value < 215 * 2:
         CAM1_BOX_COUNT = 5
-    elif pixelValueCam1 < 847:
+    elif value < 305 * 2:
         CAM1_BOX_COUNT = 6
-    elif pixelValueCam1 < 974:
+    elif value < 350 * 2:
         CAM1_BOX_COUNT = 7
-    elif pixelValueCam1 < 1105:
+    elif value < 395 * 2:
         CAM1_BOX_COUNT = 8
-    elif pixelValueCam1 < 1232:
+    elif value < 440 * 2:
         CAM1_BOX_COUNT = 9
-    elif pixelValueCam1 < 1360:
+    elif value < 490 * 2:
         CAM1_BOX_COUNT = 10
-    elif pixelValueCam1 < 1492:
+    elif value < 530 * 2:
         CAM1_BOX_COUNT = 11
-    elif pixelValueCam1 < 1543: # ??
+    elif value < 580 * 2:
         CAM1_BOX_COUNT = 12
+    elif value < 620 * 2:
+        CAM1_BOX_COUNT = 13
+    elif value < 670 * 2:
+        CAM1_BOX_COUNT = 14
+    elif value < 710 * 2:
+        CAM1_BOX_COUNT = 15
     else:
-        CAM1_BOX_COUNT = len(image_handling.cam1BoxThresh())
+        CAM1_BOX_COUNT = 16
 
-    if pixelValueCam2 < 158:
+    if value < 20 * 2:
         CAM2_BOX_COUNT = 1
-    elif pixelValueCam2 < 282:
+    elif value < 65 * 2:
         CAM2_BOX_COUNT = 2
-    elif pixelValueCam2 < 408:
+    elif value < 110 * 2:
         CAM2_BOX_COUNT = 3
-    elif pixelValueCam2 < 537:
+    elif value < 155 * 2:
         CAM2_BOX_COUNT = 4
-    elif pixelValueCam2 < 662:
+    elif value < 200 * 2:
         CAM2_BOX_COUNT = 5
-    elif pixelValueCam2 < 797:
+    elif value < 245 * 2:
         CAM2_BOX_COUNT = 6
-    elif pixelValueCam2 < 929:
+    elif value < 290 * 2:
         CAM2_BOX_COUNT = 7
-    elif pixelValueCam2 < 1058:
+    elif value < 338 * 2:
         CAM2_BOX_COUNT = 8
-    elif pixelValueCam2 < 1190:
+    elif value < 382 * 2:
         CAM2_BOX_COUNT = 9
-    elif pixelValueCam2 < 1320:
+    elif value < 430 * 2:
         CAM2_BOX_COUNT = 10
-    elif pixelValueCam2 < 1451:
+    elif value < 470 * 2:
         CAM2_BOX_COUNT = 11
-    elif pixelValueCam2 < 1580:
+    elif value < 520 * 2:
         CAM2_BOX_COUNT = 12
-    elif pixelValueCam2 < 1709:
+    elif value < 562 * 2:
         CAM2_BOX_COUNT = 13
-    elif pixelValueCam2 < 1838:
+    elif value < 610 * 2:
         CAM2_BOX_COUNT = 14
-    elif pixelValueCam2 < 1920: # ??
+    elif value < 655 * 2: 
         CAM2_BOX_COUNT = 15
-    else:
-        CAM2_BOX_COUNT = len(image_handling.cam2BoxThresh())
+    elif value < 720 * 2: 
+        CAM2_BOX_COUNT = 16
+    else: 
+        CAM2_BOX_COUNT = 17
 
 def set_cam1_trans_left(value):
     global CAM1_TRANS_LEFT
@@ -107,6 +112,7 @@ def set_cam2_trans_right(value):
 def set_cam1_box_lr(value):
     global CAM1_BOX_POS_LR
     CAM1_BOX_POS_LR += value
+    print(CAM1_BOX_POS_LR)
 
 def set_cam2_box_lr(value):
     global CAM2_BOX_POS_LR

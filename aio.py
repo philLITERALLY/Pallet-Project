@@ -53,6 +53,7 @@ OUT2 = 0
 OUT3 = 0
 OUT4 = 0
 OUT5 = 0
+OUT10 = 0
 
 # Changes IO array to value
 def calculateIOValue(values):
@@ -63,21 +64,21 @@ def calculateIOValue(values):
 
 # Change a given output state
 def setOutput(outPort, state):
-    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5
+    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT10
 
-    globals()['OUT' + str(outPort)] = state                         # update global variable to new state
+    globals()['OUT' + str(outPort)] = state                          # update global variable to new state
 
-    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5]                   # create output array
-    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output))         # send output
+    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, 0, 0, 0, 0, OUT10] # create output array
+    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output))          # send output
 
 # Pulse a given output
 def pulseOutput(outPort, state):
-    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5
+    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT10
 
-    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5]             # create current state
-    pulseState = initialState[:]                                    # clone current state
-    pulseState[outPort] = state                                     # modify with pulse value
+    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, 0, 0, 0, 0, OUT10] # create current state
+    pulseState = initialState[:]                                           # clone current state
+    pulseState[outPort] = state                                            # modify with pulse value
 
-    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(pulseState))     # send pulse state
-    time.sleep(variables.AIO_WAIT)                                  # sleep for 100 ms
-    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))   # set back to initial state
+    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(pulseState))            # send pulse state
+    time.sleep(variables.AIO_WAIT)                                         # sleep for 100 ms
+    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))          # set back to initial state

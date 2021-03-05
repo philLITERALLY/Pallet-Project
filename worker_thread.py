@@ -1,7 +1,6 @@
 '''This module does the heavy lifting, organises the workflow'''
 
 import PySimpleGUI as sg
-import cv2
 import time
 from os import listdir
 from os.path import isfile, join
@@ -16,16 +15,15 @@ import handle_count     # handles count of stats
 import admin_view       # handles UI when in admin mode
 import reset_view       # clears the UI
 
-# sg.theme('Light Brown 3')
+camera1 = camera_setup.main(0)  # setup camera one
+camera2 = camera_setup.main(1)  # setup camera two
 
 def main(window):
-
-    camera1 = camera_setup.main(0)  # setup camera one
-    camera2 = camera_setup.main(1)  # setup camera two
-
     try:
         while not program_state.STOP_PROGRAM:         
             if program_state.RUN_MODE:                                                     # if running
+
+                aio.setOutput(10, 1)                                                       # turn running light on
                 aio.setOutput(0, 1)                                                        # turn converyor on
                 
                 rPosition = aio.waitInputState(0, True)                                    # wait for board to be in position R
@@ -41,9 +39,15 @@ def main(window):
                 clampR = aio.getInputState(7)
                 clampL = aio.getInputState(8)
                 if clampL or clampR:                                                       # if clamps are not closed
-                    aio.setOutput(5, 1)                                                    # flag fault
-                    program_state.set_run_mode(False)                                      # stop program
-                    continue                                                               # exit loop
+                    aio.setOutput(5, 1)                                                    # turn fault on
+                    program_state.set_fault(True)                                          # let program know we have fault
+                    window.write_event_value('-FAULT-', True)                              # let gui know we have fault
+
+                    while program_state.FAULT:                                             # while program is at fault
+                        aio.pulseOutput(10, 0)                                             # pulse light off
+                        time.sleep(0.5)                                                    # sleep for 500ms
+
+                    continue                                                               # running loop
 
                 aio.setOutput(2, 1)                                                        # turn lift on
                 
@@ -136,14 +140,14 @@ def main(window):
 
                 window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
-                # aio.setOutput(0, 0)                                                        # when stopped turn converyor off
-                # aio.setOutput(1, 0)                                                        # when stopped turn clamp off
-                # aio.setOutput(2, 0)                                                        # when stopped turn lift off
-                # if program_state.ROTATE_STATE == 1:                                          # when stopped turn rotate off
-                #     program_state.toggle_rotate_state()
-                #     aio.setOutput(3, program_state.ROTATE_STATE)
-                # aio.setOutput(4, 0)                                                        # when stopped turn reject off
-                # aio.setOutput(5, 0)                                                        # when stopped turn fault off
+                aio.setOutput(0, 0)                                                        # when stopped turn converyor off
+                aio.setOutput(1, 0)                                                        # when stopped turn clamp off
+                aio.setOutput(2, 0)                                                        # when stopped turn lift off
+                ## if program_state.ROTATE_STATE == 1:                                          # when stopped turn rotate off
+                ##     program_state.toggle_rotate_state()
+                ##     aio.setOutput(3, program_state.ROTATE_STATE)
+                aio.setOutput(4, 0)                                                        # when stopped turn reject off
+                aio.setOutput(5, 0)                                                        # when stopped turn fault off
 
                 if program_state.THRESH_MODE or program_state.THRESH_BOX_MODE or program_state.SHOW_TRANSFORM:         
                     admin_view.main(camera1, camera2, window)
