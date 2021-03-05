@@ -290,24 +290,19 @@ def resizeImg(origImg):
 # main img function
 def main(origImg, camera, ignoreFlags): 
 
-    # # crop image to plank
-    # origImg = cropImg(origImg, camera)
+    # crop image to plank
+    origImg = cropImg(origImg, camera)
 
-    # # show transform
-    # if not ignoreFlags and program_state.SHOW_TRANSFORM:
-    #     origImg = plotCircles(origImg, camera)
+    # show transform
+    if not ignoreFlags and program_state.SHOW_TRANSFORM:
+        origImg = plotCircles(origImg, camera)
 
-    # # perform transform
-    # if ignoreFlags or not program_state.SHOW_TRANSFORM:
-    #     origImg = transform(origImg, camera)
+    # perform transform
+    if ignoreFlags or not program_state.SHOW_TRANSFORM:
+        origImg = transform(origImg, camera)
     
-    # # crop image to plank
-    # origImg = rotateImg(origImg, camera)
-
-    if camera == 1:        
-        origImg = cv2.imread("left_side_ruler.png")
-    else:
-        origImg = cv2.imread("right_side_ruler.png")
+    # crop image to plank
+    origImg = rotateImg(origImg, camera)
 
     # calculate thresh values
     threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)
@@ -318,6 +313,5 @@ def main(origImg, camera, ignoreFlags):
     # if thresh mode show thresh image
     if not ignoreFlags and program_state.THRESH_MODE:
         origImg = resizeImg(threshedImg)
-        cv2.imwrite('camera' + str(camera) + '.png', origImg) 
 
     return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent
