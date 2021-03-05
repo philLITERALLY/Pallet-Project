@@ -9,6 +9,7 @@ CLEAR_RESULTS = False
 REJECT_LIMIT = 10
 TOTAL_INSPECTED = 0
 TOTAL_PASSED = 0
+ROTATE_STATE = 0
 
 def set_run_mode(value):
     global RUN_MODE
@@ -61,3 +62,11 @@ def increase_total_inspected():
 def increase_total_passed():
     global TOTAL_PASSED
     TOTAL_PASSED += 1
+
+def toggle_rotate_state():
+    global ROTATE_STATE
+    
+    if ROTATE_STATE == 1:
+        ROTATE_STATE = 0
+    else:
+        ROTATE_STATE = 1

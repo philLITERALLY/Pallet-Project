@@ -18,7 +18,6 @@ topBoxBound = 100
 botBoxBound = 120
 
 # thresh settings for camera 1
-cam1BoxCount = 12
 def cam1BoxThresh():
     return [
         80 + admin_settings.CAM1_THRESH,
@@ -82,7 +81,6 @@ def cam1BotBound():
     return botBoxBound - admin_settings.CAM1_BOX_POS_UD - admin_settings.BOARD_WIDTH
 
 # thresh settings for camera 2
-cam2BoxCount = 15
 def cam2BoxThresh():
     return [
         120 + admin_settings.CAM2_THRESH,
@@ -218,7 +216,7 @@ def rotateImg(origImg, camera):
 
 # thresh image and return black vs white count
 def threshImg(origImg, camera, ignoreFlags):
-    height, _, _ = origImg.shape
+    height, width, _ = origImg.shape
 
     # grey image
     greyImg = cv2.cvtColor(origImg, cv2.COLOR_BGR2GRAY)
@@ -227,10 +225,10 @@ def threshImg(origImg, camera, ignoreFlags):
     # draw thresh boxes
     if camera == 1:
         possibleBoxes = len(cam1BoxThresh())
-        for x in range(possibleBoxes - cam1BoxCount, possibleBoxes):
+        for x in range(possibleBoxes - admin_settings.CAM1_BOX_COUNT, possibleBoxes):
             if not ignoreFlags and program_state.THRESH_BOX_MODE:
                 cv2.rectangle(origImg, (cam1LeftPositions()[x], cam1TopBound()), (cam1RightPositions()[x], height - cam1BotBound()), (255, 0, 0), 5)
-            
+                        
             newThresh = greyImg[cam1TopBound():height - cam1BotBound(), cam1LeftPositions()[x]:cam1RightPositions()[x]].copy()
             _, newThresh = cv2.threshold(newThresh, cam1BoxThresh()[x], 255, 0)
 
@@ -239,7 +237,7 @@ def threshImg(origImg, camera, ignoreFlags):
             else:
                 threshImg = cv2.hconcat([threshImg, newThresh])
     else:
-        for x in range(0, cam2BoxCount):
+        for x in range(0, admin_settings.CAM2_BOX_COUNT):
             if not ignoreFlags and program_state.THRESH_BOX_MODE:
                 cv2.rectangle(origImg, (cam2LeftPositons()[x], cam2TopBound()), (cam2RightPositions()[x], height - cam2BotBound()), (255, 0, 0), 5)
             
@@ -305,6 +303,9 @@ def main(origImg, camera, ignoreFlags):
     
     # crop image to plank
     origImg = rotateImg(origImg, camera)
+
+    if ignoreFlags:
+        cv2.imwrite('test_' + str(camera) + '.png', origImg) 
 
     # calculate thresh values
     threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)

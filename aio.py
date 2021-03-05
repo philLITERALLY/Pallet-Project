@@ -8,6 +8,8 @@ import time
 import program_state  # Programs State
 import variables      # Programs Variables
 
+import mock_aio
+
 my_path = os.path.abspath(os.path.dirname(__file__))
 AIO_DLL = clr.AddReference(my_path + '\AIOWDMNet.dll')
 
@@ -17,7 +19,8 @@ AIO_INSTANCE = AIOWDM()
 try:
     AIO_INSTANCE.RelOutPort(0, 0, 0) # Reset AIO to empty
 except Exception as e:
-    print(e)
+    print('Using mock AIO')
+    AIO_INSTANCE = mock_aio          # use mock aio so program doesn't crash
 
 def inputState(inputs, inPort):
     binary = format(inputs, 'b').zfill(9) # get binary for inputs

@@ -18,13 +18,10 @@ import reset_view       # clears the UI
 
 # sg.theme('Light Brown 3')
 
-OUT3 = False
-
 def main(window):
-    global OUT3
-    
-    camera1 = camera_setup.main(0)
-    camera2 = camera_setup.main(1)
+
+    camera1 = camera_setup.main(0)  # setup camera one
+    camera2 = camera_setup.main(1)  # setup camera two
 
     try:
         while not program_state.STOP_PROGRAM:         
@@ -69,15 +66,11 @@ def main(window):
                 else:
                     window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
-                currentCCW = aio.getInputState(4)                                         # get current CCW state                                
-                currentCW = aio.getInputState(5)                                          # get current CW state
+                currentCCW = aio.getInputState(4)                                          # get current CCW state                                
+                currentCW = aio.getInputState(5)                                           # get current CW state
 
-                if OUT3:                                                                    # Change Rotate state
-                    window.FindElement('-OUT-3-').Update(button_color=sg.theme_button_color())     
-                    OUT3 = False
-                else:
-                    window.FindElement('-OUT-3-').Update(button_color=('black', 'yellow'))
-                    OUT3 = True
+                program_state.toggle_rotate_state()                                        # change rotate state
+                aio.setOutput(3, program_state.ROTATE_STATE)                               # send new rotate state
 
                 ccwState = aio.waitInputState(4, not currentCCW)                           # wait for CCW state change
                 cwState = aio.waitInputState(5, not currentCW)                             # wait for CW state change
@@ -117,12 +110,8 @@ def main(window):
                     currentCCW = aio.getInputState(4)                                          # get current CCW state
                     currentCW = aio.getInputState(5)                                           # get current CW state
 
-                    if OUT3:                                                                    # Change Rotate state
-                        window.FindElement('-OUT-3-').Update(button_color=sg.theme_button_color())     
-                        OUT3 = False
-                    else:
-                        window.FindElement('-OUT-3-').Update(button_color=('black', 'yellow'))
-                        OUT3 = True
+                    program_state.toggle_rotate_state()                                        # change rotate state
+                    aio.setOutput(3, program_state.ROTATE_STATE)                               # send new rotate state
 
                     ccwState = aio.waitInputState(4, not currentCCW)                           # wait for CCW state change
                     cwState = aio.waitInputState(5, not currentCW)                             # wait for CW state change
@@ -147,10 +136,12 @@ def main(window):
 
                 window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
-                aio.setOutput(0, 0)                                                        # when stopped turn converyor off
-                aio.setOutput(1, 0)                                                        # when stopped turn clamp off
-                aio.setOutput(2, 0)                                                        # when stopped turn lift off
-                # aio.setOutput(3, 0)                                                        # when stopped turn rotate off
+                # aio.setOutput(0, 0)                                                        # when stopped turn converyor off
+                # aio.setOutput(1, 0)                                                        # when stopped turn clamp off
+                # aio.setOutput(2, 0)                                                        # when stopped turn lift off
+                # if program_state.ROTATE_STATE == 1:                                          # when stopped turn rotate off
+                #     program_state.toggle_rotate_state()
+                #     aio.setOutput(3, program_state.ROTATE_STATE)
                 # aio.setOutput(4, 0)                                                        # when stopped turn reject off
                 # aio.setOutput(5, 0)                                                        # when stopped turn fault off
 
