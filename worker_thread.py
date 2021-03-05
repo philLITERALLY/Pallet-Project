@@ -148,6 +148,7 @@ def main(window):
                 ##     aio.setOutput(3, program_state.ROTATE_STATE)
                 aio.setOutput(4, 0)                                                        # when stopped turn reject off
                 aio.setOutput(5, 0)                                                        # when stopped turn fault off
+                aio.setOutput(10, 0)                                                       # when stopped turn light off
 
                 if program_state.THRESH_MODE or program_state.THRESH_BOX_MODE or program_state.SHOW_TRANSFORM:         
                     admin_view.main(camera1, camera2, window)
