@@ -63,7 +63,9 @@ reject_layout = [
 
 setup_layout = [
     [sg.Image(size=(col_width, 10))], # to help center items
-    [sg.Button('SETUP', key='-SETUP-', size=(15, 5))]
+    [sg.Button('SETUP', key='-SETUP-', size=(15, 5))],
+    [sg.Text('INPUT: 0 1 2 3 4 5 6 7 8', key='-AIO-INPUT-')],
+    [sg.Text('OUTPUT: 0 1 2 3 4 5 ... 10', key='-AIO-OUTPUT-')]
 ]
 
 # admin layouts
