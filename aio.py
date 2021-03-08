@@ -36,7 +36,6 @@ def updateInState(window):
         str(IN_STATE[6]) + ' ' + \
         str(IN_STATE[7]) + ' ' + \
         str(IN_STATE[8])
-    print(inStr)
     window.FindElement('-AIO-INPUT-').update(inStr)
 
 def updateOutState(window):
@@ -48,7 +47,6 @@ def updateOutState(window):
         str(OUT_STATE[4]) + ' ' + \
         str(OUT_STATE[5]) + ' ... ' + \
         str(OUT_STATE[6])
-    print(outStr)
     window.FindElement('-AIO-OUTPUT-').update(outStr)
 
 def inputState(inputs, inPort):
@@ -59,7 +57,7 @@ def inputState(inputs, inPort):
 def waitInputState(inPort, state, window):
     currentAIO = AIO_INSTANCE.RelInPortB(0, 4)          # Port for listening to flags
     currentInState = inputState(currentAIO, inPort)     # get state of given input
-    IN_STATE[inPort] = currentInState
+    IN_STATE[inPort] = int(currentInState == True)
     updateInState(window)
 
     while currentInState != state:                      # while state of input doesn't equal given state keep checking
@@ -70,7 +68,7 @@ def waitInputState(inPort, state, window):
         
         currentAIO = AIO_INSTANCE.RelInPortB(0, 4)      # Port for listening to flags
         currentInState = inputState(currentAIO, inPort) # get state of given input
-        IN_STATE[inPort] = currentInState
+        IN_STATE[inPort] = int(currentInState == True)
         updateInState(window)
 
     return True                                         # when input matches requested state return true
@@ -78,7 +76,7 @@ def waitInputState(inPort, state, window):
 def getInputState(inPort, window):
     currentAIO = AIO_INSTANCE.RelInPortB(0, 4)          # Port for listening to flags
     currentInState = inputState(currentAIO, inPort)     # get state of given input
-    IN_STATE[inPort] = currentInState
+    IN_STATE[inPort] = int(currentInState == True)
     updateInState(window)
     return currentInState
 
@@ -102,7 +100,10 @@ def setOutput(outPort, state, window):
     global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT10
 
     globals()['OUT' + str(outPort)] = state                          # update global variable to new state
-    OUT_STATE[outPort] = state
+    if outPort == 10:
+        OUT_STATE[6] = state
+    else:
+        OUT_STATE[outPort] = state
 
     output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, 0, 0, 0, 0, OUT10] # create output array
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output))          # send output
@@ -117,9 +118,15 @@ def pulseOutput(outPort, state, window):
     pulseState[outPort] = state                                            # modify with pulse value
 
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(pulseState))            # send pulse state
-    OUT_STATE[outPort] = state
+    if outPort == 10:
+        OUT_STATE[6] = state
+    else:
+        OUT_STATE[outPort] = state
     updateOutState(window)
     time.sleep(variables.AIO_WAIT)                                         # sleep for 100 ms
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))          # set back to initial state
-    OUT_STATE[outPort] = state
+    if outPort == 10:
+        OUT_STATE[6] = state
+    else:
+        OUT_STATE[outPort] = state
     updateOutState(window)
