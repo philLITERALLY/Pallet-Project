@@ -34,7 +34,7 @@ def main(window):
                 # board in position L & R
                 aio.setOutput(0, 0, window)                                                        # turn converyor off
                 aio.setOutput(1, 1, window)                                                        # turn clamp on
-                time.sleep(2) # time.sleep(0.05)                                           # sleep 50 ms REMOVE
+                time.sleep(0.05)                                                                   # sleep 50 ms
                 
                 clampR = aio.getInputState(7, window)
                 clampL = aio.getInputState(8, window)
@@ -96,12 +96,10 @@ def main(window):
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))  # update flag for side 2 to pass
 
-                time.sleep(2)                                                                          # SLEEP FOR A BIT REMOVE
-
                 # if either side is over REJECT (10%) then it's a reject
                 if side1Bark > program_state.REJECT_LIMIT or side2Bark > program_state.REJECT_LIMIT:
                     aio.setOutput(4, 1, window)                                                         # turn reject on
-                    time.sleep(2)                                                               # sleep for a bit
+                    time.sleep(0.2)                                                                     # sleep for a bit
                     aio.setOutput(4, 0, window)                                                         # turn reject off
 
                     handle_count.plankFail(window)                                              # update stats

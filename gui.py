@@ -38,9 +38,15 @@ def main(window):
         # When the reset button is pressed
         if event == '-RESET-':
             program_state.clear_results()
-            window.FindElement('-TOTAL-PASSED-').update('% PASSED:- 0%')
-            window.FindElement('-TOTAL-INSPECTED-').update('TOTAL INSPECTED:- 0')
-            
+
+            passedStr = '% PASSED:- 0%'
+            window.FindElement('-TOTAL-PASSED-').update(passedStr)
+            window.FindElement('-TOTAL-PASSED-').set_size((len(passedStr), 1))
+
+            inspectedStr = 'TOTAL INSPECTED:- 0'
+            window.FindElement('-TOTAL-INSPECTED-').update(inspectedStr)
+            window.FindElement('-TOTAL-INSPECTED-').set_size=((len(inspectedStr), 1))
+
         # When the start button is pressed
         if event == '-START-':
             window.FindElement('-START-').Update(button_color=('black', 'yellow'))
