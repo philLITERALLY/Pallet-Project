@@ -23,37 +23,41 @@ def main(window):
         while not program_state.STOP_PROGRAM:         
             if program_state.RUN_MODE:                                                     # if running
 
-                aio.setOutput(10, 1, window)                                                       # turn running light on
-                aio.setOutput(0, 1, window)                                                        # turn converyor on
+                reset_view.main(window)
+
+                # aio.setOutput(10, 1, window)                                                       # turn running light on
+                # aio.setOutput(0, 1, window)                                                        # turn converyor on
                 
-                rPosition = aio.waitInputState(0, True, window)                                    # wait for board to be in position R
-                lPosition = aio.waitInputState(1, True, window)                                    # wait for board to be in position L     
-                if not rPosition or not lPosition:                                         # if program is stopped
-                    continue                                                               # exit loop
+                # rPosition = aio.waitInputState(0, True, window)                                    # wait for board to be in position R
+                # lPosition = aio.waitInputState(1, True, window)                                    # wait for board to be in position L
+                # if not rPosition or not lPosition:                                         # if program is stopped
+                #     continue                                                               # exit loop
 
-                # board in position L & R
-                aio.setOutput(0, 0, window)                                                        # turn converyor off
-                aio.setOutput(1, 1, window)                                                        # turn clamp on
-                time.sleep(0.05)                                                                   # sleep 50 ms
+                # # board in position L & R
+                # aio.setOutput(0, 0, window)                                                        # turn converyor off
+                # aio.setOutput(1, 1, window)                                                        # turn clamp on
+                # time.sleep(0.05)                                                                   # sleep 50 ms
                 
-                clampR = aio.getInputState(7, window)
-                clampL = aio.getInputState(8, window)
-                if clampL or clampR:                                                       # if clamps are not closed
-                    aio.setOutput(5, 1, window)                                                    # turn fault on
-                    program_state.set_fault(True)                                          # let program know we have fault
-                    window.write_event_value('-FAULT-', True)                              # let gui know we have fault
+                # clampR = aio.getInputState(7, window)
+                # clampL = aio.getInputState(8, window)
+                # if clampL or clampR:                                                       # if clamps are not closed
+                #     aio.setOutput(5, 1, window)                                                    # turn fault on
+                #     program_state.set_fault(True)                                          # let program know we have fault
+                #     window.write_event_value('-FAULT-', True)                              # let gui know we have fault
 
-                    while program_state.FAULT:                                             # while program is at fault
-                        aio.pulseOutput(10, 0, window)                                             # pulse light off
-                        time.sleep(0.5)                                                    # sleep for 500ms
+                #     while program_state.FAULT:                                             # while program is at fault
+                #         aio.pulseOutput(10, 0, window)                                             # pulse light off
+                #         time.sleep(0.5)                                                    # sleep for 500ms
 
-                    continue                                                               # running loop
+                #     continue                                                               # running loop
 
-                aio.setOutput(2, 1, window)                                                        # turn lift on
+                # aio.setOutput(2, 1, window)                                                        # turn lift on
                 
-                liftUp = aio.waitInputState(3, True, window)                                       # wait for lift up
-                if not liftUp:                                                             # if program is stopped
-                    continue                                                               # exit loop
+                # liftUp = aio.waitInputState(3, True, window)                                       # wait for lift up
+                # if not liftUp:                                                             # if program is stopped
+                #     continue                                                               # exit loop
+
+                time.sleep(2)
                 
                 _, frame1 = camera1.read()                                           # grab camera 1
                 _, frame2 = camera2.read()                                           # grab camera 2                    
@@ -70,16 +74,18 @@ def main(window):
                 else:
                     window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
-                currentCCW = aio.getInputState(4, window)                                          # get current CCW state
-                currentCW = aio.getInputState(5, window)                                           # get current CW state
+                time.sleep(2)
 
-                program_state.toggle_rotate_state()                                        # change rotate state
-                aio.setOutput(3, program_state.ROTATE_STATE, window)                               # send new rotate state
+                # currentCCW = aio.getInputState(4, window)                                          # get current CCW state
+                # currentCW = aio.getInputState(5, window)                                           # get current CW state
 
-                ccwState = aio.waitInputState(4, not currentCCW, window)                           # wait for CCW state change
-                cwState = aio.waitInputState(5, not currentCW, window)                             # wait for CW state change
-                if not ccwState or not cwState:                                            # if program is stopped
-                    continue                                                               # exit loop
+                # program_state.toggle_rotate_state()                                        # change rotate state
+                # aio.setOutput(3, program_state.ROTATE_STATE, window)                               # send new rotate state
+
+                # ccwState = aio.waitInputState(4, not currentCCW, window)                           # wait for CCW state change
+                # cwState = aio.waitInputState(5, not currentCW, window)                             # wait for CW state change
+                # if not ccwState or not cwState:                                            # if program is stopped
+                #     continue                                                               # exit loop
                 
                 _, frame1 = camera1.read()                                                 # grab camera 1
                 _, frame2 = camera2.read()                                                 # grab camera 2                    
@@ -96,43 +102,45 @@ def main(window):
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))  # update flag for side 2 to pass
 
-                # if either side is over REJECT (10%) then it's a reject
-                if side1Bark > program_state.REJECT_LIMIT or side2Bark > program_state.REJECT_LIMIT:
-                    aio.setOutput(4, 1, window)                                                         # turn reject on
-                    time.sleep(0.2)                                                                     # sleep for a bit
-                    aio.setOutput(4, 0, window)                                                         # turn reject off
+                time.sleep(2)
 
-                    handle_count.plankFail(window)                                              # update stats
-                    program_state.set_run_mode(False)                                           # stop running
+                # # if either side is over REJECT (10%) then it's a reject
+                # if side1Bark > program_state.REJECT_LIMIT or side2Bark > program_state.REJECT_LIMIT:
+                #     aio.setOutput(4, 1, window)                                                         # turn reject on
+                #     time.sleep(0.2)                                                                     # sleep for a bit
+                #     aio.setOutput(4, 0, window)                                                         # turn reject off
 
-                    continue
+                #     handle_count.plankFail(window)                                              # update stats
+                #     program_state.set_run_mode(False)                                           # stop running
 
-                # if side 1
-                elif side1Bark < side2Bark:
-                    currentCCW = aio.getInputState(4, window)                                          # get current CCW state
-                    currentCW = aio.getInputState(5, window)                                           # get current CW state
+                #     continue
 
-                    program_state.toggle_rotate_state()                                        # change rotate state
-                    aio.setOutput(3, program_state.ROTATE_STATE, window)                               # send new rotate state
+                # # if side 1
+                # elif side1Bark < side2Bark:
+                #     currentCCW = aio.getInputState(4, window)                                          # get current CCW state
+                #     currentCW = aio.getInputState(5, window)                                           # get current CW state
 
-                    ccwState = aio.waitInputState(4, not currentCCW, window)                           # wait for CCW state change
-                    cwState = aio.waitInputState(5, not currentCW, window)                             # wait for CW state change
-                    if not ccwState or not cwState:                                            # if program is stopped
-                        continue                                                               # exit loop
+                #     program_state.toggle_rotate_state()                                        # change rotate state
+                #     aio.setOutput(3, program_state.ROTATE_STATE, window)                               # send new rotate state
 
-                # if side 1 or 2
-                handle_count.plankPass(window)                                                 # update stats
+                #     ccwState = aio.waitInputState(4, not currentCCW, window)                           # wait for CCW state change
+                #     cwState = aio.waitInputState(5, not currentCW, window)                             # wait for CW state change
+                #     if not ccwState or not cwState:                                            # if program is stopped
+                #         continue                                                               # exit loop
 
-                # continue with plank
-                aio.setOutput(2, 0, window)                                                        # turn lift off
-                liftDown = aio.waitInputState(2, True, window)                                     # wait for lift down
-                if not liftDown:                                                           # if program is stopped
-                    continue                                                               # exit loop
+                # # if side 1 or 2
+                # handle_count.plankPass(window)                                                 # update stats
 
-                aio.setOutput(1, 0, window)                                                        # turn clamp off
-                clampOpen = aio.waitInputState(6, True, window)                                    # wait for clamp open
-                if not clampOpen:                                                          # if program is stopped
-                    continue                                                               # exit loop  
+                # # continue with plank
+                # aio.setOutput(2, 0, window)                                                        # turn lift off
+                # liftDown = aio.waitInputState(2, True, window)                                     # wait for lift down
+                # if not liftDown:                                                           # if program is stopped
+                #     continue                                                               # exit loop
+
+                # aio.setOutput(1, 0, window)                                                        # turn clamp off
+                # clampOpen = aio.waitInputState(6, True, window)                                    # wait for clamp open
+                # if not clampOpen:                                                          # if program is stopped
+                #     continue                                                               # exit loop  
             
             else:                                                                          
 
