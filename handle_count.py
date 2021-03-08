@@ -7,13 +7,8 @@ import program_state    # Programs State
 def updateText(window):
     passed_perc = round(program_state.TOTAL_PASSED / program_state.TOTAL_INSPECTED * 100, 2)
 
-    passedStr = '% PASSED:- ' + str(passed_perc)
-    window.FindElement('-TOTAL-PASSED-').update(passedStr)
-    window.FindElement('-TOTAL-PASSED-').set_size((len(passedStr), 1))
-
-    inspectedStr = 'TOTAL INSPECTED:- ' + str(program_state.TOTAL_INSPECTED)
-    window.FindElement('-TOTAL-INSPECTED-').update(inspectedStr)
-    window.FindElement('-TOTAL-INSPECTED-').set_size=((len(inspectedStr), 1))
+    window.FindElement('-TOTAL-PASSED-').update(str(passed_perc))
+    window.FindElement('-TOTAL-INSPECTED-').update(str(program_state.TOTAL_INSPECTED))
 
 def plankPass(window):
     program_state.increase_total_inspected()    # add to total count

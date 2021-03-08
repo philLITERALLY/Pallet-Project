@@ -13,8 +13,11 @@ def main(camera):
     capture.set(3, 3840)                # CAM WIDTH
     capture.set(4, 2160)                # CAM HEIGHT
     # capture.set(5, handle_config.CAM_FPS)
-    # time.sleep(5)
-    # capture.set(15, handle_config.CAM_EXPOSURE)
+    time.sleep(5)
+    capture.set(15, -3)                 # CAM EXPOSURE
+
+    for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
+        _, _ = capture.read()
 
     info_logger.camera_settings(camera, capture)
 

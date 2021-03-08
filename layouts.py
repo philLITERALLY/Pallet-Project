@@ -42,8 +42,14 @@ stats_layout = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [sg.Button('RESET', key='-RESET-', size=(8, 2))],
     [sg.Image(size=(col_width, 20))], # extra padding
-    [sg.Text('% PASSED:- 0%', key='-TOTAL-PASSED-', size=(13, 1))],
-    [sg.Text('TOTAL INSPECTED:- 0', key='-TOTAL-INSPECTED-', size=(19, 1))],
+    [
+        sg.Text('% PASSED:- '),
+        sg.Text('0', key='-TOTAL-PASSED-', size=(14, 1))
+    ],
+    [
+        sg.Text('TOTAL INSPECTED:- '),
+        sg.Text('0', key='-TOTAL-INSPECTED-', size=(20, 1))
+    ],
 ]
 
 reject_layout = [
