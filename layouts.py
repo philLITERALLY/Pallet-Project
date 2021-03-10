@@ -71,7 +71,8 @@ setup_layout = [
     [sg.Image(size=(col_width, 10))], # to help center items
     [sg.Button('SETUP', key='-SETUP-', size=(15, 3))],
     [sg.Text('INPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-INPUT-')],
-    [sg.Text('OUTPUT: 0 0 0 0 0 0 ... 0', key='-AIO-OUTPUT-')]
+    [sg.Text('OUTPUT: 0 0 0 0 0 0 ... 0', key='-AIO-OUTPUT-')],
+    [sg.Text('', key='-SLEEP-', size=(11, 1))]
 ]
 
 # admin layouts

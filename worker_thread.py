@@ -22,6 +22,17 @@ def main(window):
     try:
         while not program_state.STOP_PROGRAM:
             if program_state.RUN_MODE:                                                     # if running
+                window.FindElement('-SLEEP-').update('CLEAR IN 5...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('CLEAR IN 4...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('CLEAR IN 3...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('CLEAR IN 2...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('CLEAR IN 1...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('')
 
                 reset_view.main(window)                                                    # clear images and plank stats
 
@@ -56,6 +67,18 @@ def main(window):
                 liftUp = aio.waitInputState(3, True, window)                                       # wait for lift up
                 if not liftUp:                                                             # if program is stopped
                     continue                                                               # exit loop
+
+                window.FindElement('-SLEEP-').update('SIDE 1 IN 5...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 1 IN 4...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 1 IN 3...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 1 IN 2...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 1 IN 1...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('')
                 
                 frame1 = camera1.read()                                           # grab camera 1
                 frame2 = camera2.read()                                           # grab camera 2                    
@@ -82,6 +105,18 @@ def main(window):
                 cwState = aio.waitInputState(5, not currentCW, window)                             # wait for CW state change
                 if not ccwState or not cwState:                                            # if program is stopped
                     continue                                                               # exit loop
+
+                window.FindElement('-SLEEP-').update('SIDE 2 IN 5...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 2 IN 4...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 2 IN 3...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 2 IN 2...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('SIDE 2 IN 1...')
+                time.sleep(1)
+                window.FindElement('-SLEEP-').update('')
                 
                 frame1 = camera1.read()                                                 # grab camera 1
                 frame2 = camera2.read()                                                 # grab camera 2                    
