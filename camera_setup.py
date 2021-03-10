@@ -1,24 +1,50 @@
 '''This module sets up the cameras'''
 
 # External Libraries
-import cv2      # OpenCV
-import time     # time
+import cv2
+import queue
+import threading
+import time
 
 # My Modules
 import info_logger
 
-def main(camera):
-    '''Initialise and apply camera settings'''
-    capture = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
-    capture.set(3, 3840)                # CAM WIDTH
-    capture.set(4, 2160)                # CAM HEIGHT
-    # capture.set(5, handle_config.CAM_FPS)
+# bufferless VideoCapture
+class VideoCapture:
+
+  def __init__(self, camera):
+    self.cap = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
+    self.cap.set(3, 3840)                # CAM WIDTH
+    self.cap.set(4, 2160)                # CAM HEIGHT
+    # self.cap.set(5, handle_config.CAM_FPS)
     time.sleep(5)
-    capture.set(15, -3)                 # CAM EXPOSURE
+    self.cap.set(15, -3)                 # CAM EXPOSURE
 
     for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
-        _, _ = capture.read()
+        _, _ = self.cap.read()
 
-    info_logger.camera_settings(camera, capture)
+    info_logger.camera_settings(camera, self.cap)
 
-    return capture
+    self.q = queue.Queue()
+    t = threading.Thread(target=self._reader)
+    t.daemon = True
+    t.start()
+
+  # read frames as soon as they are available, keeping only most recent one
+  def _reader(self):
+    while True:
+      ret, frame = self.cap.read()
+      if not ret:
+        break
+      if not self.q.empty():
+        try:
+          self.q.get_nowait()   # discard previous (unprocessed) frame
+        except queue.Empty:
+          pass
+      self.q.put(frame)
+
+  def read(self):
+    return self.q.get()
+
+  def release(self):
+      self.cap.release()

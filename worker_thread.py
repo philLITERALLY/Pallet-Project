@@ -15,8 +15,8 @@ import handle_count     # handles count of stats
 import admin_view       # handles UI when in admin mode
 import reset_view       # clears the UI
 
-camera1 = camera_setup.main(0)  # setup camera one
-camera2 = camera_setup.main(1)  # setup camera two
+camera1 = camera_setup.VideoCapture(0)  # setup camera one
+camera2 = camera_setup.VideoCapture(1)  # setup camera two
 
 def main(window):
     try:
@@ -57,8 +57,8 @@ def main(window):
                 if not liftUp:                                                             # if program is stopped
                     continue                                                               # exit loop
                 
-                _, frame1 = camera1.read()                                           # grab camera 1
-                _, frame2 = camera2.read()                                           # grab camera 2                    
+                frame1 = camera1.read()                                           # grab camera 1
+                frame2 = camera2.read()                                           # grab camera 2                    
                 side1cam1, side1cam1Bark = image_handling.main(frame1, 1, True)      # process camera 1
                 side1cam2, side1cam2Bark = image_handling.main(frame2, 2, True)      # process camera 2
                 side1Bark = round((side1cam1Bark + side1cam2Bark) / 2, 2)            # calculate bark count
@@ -83,8 +83,8 @@ def main(window):
                 if not ccwState or not cwState:                                            # if program is stopped
                     continue                                                               # exit loop
                 
-                _, frame1 = camera1.read()                                                 # grab camera 1
-                _, frame2 = camera2.read()                                                 # grab camera 2                    
+                frame1 = camera1.read()                                                 # grab camera 1
+                frame2 = camera2.read()                                                 # grab camera 2                    
                 side2cam1, side2cam1Bark = image_handling.main(frame1, 1, True)            # process camera 1
                 side2cam2, side2cam2Bark = image_handling.main(frame2, 2, True)            # process camera 2
                 side2Bark = round((side2cam1Bark + side2cam2Bark) / 2, 2)                  # calculate bark count

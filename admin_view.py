@@ -5,8 +5,8 @@ import image_handling   # handles image
 import program_state    # Programs State
 
 def main(camera1, camera2, window):
-    _, frame1 = camera1.read()
-    _, frame2 = camera2.read()
+    frame1 = camera1.read()
+    frame2 = camera2.read()
     
     cam1Orig, _ = image_handling.main(frame1, 1, True)                                  # process camera 1 no mods
     cam2Orig, _ = image_handling.main(frame2, 2, True)                                  # process camera 2 no mods
