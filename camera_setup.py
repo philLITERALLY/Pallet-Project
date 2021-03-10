@@ -5,14 +5,15 @@ import cv2
 import queue
 import threading
 import time
+import numpy as np
 
 # My Modules
 import info_logger
 
 # bufferless VideoCapture
 class VideoCapture:
-
   def __init__(self, camera):
+    self.camera = camera
     self.cap = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
     self.cap.set(3, 3840)                # CAM WIDTH
     self.cap.set(4, 2160)                # CAM HEIGHT
@@ -33,18 +34,15 @@ class VideoCapture:
   # read frames as soon as they are available, keeping only most recent one
   def _reader(self):
     while True:
-      ret, frame = self.cap.read()
-      if not ret:
-        break
-      if not self.q.empty():
-        try:
-          self.q.get_nowait()   # discard previous (unprocessed) frame
-        except queue.Empty:
-          pass
-      self.q.put(frame)
+      _, _ = self.cap.read()
 
   def read(self):
-    return self.q.get()
+    _, frame = self.cap.read()
+    
+    while np.sum(frame) == 0:
+      _, frame = self.cap.read()
+
+    return frame
 
   def release(self):
       self.cap.release()
