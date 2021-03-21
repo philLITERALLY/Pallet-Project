@@ -8,7 +8,8 @@ import admin_settings   # Admin settings
 def admin(event, window):
     window.FindElement('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-BOXES-MODE-').Update(button_color=sg.theme_button_color())
-    window.FindElement('-THRESH-MODE-').Update(button_color=sg.theme_button_color())
+    window.FindElement('-BARK-MODE-').Update(button_color=sg.theme_button_color())
+    window.FindElement('-LINE-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=False)
     window.FindElement('-CAM1-BOXES-LAYOUT-').Update(visible=False)
     window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=False)
@@ -38,6 +39,7 @@ def admin(event, window):
         # make sure admin modes are off
         program_state.set_thresh_boxes(False)
         program_state.set_thresh(False)
+        program_state.set_line(False)
         program_state.set_transform(False)
 
     # When transform mode button is pressed
@@ -58,12 +60,21 @@ def admin(event, window):
         window.FindElement('-CAM1-BOXES-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-BOXES-LAYOUT-').Update(visible=True)
 
-    # When thresh mode button is pressed
-    if event == '-THRESH-MODE-':          
-        program_state.set_thresh(True)       # turn on thresh mode
+    # When bark thresh mode button is pressed
+    if event == '-BARK-MODE-':
+        program_state.set_thresh(True)       # turn on box thresh mode
 
         # turn thresh button on
-        window.FindElement('-THRESH-MODE-').Update(button_color=('black', 'yellow'))
+        window.FindElement('-BARK-MODE-').Update(button_color=('black', 'yellow'))
+        window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
+        window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
+
+    # When line thresh mode button is pressed
+    if event == '-LINE-MODE-':
+        program_state.set_line(True)       # turn on line thresh mode
+
+        # turn thresh button on
+        window.FindElement('-LINE-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
 

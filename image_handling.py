@@ -214,7 +214,7 @@ def rotateImg(origImg, camera):
 
     return origImg
 
-# thresh image and return black vs white count
+# thresh box image and return black vs white count
 def threshImg(origImg, camera, ignoreFlags):
     height, width, _ = origImg.shape
 
@@ -255,6 +255,47 @@ def threshImg(origImg, camera, ignoreFlags):
 
     return threshImg, round(blackPixels / totalPixels * 100, 2)
 
+# thresh line image and return black vs white count
+def lineImg(origImg, camera, ignoreFlags):
+    height, width, _ = origImg.shape
+
+    # grey image
+    greyImg = cv2.cvtColor(origImg, cv2.COLOR_BGR2GRAY)
+    threshImg = None
+
+    # draw thresh boxes
+    if camera == 1:
+        possibleBoxes = len(cam1BoxThresh())
+        for x in range(possibleBoxes - admin_settings.CAM1_BOX_COUNT + 1, possibleBoxes):
+            if not ignoreFlags and program_state.THRESH_BOX_MODE:
+                cv2.rectangle(origImg, (cam1RightPositions()[x - 1], cam1TopBound()), (cam1LeftPositions()[x], height - cam1BotBound()), (0, 0, 255), 5)
+
+            newThresh = greyImg[cam1TopBound():height - cam1BotBound(), cam1RightPositions()[x - 1]:cam1LeftPositions()[x]].copy()
+            _, newThresh = cv2.threshold(newThresh, cam1BoxThresh()[x], 255, 0)
+
+            if threshImg is None:
+                threshImg = newThresh
+            else:
+                threshImg = cv2.hconcat([threshImg, newThresh])
+    else:
+        for x in range(1, admin_settings.CAM2_BOX_COUNT):
+            if not ignoreFlags and program_state.THRESH_BOX_MODE:
+                cv2.rectangle(origImg, (cam2RightPositions()[x - 1], cam2TopBound()), (cam2LeftPositons()[x], height - cam2BotBound()), (0, 0, 255), 5)
+
+            newThresh = greyImg[cam2TopBound():height - cam2BotBound(), cam2RightPositions()[x - 1]:cam2LeftPositons()[x]].copy()
+            _, newThresh = cv2.threshold(newThresh, cam2BoxThresh()[x], 255, 0)
+
+            if threshImg is None:
+                threshImg = newThresh
+            else:
+                threshImg = cv2.hconcat([threshImg, newThresh])
+
+    totalPixels = threshImg.size
+    whitePixels = cv2.countNonZero(threshImg)
+    blackPixels = totalPixels - whitePixels
+
+    return threshImg, round(blackPixels / totalPixels * 100, 2)
+
 # resize img to fit ui
 def resizeImg(origImg):    
     # heigh, width and ratio of cropped and rotated img
@@ -263,7 +304,7 @@ def resizeImg(origImg):
     
     # adjust width to image ratio
     newWidth = int(layouts.row_size / ratio)
-    newHeight = int(width * ratio)
+    newHeight = int(newWidth * ratio)
 
     # if image too big use other variable
     if newWidth > layouts.img_width:
@@ -304,8 +345,12 @@ def main(origImg, camera, ignoreFlags):
     # crop image to plank
     origImg = rotateImg(origImg, camera)
 
-    # calculate thresh values
+    # calculate box thresh values
     threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)
+
+    # calculate line thresh values
+    linedImg, linePercent = lineImg(origImg, camera, ignoreFlags)
+    print('linePercent: ', linePercent)
 
     # crop image to plank
     origImg = resizeImg(origImg)
@@ -313,5 +358,9 @@ def main(origImg, camera, ignoreFlags):
     # if thresh mode show thresh image
     if not ignoreFlags and program_state.THRESH_MODE:
         origImg = resizeImg(threshedImg)
+
+    # if line mode show thresh image
+    if not ignoreFlags and program_state.LINE_MODE:
+        origImg = resizeImg(linedImg)
 
     return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent

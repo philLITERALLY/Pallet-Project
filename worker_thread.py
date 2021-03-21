@@ -166,7 +166,10 @@ def main(window):
                 aio.setOutput(5, 0, window)                                                        # when stopped turn fault off
                 aio.setOutput(10, 0, window)                                                       # when stopped turn light off
 
-                if program_state.THRESH_MODE or program_state.THRESH_BOX_MODE or program_state.SHOW_TRANSFORM:         
+                if program_state.THRESH_MODE or \
+                    program_state.LINE_MODE or \
+                    program_state.THRESH_BOX_MODE or \
+                    program_state.SHOW_TRANSFORM:
                     admin_view.main(camera1, camera2, window)
                 else:
                     reset_view.main(window)

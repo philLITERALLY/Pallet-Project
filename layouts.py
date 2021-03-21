@@ -78,9 +78,14 @@ setup_layout = [
 # admin layouts
 admin_mode = [
     [sg.Image(size=(col_width, 1))], # to help center items
-    [sg.Button('TRANSFORM', key='-TRANSFORM-MODE-', size=(15, 2))],
-    [sg.Button('BOXES', key='-BOXES-MODE-', size=(15, 2))],
-    [sg.Button('THRESH', key='-THRESH-MODE-', size=(15, 2))]
+    [
+        sg.Button('TRANSFORM', key='-TRANSFORM-MODE-', size=(15, 2)),
+        sg.Button('BOXES', key='-BOXES-MODE-', size=(15, 2))
+    ],
+    [
+        sg.Button('BARK', key='-BARK-MODE-', size=(15, 2)),
+        sg.Button('LINE', key='-LINE-MODE-', size=(15, 2))
+    ]
 ]
 
 board1_admin = [

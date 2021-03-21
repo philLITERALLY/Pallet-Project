@@ -5,6 +5,7 @@ FAULT = False
 STOP_PROGRAM = False
 SHOW_TRANSFORM = False
 THRESH_MODE = False
+LINE_MODE = False
 THRESH_BOX_MODE = False
 CLEAR_RESULTS = False
 REJECT_LIMIT = 10
@@ -25,31 +26,44 @@ def stop_program():
     STOP_PROGRAM = True
 
 def set_transform(value):
-    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE
+    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE, LINE_MODE
     SHOW_TRANSFORM = value
 
     # if turning on this mode then disable others
     if value:
         THRESH_BOX_MODE = False
         THRESH_MODE = False
+        LINE_MODE = False
 
 def set_thresh_boxes(value):
-    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE
+    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE, LINE_MODE
     THRESH_BOX_MODE = value
 
     # if turning on this mode then disable others
     if value:
         SHOW_TRANSFORM = False
         THRESH_MODE = False
+        LINE_MODE = False
 
 def set_thresh(value):
-    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE
+    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE, LINE_MODE
     THRESH_MODE = value
 
     # if turning on this mode then disable others
     if value:
         SHOW_TRANSFORM = False
         THRESH_BOX_MODE = False
+        LINE_MODE = False
+
+def set_line(value):
+    global SHOW_TRANSFORM, THRESH_BOX_MODE, THRESH_MODE, LINE_MODE
+    LINE_MODE = value
+
+    # if turning on this mode then disable others
+    if value:
+        SHOW_TRANSFORM = False
+        THRESH_BOX_MODE = False
+        THRESH_MODE = False
 
 def clear_results():
     global TOTAL_INSPECTED, TOTAL_PASSED

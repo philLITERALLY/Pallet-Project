@@ -16,7 +16,7 @@ def main(window):
             break
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-TRANSFORM-MODE-', '-BOXES-MODE-', '-THRESH-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-TRANSFORM-MODE-', '-BOXES-MODE-', '-BARK-MODE-', '-LINE-MODE-'):
             handle_events.admin(event, window)
 
         # board events
