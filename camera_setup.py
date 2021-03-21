@@ -13,6 +13,7 @@ import info_logger
 # bufferless VideoCapture
 class VideoCapture:
   def __init__(self, camera):
+    self.camera = camera
     self.cap = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
     self.cap.set(3, 3840)                # CAM WIDTH
     self.cap.set(4, 2160)                # CAM HEIGHT
