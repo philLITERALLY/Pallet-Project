@@ -13,7 +13,6 @@ import info_logger
 # bufferless VideoCapture
 class VideoCapture:
   def __init__(self, camera):
-    self.camera = camera
     self.cap = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
     self.cap.set(3, 3840)                # CAM WIDTH
     self.cap.set(4, 2160)                # CAM HEIGHT
@@ -34,15 +33,21 @@ class VideoCapture:
   # read frames as soon as they are available, keeping only most recent one
   def _reader(self):
     while True:
-      _, _ = self.cap.read()
+      ret, frame = self.cap.read()
+      if not ret:                   # capture frame error
+        print('Image read error')
+        break
+      if np.sum(frame) == 0:        # frame empty for some reason
+        continue
+      if not self.q.empty():        # if queue is not empty clear it
+        try:
+          self.q.get_nowait()       # discard previous (unprocessed) frame
+        except queue.Empty:
+          pass
+      self.q.put(frame)
 
   def read(self):
-    _, frame = self.cap.read()
-    
-    while np.sum(frame) == 0:
-      _, frame = self.cap.read()
-
-    return frame
+    return self.q.get()
 
   def release(self):
       self.cap.release()

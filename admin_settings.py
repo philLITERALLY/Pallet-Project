@@ -112,7 +112,6 @@ def set_cam2_trans_right(value):
 def set_cam1_box_lr(value):
     global CAM1_BOX_POS_LR
     CAM1_BOX_POS_LR += value
-    print(CAM1_BOX_POS_LR)
 
 def set_cam2_box_lr(value):
     global CAM2_BOX_POS_LR
