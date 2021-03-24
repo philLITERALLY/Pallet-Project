@@ -30,7 +30,7 @@ def main(window):
 
                 reset_view.main(window)                                                    # clear images and plank stats
 
-                aio.setOutput(10, 1, window)                                               # turn running light on
+                aio.setOutput(6, 1, window)                                               # turn running light on
                 aio.setOutput(0, 1, window)                                                # turn converyor on
                 
                 rPosition = aio.waitInputState(0, True, window)                            # wait for board to be in position R
@@ -51,7 +51,7 @@ def main(window):
                     window.write_event_value('-FAULT-', True)                              # let gui know we have fault
 
                     while program_state.FAULT:                                             # while program is at fault
-                        aio.pulseOutput(10, 0, window)                                             # pulse light off
+                        aio.pulseOutput(6, 0, window)                                             # pulse light off
                         time.sleep(0.5)                                                    # sleep for 500ms
 
                     continue                                                               # running loop
@@ -164,7 +164,7 @@ def main(window):
                 ##     aio.setOutput(3, program_state.ROTATE_STATE)
                 aio.setOutput(4, 0, window)                                                        # when stopped turn reject off
                 aio.setOutput(5, 0, window)                                                        # when stopped turn fault off
-                aio.setOutput(10, 0, window)                                                       # when stopped turn light off
+                aio.setOutput(6, 0, window)                                                       # when stopped turn light off
 
                 if program_state.THRESH_MODE or \
                     program_state.LINE_MODE or \

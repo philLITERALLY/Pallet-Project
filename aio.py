@@ -45,7 +45,7 @@ def updateOutState(window):
         str(OUT_STATE[2]) + ' ' + \
         str(OUT_STATE[3]) + ' ' + \
         str(OUT_STATE[4]) + ' ' + \
-        str(OUT_STATE[5]) + ' ... ' + \
+        str(OUT_STATE[5]) + ' ' + \
         str(OUT_STATE[6])
     window.FindElement('-AIO-OUTPUT-').update(outStr)
 
@@ -86,7 +86,7 @@ OUT2 = 0
 OUT3 = 0
 OUT4 = 0
 OUT5 = 0
-OUT10 = 0
+OUT6 = 0
 
 # Changes IO array to value
 def calculateIOValue(values):
@@ -97,36 +97,30 @@ def calculateIOValue(values):
 
 # Change a given output state
 def setOutput(outPort, state, window):
-    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT10
+    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6
 
     globals()['OUT' + str(outPort)] = state                          # update global variable to new state
-    if outPort == 10:
-        OUT_STATE[6] = state
-    else:
-        OUT_STATE[outPort] = state
+    OUT_STATE[outPort] = state
 
-    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, 0, 0, 0, 0, OUT10] # create output array
-    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output))          # send output
+    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6]     # create output array
+    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output)) # send output
     updateOutState(window)
 
 # Pulse a given output
 def pulseOutput(outPort, state, window):
-    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT10
+    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6
 
-    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, 0, 0, 0, 0, OUT10] # create current state
+    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6]              # create current state
     pulseState = initialState[:]                                           # clone current state
     pulseState[outPort] = state                                            # modify with pulse value
 
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(pulseState))            # send pulse state
-    if outPort == 10:
-        OUT_STATE[6] = state
-    else:
-        OUT_STATE[outPort] = state
+    OUT_STATE[outPort] = state
+
     updateOutState(window)
+
     time.sleep(variables.AIO_WAIT)                                         # sleep for 100 ms
+
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))          # set back to initial state
-    if outPort == 10:
-        OUT_STATE[6] = state
-    else:
-        OUT_STATE[outPort] = state
+    OUT_STATE[outPort] = state
     updateOutState(window)
