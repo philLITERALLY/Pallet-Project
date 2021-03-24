@@ -48,7 +48,10 @@ class VideoCapture:
       self.q.put(frame)
 
   def read(self):
-    return self.q.get()
+    cam_path = 'another-' + str(self.camera) + '.jpg'
+    img = cv2.imread(cam_path)
+    return img
+    # return self.q.get()
 
   def release(self):
       self.cap.release()

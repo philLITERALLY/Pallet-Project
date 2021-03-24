@@ -4,8 +4,8 @@ import image_handling # image handling
 
 BOARD_WIDTH = 0
 BOARD_LENGTH = 1200
-CAM1_BOX_COUNT = 13
-CAM2_BOX_COUNT = 14
+CAM1_BOX_COUNT = 14
+CAM2_BOX_COUNT = 13
 CAM1_TRANS_LEFT = 110
 CAM2_TRANS_LEFT = 90
 CAM1_TRANS_RIGHT = 105
@@ -16,6 +16,8 @@ CAM1_BOX_POS_UD = 0
 CAM2_BOX_POS_UD = 0
 CAM1_THRESH = 0
 CAM2_THRESH = 0
+CAM1_LINE_THRESH = 0
+CAM2_LINE_THRESH = 0
     
 def set_board_width(value):
     global BOARD_WIDTH
@@ -132,3 +134,11 @@ def set_cam1_thresh(value):
 def set_cam2_thresh(value):
     global CAM2_THRESH
     CAM2_THRESH += value
+
+def set_cam1_line_thresh(value):
+    global CAM1_LINE_THRESH
+    CAM1_LINE_THRESH += value
+
+def set_cam2_line_thresh(value):
+    global CAM2_LINE_THRESH
+    CAM2_LINE_THRESH += value
