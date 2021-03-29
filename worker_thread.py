@@ -39,7 +39,6 @@ def main(window):
                     continue                                                               # exit loop
 
                 # board in position L & R
-                aio.setOutput(0, 0, window)                                                        # turn converyor off
                 aio.setOutput(1, 1, window)                                                        # turn clamp on
                 time.sleep(0.05)                                                                   # sleep 50 ms
                 
@@ -61,6 +60,8 @@ def main(window):
                 liftUp = aio.waitInputState(3, True, window)                                       # wait for lift up
                 if not liftUp:                                                             # if program is stopped
                     continue                                                               # exit loop
+                
+                aio.setOutput(0, 0, window)                                                        # turn converyor off
 
                 # window.FindElement('-SLEEP-').update('SIDE 1 IN 2...')
                 # time.sleep(1)
