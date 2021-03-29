@@ -30,7 +30,7 @@ def main(window):
 
                 reset_view.main(window)                                                    # clear images and plank stats
 
-                aio.setOutput(6, 1, window)                                               # turn running light on
+                aio.setOutput(6, 1, window)                                                # turn running light on
                 aio.setOutput(0, 1, window)                                                # turn converyor on
                 
                 rPosition = aio.waitInputState(0, True, window)                            # wait for board to be in position R
@@ -99,15 +99,15 @@ def main(window):
                 # window.FindElement('-SLEEP-').update('SIDE 2 IN 1...')
                 # time.sleep(1)
                 # window.FindElement('-SLEEP-').update('')
-                
+
                 frame1 = camera1.read()                                                 # grab camera 1
-                frame2 = camera2.read()                                                 # grab camera 2                    
+                frame2 = camera2.read()                                                 # grab camera 2
                 side2cam1, side2cam1Bark = image_handling.main(frame1, 1, True)            # process camera 1
                 side2cam2, side2cam2Bark = image_handling.main(frame2, 2, True)            # process camera 2
                 side2Bark = round((side2cam1Bark + side2cam2Bark) / 2, 2)                  # calculate bark count
 
                 window.FindElement('-SIDE-2-CAM-1-').update(data=side2cam1)                            # update img for side 2 camera 1
-                window.FindElement('-SIDE-2-CAM-2-').update(data=side2cam2)                            # update img for side 2 camera 2                
+                window.FindElement('-SIDE-2-CAM-2-').update(data=side2cam2)                            # update img for side 2 camera 2
                 window.FindElement('-%-BARK-2-').update('\nSIDE 2:- % BARK ' + str(side2Bark))         # update count of bark count for side 2
 
                 if side2Bark > program_state.REJECT_LIMIT:
@@ -139,18 +139,27 @@ def main(window):
                         continue                                                               # exit loop
 
                 # if side 1 or 2
-                handle_count.plankPass(window)                                                 # update stats
+                handle_count.plankPass(window)                                             # update stats
 
                 # continue with plank
-                aio.setOutput(2, 0, window)                                                        # turn lift off
-                liftDown = aio.waitInputState(2, True, window)                                     # wait for lift down
+                aio.setOutput(2, 0, window)                                                # turn lift off
+                liftDown = aio.waitInputState(2, True, window)                             # wait for lift down
                 if not liftDown:                                                           # if program is stopped
                     continue                                                               # exit loop
 
-                aio.setOutput(1, 0, window)                                                        # turn clamp off
-                clampOpen = aio.waitInputState(6, True, window)                                    # wait for clamp open
-                if not clampOpen:                                                          # if program is stopped
-                    continue                                                               # exit loop  
+                aio.setOutput(1, 0, window)                                                 # turn clamp off
+                clampOpen = aio.waitInputState(6, True, window)                             # wait for clamp open
+                if not clampOpen:                                                           # if program is stopped
+                    continue                                                                # exit loop
+
+                notRPosition = aio.waitInputState(0, False, window)                         # wait for board to not be in position R
+                notLPosition = aio.waitInputState(1, False, window)                         # wait for board to not be in position L
+                if not notRPosition or not notLPosition:                                    # if program is stopped
+                    continue                                                                # exit loop
+
+                time.sleep(0.5)                                                             # sleep for 50ms
+
+                aio.setOutput(0, 1, window)                                                 # turn converyor on
             
             else:                                                                          
 
