@@ -353,8 +353,7 @@ def main(origImg, camera, ignoreFlags):
     threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)
 
     # calculate line thresh values
-    linedImg, linePercent = lineImg(origImg, camera, ignoreFlags)
-    print('linePercent: ', linePercent)
+    linedImg, _ = lineImg(origImg, camera, ignoreFlags)
 
     # crop image to plank
     origImg = resizeImg(origImg)

@@ -1,2 +1,1 @@
-cd C:\Users\User\Pallet-Project\
-"C:/Users/User/AppData/Local/Programs/Python/Python38/python.exe" ./main.py
+"D:/Python/Python38/python.exe" d:/Pallet-Project/main.py
