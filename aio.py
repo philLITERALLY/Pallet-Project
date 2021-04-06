@@ -17,7 +17,7 @@ from AIOWDMNet import AIOWDM # pylint: disable=E0401
 AIO_INSTANCE = AIOWDM()
 
 IN_STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0]
-OUT_STATE = [0, 0, 0, 0, 0, 0, 0]
+OUT_STATE = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
 try:
     AIO_INSTANCE.RelOutPort(0, 0, 0) # Reset AIO to empty
@@ -46,7 +46,9 @@ def updateOutState(window):
         str(OUT_STATE[3]) + ' ' + \
         str(OUT_STATE[4]) + ' ' + \
         str(OUT_STATE[5]) + ' ' + \
-        str(OUT_STATE[6])
+        str(OUT_STATE[6]) + ' ' + \
+        str(OUT_STATE[7]) + ' ' + \
+        str(OUT_STATE[8])
     window.FindElement('-AIO-OUTPUT-').update(outStr)
 
 def inputState(inputs, inPort):
@@ -87,6 +89,8 @@ OUT3 = 0
 OUT4 = 0
 OUT5 = 0
 OUT6 = 0
+OUT7 = 0
+OUT8 = 0
 
 # Changes IO array to value
 def calculateIOValue(values):
@@ -97,20 +101,20 @@ def calculateIOValue(values):
 
 # Change a given output state
 def setOutput(outPort, state, window):
-    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6
+    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8
 
     globals()['OUT' + str(outPort)] = state                          # update global variable to new state
     OUT_STATE[outPort] = state
 
-    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6]     # create output array
+    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8]     # create output array
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output)) # send output
     updateOutState(window)
 
 # Pulse a given output
 def pulseOutput(outPort, state, window):
-    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6
+    global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8
 
-    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6]              # create current state
+    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8]              # create current state
     pulseState = initialState[:]                                           # clone current state
     pulseState[outPort] = state                                            # modify with pulse value
 

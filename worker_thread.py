@@ -30,16 +30,8 @@ def main(window):
 
                 reset_view.main(window)                                           # clear images and plank stats
 
-                aio.setOutput(6, 1, window)                                       # turn running light on
-
-                notRPosition = aio.waitInputState(0, False, window)               # wait for board to not be in position R
-                notLPosition = aio.waitInputState(1, False, window)               # wait for board to not be in position L
-                if not notRPosition or not notLPosition:                          # if program is stopped
-                    continue                                                      # exit loop
-
-                time.sleep(0.5)                                                   # sleep for 50ms
-
-                aio.setOutput(0, 1, window)                                       # turn converyor on
+                aio.setOutput(8, 1, window)                                       # turn running light on
+                aio.setOutput(0, 1, window)                                       # turn board stop on
                 
                 rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R
                 lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L
@@ -68,8 +60,6 @@ def main(window):
                 liftUp = aio.waitInputState(3, True, window)                      # wait for lift up
                 if not liftUp:                                                    # if program is stopped
                     continue                                                      # exit loop
-                
-                aio.setOutput(0, 0, window)                                       # turn converyor off
 
                 # window.FindElement('-SLEEP-').update('SIDE 1 IN 2...')
                 # time.sleep(1)
@@ -124,18 +114,13 @@ def main(window):
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green')) # update flag for side 2 to pass
 
-                # if either side is over REJECT (10%) then it's a reject
-                if side1Bark > program_state.REJECT_LIMIT or side2Bark > program_state.REJECT_LIMIT:
-                    aio.setOutput(4, 1, window)                                   # turn reject on
-                    time.sleep(0.2)                                               # sleep for a bit
-                    aio.setOutput(4, 0, window)                                   # turn reject off
+                aio.setOutput(0, 0, window)                                       # turn board stop off
 
-                    handle_count.plankFail(window)                                # update stats
+                # if either side is over REJECT (10%) then it's a reject                
+                reject = side1Bark > program_state.REJECT_LIMIT or side2Bark > program_state.REJECT_LIMIT
 
-                    continue
-
-                # if side 1
-                elif side1Bark < side2Bark:
+                # if plank isn't a reject and is side 1
+                if not reject and side1Bark < side2Bark:
                     currentCCW = aio.getInputState(4, window)                     # get current CCW state
                     currentCW = aio.getInputState(5, window)                      # get current CW state
 
@@ -147,9 +132,6 @@ def main(window):
                     if not ccwState or not cwState:                               # if program is stopped
                         continue                                                  # exit loop
 
-                # if side 1 or 2
-                handle_count.plankPass(window)                                    # update stats
-
                 # continue with plank
                 aio.setOutput(2, 0, window)                                       # turn lift off
                 liftDown = aio.waitInputState(2, True, window)                    # wait for lift down
@@ -160,12 +142,26 @@ def main(window):
                 clampOpen = aio.waitInputState(6, True, window)                   # wait for clamp open
                 if not clampOpen:                                                 # if program is stopped
                     continue                                                      # exit loop
-            
+                
+
+                if reject:
+                    aio.setOutput(4, 1, window)                                   # turn reject on
+                    time.sleep(0.2)                                               # sleep for 20ms
+                    aio.setOutput(4, 0, window)                                   # turn reject off       
+
+                    handle_count.plankFail(window)                                # update stats
+                else:
+                    aio.setOutput(7, 1, window)                                   # turn good board on
+                    time.sleep(0.2)                                               # sleep for 20ms
+                    aio.setOutput(7, 0, window)                                   # turn good board off       
+                    
+                    handle_count.plankPass(window)                                # update stats
+    
             else:                                                                          
 
                 window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
-                aio.setOutput(0, 0, window)                                       # when stopped turn converyor off
+                aio.setOutput(0, 0, window)                                       # when stopped turn board stop off
                 aio.setOutput(1, 0, window)                                       # when stopped turn clamp off
                 aio.setOutput(2, 0, window)                                       # when stopped turn lift off
                 ## if program_state.ROTATE_STATE == 1:                            # when stopped turn rotate off
@@ -173,7 +169,8 @@ def main(window):
                 ##     aio.setOutput(3, program_state.ROTATE_STATE)
                 aio.setOutput(4, 0, window)                                       # when stopped turn reject off
                 aio.setOutput(5, 0, window)                                       # when stopped turn fault off
-                aio.setOutput(6, 0, window)                                       # when stopped turn light off
+                aio.setOutput(7, 0, window)                                       # when stopped turn good board off
+                aio.setOutput(8, 0, window)                                       # when stopped turn light off
 
                 if program_state.THRESH_MODE or \
                     program_state.LINE_MODE or \
