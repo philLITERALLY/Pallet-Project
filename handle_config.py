@@ -31,7 +31,7 @@ def init():
     global CAM1_THRESH, CAM2_THRESH
 
     # Box positioning
-    global SIDE1_VERT
+    global SIDE1_VERT, SIDE2_VERT
 
     # AIO Settings
     global AIO_WAIT
@@ -61,6 +61,7 @@ def init():
 
     # Get box positioning
     SIDE1_VERT = config.getint('BOX POSITIONING', 'SIDE1_VERT')
+    SIDE2_VERT = config.getint('BOX POSITIONING', 'SIDE2_VERT')
 
     # Get side 1 cam 1 box positions
     for box in range(16):                                                   # VARIABLE?!
@@ -73,6 +74,20 @@ def init():
     for box in range(17):                                                   # VARIABLE?!
         leftPos = 'SIDE1_CAM2_BOX' + str(box) + '_LEFT'
         rightPos = 'SIDE1_CAM2_BOX' + str(box) + '_RIGHT'
+        globals()[leftPos] = config.getint('BOX POSITIONING', leftPos)
+        globals()[rightPos] = config.getint('BOX POSITIONING', rightPos)
+
+    # Get side 2 cam 1 box positions
+    for box in range(16):                                                   # VARIABLE?!
+        leftPos = 'SIDE2_CAM1_BOX' + str(box) + '_LEFT'
+        rightPos = 'SIDE2_CAM1_BOX' + str(box) + '_RIGHT'
+        globals()[leftPos] = config.getint('BOX POSITIONING', leftPos)
+        globals()[rightPos] = config.getint('BOX POSITIONING', rightPos)
+
+    # Get side 2 cam 2 box positions
+    for box in range(17):                                                   # VARIABLE?!
+        leftPos = 'SIDE2_CAM2_BOX' + str(box) + '_LEFT'
+        rightPos = 'SIDE2_CAM2_BOX' + str(box) + '_RIGHT'
         globals()[leftPos] = config.getint('BOX POSITIONING', leftPos)
         globals()[rightPos] = config.getint('BOX POSITIONING', rightPos)
 

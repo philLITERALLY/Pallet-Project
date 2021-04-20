@@ -13,6 +13,7 @@ CLEAR_RESULTS = False
 TOTAL_INSPECTED = 0
 TOTAL_PASSED = 0
 ROTATE_STATE = 0
+SIDE_STATE = 1
 
 def set_run_mode(value):
     global RUN_MODE
@@ -36,16 +37,6 @@ def set_transform(value):
         THRESH_BOX_2_MODE = False
         THRESH_MODE = False
 
-def set_thresh_boxes_1(value):
-    global SHOW_TRANSFORM, THRESH_BOX_1_MODE, THRESH_BOX_2_MODE, THRESH_MODE
-    THRESH_BOX_1_MODE = value
-
-    # if turning on this mode then disable others
-    if value:
-        SHOW_TRANSFORM = False
-        THRESH_MODE = False
-        THRESH_BOX_2_MODE = False
-
 def set_thresh(value):
     global SHOW_TRANSFORM, THRESH_BOX_1_MODE, THRESH_BOX_2_MODE, THRESH_MODE
     THRESH_MODE = value
@@ -56,15 +47,27 @@ def set_thresh(value):
         THRESH_BOX_1_MODE = False
         THRESH_BOX_2_MODE = False
 
-def set_thresh_boxes_1_2(value):
-    global SHOW_TRANSFORM, THRESH_BOX_1_MODE, THRESH_BOX_2_MODE, THRESH_MODE
-    THRESH_BOX_2_MODE = value
+def set_thresh_boxes_1(value):
+    global SHOW_TRANSFORM, THRESH_BOX_1_MODE, THRESH_BOX_2_MODE, THRESH_MODE, SIDE_STATE
+    THRESH_BOX_1_MODE = value
+    SIDE_STATE = 1
 
     # if turning on this mode then disable others
     if value:
         SHOW_TRANSFORM = False
-        THRESH_BOX_1_MODE = False
         THRESH_MODE = False
+        THRESH_BOX_2_MODE = False
+
+def set_thresh_boxes_2(value):
+    global SHOW_TRANSFORM, THRESH_BOX_1_MODE, THRESH_BOX_2_MODE, THRESH_MODE, SIDE_STATE
+    THRESH_BOX_2_MODE = value
+    SIDE_STATE = 2
+
+    # if turning on this mode then disable others
+    if value:
+        SHOW_TRANSFORM = False
+        THRESH_MODE = False
+        THRESH_BOX_1_MODE = False
 
 def clear_results():
     global TOTAL_INSPECTED, TOTAL_PASSED

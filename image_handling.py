@@ -60,11 +60,13 @@ def cam2BoxThresh():
         80 + handle_config.CAM2_THRESH
     ]
 
-# Side 1 vertical positions
-def side1TopBound():
-    return topBoxBound + handle_config.SIDE1_VERT - admin_settings.BOARD_WIDTH
-def side1BotBound():
-    return botBoxBound - handle_config.SIDE1_VERT - admin_settings.BOARD_WIDTH
+# Get vertical positions
+def topBound(side):
+    vertPos = getattr(handle_config, 'SIDE' + str(side) + '_VERT')
+    return topBoxBound + vertPos - admin_settings.BOARD_WIDTH
+def botBound(side):
+    vertPos = getattr(handle_config, 'SIDE' + str(side) + '_VERT')
+    return botBoxBound - vertPos - admin_settings.BOARD_WIDTH
 
 # crop image to plank based on offset
 def cropImg(origImg, camera):
@@ -135,7 +137,7 @@ def rotateImg(origImg, camera):
     return origImg
 
 # thresh box image and return black vs white count
-def threshImg(origImg, camera, ignoreFlags):
+def threshImg(origImg, camera, side, ignoreFlags):
     height, width, _ = origImg.shape
 
     # grey image
@@ -151,22 +153,22 @@ def threshImg(origImg, camera, ignoreFlags):
             inUse = x > possibleBoxes - admin_settings.CAM1_BOX_COUNT # boxes that are used in current thresh
             modifying = program_state.CAM1_BOX_MODIFY                 # box that user is currently modifying
 
-            leftPos = getattr(handle_config, 'SIDE1_CAM1_BOX' + str(x) + '_LEFT') 
-            rightPos = getattr(handle_config, 'SIDE1_CAM1_BOX' + str(x) + '_RIGHT')
+            leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM1_BOX' + str(x) + '_LEFT') 
+            rightPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM1_BOX' + str(x) + '_RIGHT')
 
-            if not ignoreFlags and program_state.THRESH_BOX_1_MODE:
+            if not ignoreFlags and (program_state.THRESH_BOX_1_MODE or program_state.THRESH_BOX_2_MODE):
                 rectColour = (255, 0, 0)
 
                 if x == modifying:
                     rectColour = (0, 255, 0)
 
                 if inUse:
-                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, 5)
+                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, 5)
                 else:
-                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, -1)
+                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, -1)
 
             if inUse:
-                newThresh = greyImg[side1TopBound():height - side1BotBound(), leftPos:rightPos].copy()
+                newThresh = greyImg[topBound(side):height - botBound(side), leftPos:rightPos].copy()
                 _, newThresh = cv2.threshold(newThresh, cam1BoxThresh()[x], 255, 0)
 
                 if threshImg is None:
@@ -179,22 +181,22 @@ def threshImg(origImg, camera, ignoreFlags):
             inUse = x < admin_settings.CAM2_BOX_COUNT # boxes that are used in current thresh
             modifying = program_state.CAM2_BOX_MODIFY # box that user is currently modifying
 
-            leftPos = getattr(handle_config, 'SIDE1_CAM2_BOX' + str(x) + '_LEFT') 
-            rightPos = getattr(handle_config, 'SIDE1_CAM2_BOX' + str(x) + '_RIGHT')
+            leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM2_BOX' + str(x) + '_LEFT') 
+            rightPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM2_BOX' + str(x) + '_RIGHT')
 
-            if not ignoreFlags and program_state.THRESH_BOX_1_MODE:
+            if not ignoreFlags and (program_state.THRESH_BOX_1_MODE or program_state.THRESH_BOX_2_MODE):
                 rectColour = (255, 0, 0)
 
                 if x == modifying:
                     rectColour = (0, 255, 0)
 
                 if inUse:
-                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, 5)
+                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, 5)
                 else:
-                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, -1)
+                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, -1)
 
             if inUse:    
-                newThresh = greyImg[side1TopBound():height - side1BotBound(), leftPos:rightPos].copy()
+                newThresh = greyImg[topBound(side):height - botBound(side), leftPos:rightPos].copy()
                 _, newThresh = cv2.threshold(newThresh, cam2BoxThresh()[x], 255, 0)
 
                 if threshImg is None:
@@ -241,7 +243,7 @@ def resizeImg(origImg):
     return origImg
 
 # main img function
-def main(origImg, camera, ignoreFlags): 
+def main(origImg, camera, side, ignoreFlags): 
 
     # crop image to plank
     origImg = cropImg(origImg, camera)
@@ -258,17 +260,13 @@ def main(origImg, camera, ignoreFlags):
     origImg = rotateImg(origImg, camera)
 
     # calculate box thresh values
-    threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)
+    threshedImg, barkPercent = threshImg(origImg, camera, side, ignoreFlags)
 
     # crop image to plank
     origImg = resizeImg(origImg)
 
     # if thresh mode show thresh image
     if not ignoreFlags and program_state.THRESH_MODE:
-        origImg = resizeImg(threshedImg)
-
-    # if line mode show thresh image
-    if not ignoreFlags and program_state.THRESH_BOX_2_MODE:
         origImg = resizeImg(threshedImg)
 
     return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent

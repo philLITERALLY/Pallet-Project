@@ -90,7 +90,7 @@ admin_mode = [
         sg.Button('SIDE 1 BOXES', key='-BOXES-1-MODE-', size=(15, 2)),
         sg.Button('SIDE 2 BOXES', key='-BOXES-2-MODE-', size=(15, 2))
     ],
-    [sg.Button('CANCEL', key='-CANCEL-', size=(32, 2))]
+    [sg.Button('CANCEL', key='-CANCEL-', size=(31, 2))]
 ]
 
 admin_box1 = [
@@ -159,23 +159,32 @@ admin_box2 = [
                 sg.Button('+', key='-CAM2-BOT+-', size=(4, 2))
             ]
         ], key='-CAM2-TRANSFORM-LAYOUT-', visible=False),
+        sg.Column([[
+            sg.Button('-', key='-CAM2-THRESH--', size=(4, 2)),
+                sg.Text(' ' + str(handle_config.CAM2_THRESH) + ' ', key='-CAM2-THRESH-', size=(4, 1), justification='c'),
+            sg.Button('+', key='-CAM2-THRESH+-', size=(4, 2))
+        ]], key='-CAM2-THRESH-LAYOUT-', visible=False),
         sg.Column([
             [
                 sg.Button('-', key='-SIDE1-BOX--', size=(4, 2)),
                 sg.Text('BOX 0', key='-SIDE1-BOX-', size=(6, 1), justification='c'),
                 sg.Button('+', key='-SIDE1-BOX+-', size=(4, 2))
             ]
-        ], key='-SIDE1-BOXES-LAYOUT-', visible=False),
-        sg.Column([[
-            sg.Button('-', key='-CAM2-THRESH--', size=(4, 2)),
-                sg.Text(' ' + str(handle_config.CAM2_THRESH) + ' ', key='-CAM2-THRESH-', size=(4, 1), justification='c'),
-            sg.Button('+', key='-CAM2-THRESH+-', size=(4, 2))
-        ]], key='-CAM2-THRESH-LAYOUT-', visible=False)
+        ], key='-SIDE1-BOX-SELECT-LAYOUT-', visible=False),
+        sg.Column([
+            [
+                sg.Button('-', key='-SIDE2-BOX--', size=(4, 2)),
+                sg.Text('BOX 0', key='-SIDE2-BOX-', size=(6, 1), justification='c'),
+                sg.Button('+', key='-SIDE2-BOX+-', size=(4, 2))
+            ]
+        ], key='-SIDE2-BOX-SELECT-LAYOUT-', visible=False),
     ],
 ]
 
-cancel_layout = [
+boxes_layout = [
     [sg.Image(size=(col_width, 10))], # to help center items
+    [sg.Text('BOX POSITION', key='-BOX-POS-TEXT-')],
+    [sg.Image(size=(col_width, 20))], # extra padding
     [
         sg.Column([
             [
@@ -187,7 +196,7 @@ cancel_layout = [
                 sg.Text('POSITION', key='-SIDE1-BOX-POS-', size=(4, 1), justification='c'),
                 sg.Button('+', key='-SIDE1-BOX-POS+-', size=(4, 2))
             ]
-        ], key='-SIDE1-BOXES-LAYOUT-', visible=True),
+        ], key='-SIDE1-BOXES-LAYOUT-', visible=False),
         sg.Column([
             [
                 sg.Button('-', key='-SIDE2-BOX-WIDTH--', size=(4, 2)),
@@ -238,7 +247,7 @@ main_layout = [
             sg.Column(admin_mode, element_justification='c', size=(col_width, row_size)),    # which admin mode
             sg.Column(admin_box1, element_justification='c', size=(col_width, row_size)),  # board 1 settings
             sg.Column(admin_box2, element_justification='c', size=(col_width, row_size)),  # board 2 settings
-            sg.Column(cancel_layout, element_justification='c', size=(col_width, row_size)), # cancel setup button
+            sg.Column(boxes_layout, element_justification='c', size=(col_width, row_size)), # cancel setup button
         ]], key='-ADMIN-LAYOUT-', visible=False)
     ],
 ]

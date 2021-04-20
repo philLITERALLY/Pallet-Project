@@ -12,12 +12,16 @@ def admin(event, window):
     window.FindElement('-BOXES-2-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-BARK-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE1-VERTICAL-LAYOUT-').Update(visible=False)
-    window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=False)
     window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=False)
+    window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=False)
+    window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=False)
+    window.FindElement('-SIDE1-VERTICAL-LAYOUT-').Update(visible=False)
+    window.FindElement('-SIDE2-VERTICAL-LAYOUT-').Update(visible=False)
     window.FindElement('-SIDE1-BOX-SELECT-LAYOUT-').Update(visible=False)
     window.FindElement('-SIDE2-BOX-SELECT-LAYOUT-').Update(visible=False)
-    window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=False)
+    window.FindElement('-BOX-POS-TEXT-').Update(visible=False)
+    window.FindElement('-SIDE1-BOXES-LAYOUT-').Update(visible=False)
+    window.FindElement('-SIDE2-BOXES-LAYOUT-').Update(visible=False)
     window.FindElement('-ADMIN-BOX1-TEXT-').Update('CAM 1')
     window.FindElement('-ADMIN-BOX2-TEXT-').Update('CAM 2')
     
@@ -43,7 +47,7 @@ def admin(event, window):
         # make sure admin modes are off
         program_state.set_thresh_boxes_1(False)
         program_state.set_thresh(False)
-        program_state.set_thresh_boxes_1_2(False)
+        program_state.set_thresh_boxes_2(False)
         program_state.set_transform(False)
 
     # When transform mode button is pressed
@@ -55,6 +59,15 @@ def admin(event, window):
         window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
 
+    # When bark thresh mode button is pressed
+    if event == '-BARK-MODE-':
+        program_state.set_thresh(True)       # turn on box thresh mode
+
+        # turn thresh button on
+        window.FindElement('-BARK-MODE-').Update(button_color=('black', 'yellow'))
+        window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
+        window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
+
     # When boxes mode button is pressed
     if event == '-BOXES-1-MODE-':
         program_state.set_thresh_boxes_1(True)  # turn on boxes mode
@@ -65,26 +78,21 @@ def admin(event, window):
         window.FindElement('-ADMIN-BOX2-TEXT-').Update('SELECT BOX')
         window.FindElement('-SIDE1-VERTICAL-LAYOUT-').Update(visible=True)
         window.FindElement('-SIDE1-BOX-SELECT-LAYOUT-').Update(visible=True)
+        window.FindElement('-SIDE1-BOXES-LAYOUT-').Update(visible=True)
+        window.FindElement('-BOX-POS-TEXT-').Update(visible=True)
 
     # When boxes 2 mode button is pressed
     if event == '-BOXES-2-MODE-':
-        program_state.set_thresh_boxes_1_2(True)       # turn on line thresh mode
+        program_state.set_thresh_boxes_2(True)       # turn on line thresh mode
 
         # turn thresh button on
         window.FindElement('-BOXES-2-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-ADMIN-BOX1-TEXT-').Update('ALL BOXES')
         window.FindElement('-ADMIN-BOX2-TEXT-').Update('SELECT BOX')
-        window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
-        window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
-
-    # When bark thresh mode button is pressed
-    if event == '-BARK-MODE-':
-        program_state.set_thresh(True)       # turn on box thresh mode
-
-        # turn thresh button on
-        window.FindElement('-BARK-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
-        window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
+        window.FindElement('-SIDE2-VERTICAL-LAYOUT-').Update(visible=True)
+        window.FindElement('-SIDE2-BOX-SELECT-LAYOUT-').Update(visible=True)
+        window.FindElement('-SIDE2-BOXES-LAYOUT-').Update(visible=True)
+        window.FindElement('-BOX-POS-TEXT-').Update(visible=True)
 
 def board(event, window):
     if event == '-WIDTH-70-': # 70

@@ -69,8 +69,8 @@ def main(window):
                 
                 frame1 = camera1.read()                                           # grab camera 1
                 frame2 = camera2.read()                                           # grab camera 2                    
-                side1cam1, side1cam1Bark = image_handling.main(frame1, 1, True)   # process camera 1
-                side1cam2, side1cam2Bark = image_handling.main(frame2, 2, True)   # process camera 2
+                side1cam1, side1cam1Bark = image_handling.main(frame1, 1, 1, True)   # process camera 1 side 1
+                side1cam2, side1cam2Bark = image_handling.main(frame2, 2, 1, True)   # process camera 2 side 1
                 side1Bark = round((side1cam1Bark + side1cam2Bark) / 2, 2)         # calculate bark count
 
                 window.FindElement('-SIDE-1-CAM-1-').update(data=side1cam1)                    # update img for side 1 camera 1
@@ -101,8 +101,8 @@ def main(window):
 
                 frame1 = camera1.read()                                           # grab camera 1
                 frame2 = camera2.read()                                           # grab camera 2
-                side2cam1, side2cam1Bark = image_handling.main(frame1, 1, True)   # process camera 1
-                side2cam2, side2cam2Bark = image_handling.main(frame2, 2, True)   # process camera 2
+                side2cam1, side2cam1Bark = image_handling.main(frame1, 1, 2, True)   # process camera 1 side 2
+                side2cam2, side2cam2Bark = image_handling.main(frame2, 2, 2, True)   # process camera 2 side 2
                 side2Bark = round((side2cam1Bark + side2cam2Bark) / 2, 2)         # calculate bark count
 
                 window.FindElement('-SIDE-2-CAM-1-').update(data=side2cam1)                    # update img for side 2 camera 1
