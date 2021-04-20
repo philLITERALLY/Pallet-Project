@@ -3,12 +3,14 @@
 import threading        # threading
 
 # my modules
+import info_logger      # logger
+info_logger.init()      # logger needs loaded
+import handle_config    # module to handle config settings
+handle_config.init()    # config settings need loaded
+
 import layouts          # UI Layouts
 import gui              # gui handler
 import worker_thread    # main thread
-import info_logger      # logger
-
-info_logger.init()
 
 if __name__ == '__main__':
    

@@ -6,7 +6,7 @@ import time
 
 # my modules
 import program_state  # Programs State
-import variables      # Programs Variables
+import handle_config  # Programs Configuration
 
 import mock_aio
 
@@ -123,7 +123,7 @@ def pulseOutput(outPort, state, window):
 
     updateOutState(window)
 
-    time.sleep(variables.AIO_WAIT)                                         # sleep for 100 ms
+    time.sleep(handle_config.AIO_WAIT)                                         # sleep for 100 ms
 
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))          # set back to initial state
     OUT_STATE[outPort] = state

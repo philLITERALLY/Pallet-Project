@@ -6,7 +6,7 @@ from os import listdir
 from os.path import isfile, join
 
 # my modules
-import layouts          # UI Layouts
+import handle_config    # module to handle config settings
 import program_state    # programs State
 import camera_setup     # camera setup function
 import aio              # handles the aio
@@ -77,7 +77,7 @@ def main(window):
                 window.FindElement('-SIDE-1-CAM-2-').update(data=side1cam2)                    # update img for side 1 camera 2                    
                 window.FindElement('-%-BARK-1-').update('\nSIDE 1:- % BARK ' + str(side1Bark)) # update count of bark count for side 1
 
-                if side1Bark > program_state.REJECT_LIMIT:
+                if side1Bark > handle_config.REJECT_LEVEL:
                     window.FindElement('-SIDE1-STATUS-').update('\nFAIL', background_color=('red'))
                 else:
                     window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
@@ -109,7 +109,7 @@ def main(window):
                 window.FindElement('-SIDE-2-CAM-2-').update(data=side2cam2)                    # update img for side 2 camera 2
                 window.FindElement('-%-BARK-2-').update('\nSIDE 2:- % BARK ' + str(side2Bark)) # update count of bark count for side 2
 
-                if side2Bark > program_state.REJECT_LIMIT:
+                if side2Bark > handle_config.REJECT_LEVEL:
                     window.FindElement('-SIDE2-STATUS-').update('\nFAIL', background_color=('red'))   # update flag for side 2 to fail
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green')) # update flag for side 2 to pass
@@ -117,7 +117,7 @@ def main(window):
                 aio.setOutput(0, 0, window)                                       # turn board stop off
 
                 # if either side is over REJECT (10%) then it's a reject                
-                reject = side1Bark > program_state.REJECT_LIMIT or side2Bark > program_state.REJECT_LIMIT
+                reject = side1Bark > handle_config.REJECT_LEVEL or side2Bark > handle_config.REJECT_LEVEL
 
                 # if plank isn't a reject and is side 1
                 if not reject and side1Bark < side2Bark:
@@ -173,8 +173,8 @@ def main(window):
                 aio.setOutput(8, 0, window)                                       # when stopped turn light off
 
                 if program_state.THRESH_MODE or \
-                    program_state.LINE_MODE or \
-                    program_state.THRESH_BOX_MODE or \
+                    program_state.THRESH_BOX_1_MODE or \
+                    program_state.THRESH_BOX_2_MODE or \
                     program_state.SHOW_TRANSFORM:
                     admin_view.main(camera1, camera2, window)
                 else:

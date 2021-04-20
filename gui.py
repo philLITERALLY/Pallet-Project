@@ -5,6 +5,7 @@ import PySimpleGUI as sg
 # my modules
 import program_state    # Programs State
 import handle_events    # handles the UI button events
+import handle_config    # module to handle config settings
 
 def main(window):
     while not program_state.STOP_PROGRAM:
@@ -16,7 +17,7 @@ def main(window):
             break
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-TRANSFORM-MODE-', '-BOXES-MODE-', '-BARK-MODE-', '-LINE-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-TRANSFORM-MODE-', '-BOXES-1-MODE-', '-BOXES-2-MODE-', '-BARK-MODE-'):
             handle_events.admin(event, window)
 
         # board events
@@ -28,7 +29,7 @@ def main(window):
             handle_events.transform(event, window)
             
         # box position events
-        if event in ('-CAM1-LEFT-', '-CAM1-RIGHT-', '-CAM1-UP-', '-CAM1-DOWN-', '-CAM2-LEFT-', '-CAM2-RIGHT-', '-CAM2-UP-', '-CAM2-DOWN-'):
+        if event in ('-CAM1-LEFT-', '-CAM1-RIGHT-', '-SIDE1-UP-', '-SIDE1-DOWN-', '-CAM2-LEFT-', '-CAM2-RIGHT-', '-CAM2-UP-', '-CAM2-DOWN-'):
             handle_events.boxes(event)
 
         # thresh events
@@ -54,19 +55,15 @@ def main(window):
 
         # When the increase reject value is pressed
         if event == '-REJECT+-':
-            REJECT = program_state.REJECT_LIMIT + 1
-            rejectStr = str(REJECT) + '%'
+            handle_config.setValue('REJECT SETTINGS', 'REJECT_LEVEL', handle_config.REJECT_LEVEL + 1)
+            rejectStr = str(handle_config.REJECT_LEVEL) + '%'
             window.FindElement('-REJECT-LEVEL-').update(rejectStr)
-
-            program_state.set_reject_limit(REJECT)
             
         # When the decrease reject value is pressed
         if event == '-REJECT--':
-            REJECT = program_state.REJECT_LIMIT - 1
-            rejectStr = str(REJECT) + '%'
+            handle_config.setValue('REJECT SETTINGS', 'REJECT_LEVEL', handle_config.REJECT_LEVEL - 1)
+            rejectStr = str(handle_config.REJECT_LEVEL) + '%'
             window.FindElement('-REJECT-LEVEL-').update(rejectStr)
-
-            program_state.set_reject_limit(REJECT)
 
         # When fault is flagged
         if event == '-FAULT-':

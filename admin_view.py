@@ -2,7 +2,7 @@
 
 # my modules
 import image_handling   # handles image
-import program_state    # Programs State
+import handle_config    # module to handle config settings
 
 def main(camera1, camera2, window):
     frame1 = camera1.read()
@@ -23,12 +23,12 @@ def main(camera1, camera2, window):
     window.FindElement('-%-BARK-1-').update('\nCAM 1:- % BARK ' + str(cam1BarkPerc))
     window.FindElement('-%-BARK-2-').update('\nCAM 2:- % BARK ' + str(cam2BarkPerc))
 
-    if cam1BarkPerc > program_state.REJECT_LIMIT:
+    if cam1BarkPerc > handle_config.REJECT_LEVEL:
         window.FindElement('-SIDE1-STATUS-').update('\nFAIL', background_color=('red'))
     else:
         window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
-    if cam2BarkPerc > program_state.REJECT_LIMIT:
+    if cam2BarkPerc > handle_config.REJECT_LEVEL:
         window.FindElement('-SIDE2-STATUS-').update('\nFAIL', background_color=('red'))
     else:
         window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))

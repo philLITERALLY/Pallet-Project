@@ -8,8 +8,8 @@ import PIL.Image
 import layouts          # UI Layouts
 import program_state    # Programs State
 import admin_settings   # Admin settings
+import handle_config    # Programs Configuration
 
-plankWidth = 300
 midOffsetCam1 = -40
 midOffsetCam2 = -20
 planeOffset = 100
@@ -20,135 +20,51 @@ botBoxBound = 120
 # thresh settings for camera 1
 def cam1BoxThresh():
     return [
-        80 + admin_settings.CAM1_THRESH,
-        80 + admin_settings.CAM1_THRESH,
-        100 + admin_settings.CAM1_THRESH,
-        100 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH, 
-        120 + admin_settings.CAM1_THRESH, 
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH, 
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH,
-        120 + admin_settings.CAM1_THRESH
+        80 + handle_config.CAM1_THRESH,
+        80 + handle_config.CAM1_THRESH,
+        100 + handle_config.CAM1_THRESH,
+        100 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH, 
+        120 + handle_config.CAM1_THRESH, 
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH, 
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH,
+        120 + handle_config.CAM1_THRESH
     ]
-def cam1LineThresh():
-    return 120 + admin_settings.CAM1_LINE_THRESH
-def cam1LeftPositions():
-    return [
-        225 + admin_settings.CAM1_BOX_POS_LR,
-        345 + admin_settings.CAM1_BOX_POS_LR,
-        465 + admin_settings.CAM1_BOX_POS_LR,
-        590 + admin_settings.CAM1_BOX_POS_LR,
-        718 + admin_settings.CAM1_BOX_POS_LR,
-        847 + admin_settings.CAM1_BOX_POS_LR,
-        976 + admin_settings.CAM1_BOX_POS_LR,
-        1108 + admin_settings.CAM1_BOX_POS_LR,
-        1238 + admin_settings.CAM1_BOX_POS_LR,
-        1370 + admin_settings.CAM1_BOX_POS_LR,
-        1505 + admin_settings.CAM1_BOX_POS_LR,
-        1630 + admin_settings.CAM1_BOX_POS_LR,
-        1760 + admin_settings.CAM1_BOX_POS_LR,
-        1890 + admin_settings.CAM1_BOX_POS_LR,
-        2015 + admin_settings.CAM1_BOX_POS_LR,
-        2135 + admin_settings.CAM1_BOX_POS_LR
-    ]
-def cam1RightPositions(width):
-    return [
-        315 + admin_settings.CAM1_BOX_POS_LR,
-        435 + admin_settings.CAM1_BOX_POS_LR,
-        565 + admin_settings.CAM1_BOX_POS_LR,
-        698 + admin_settings.CAM1_BOX_POS_LR,
-        827 + admin_settings.CAM1_BOX_POS_LR,
-        956 + admin_settings.CAM1_BOX_POS_LR,
-        1088 + admin_settings.CAM1_BOX_POS_LR,
-        1218 + admin_settings.CAM1_BOX_POS_LR,
-        1350 + admin_settings.CAM1_BOX_POS_LR,
-        1485 + admin_settings.CAM1_BOX_POS_LR,
-        1610 + admin_settings.CAM1_BOX_POS_LR,
-        1740 + admin_settings.CAM1_BOX_POS_LR,
-        1870 + admin_settings.CAM1_BOX_POS_LR,
-        1995 + admin_settings.CAM1_BOX_POS_LR,
-        2115 + admin_settings.CAM1_BOX_POS_LR,
-        width
-    ]
-def cam1TopBound():
-    return topBoxBound + admin_settings.CAM1_BOX_POS_UD - admin_settings.BOARD_WIDTH
-def cam1BotBound():
-    return botBoxBound - admin_settings.CAM1_BOX_POS_UD - admin_settings.BOARD_WIDTH
 
 # thresh settings for camera 2
 def cam2BoxThresh():
     return [
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        120 + admin_settings.CAM2_THRESH,
-        100 + admin_settings.CAM2_THRESH,
-        100 + admin_settings.CAM2_THRESH,
-        80 + admin_settings.CAM2_THRESH,
-        80 + admin_settings.CAM2_THRESH,
-        80 + admin_settings.CAM2_THRESH
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        120 + handle_config.CAM2_THRESH,
+        100 + handle_config.CAM2_THRESH,
+        100 + handle_config.CAM2_THRESH,
+        80 + handle_config.CAM2_THRESH,
+        80 + handle_config.CAM2_THRESH,
+        80 + handle_config.CAM2_THRESH
     ]
-def cam2LineThresh():
-    return 120 + admin_settings.CAM2_LINE_THRESH
-def cam2LeftPositons():
-    return [
-        0,
-        110 + admin_settings.CAM2_BOX_POS_LR,
-        233 + admin_settings.CAM2_BOX_POS_LR,
-        355 + admin_settings.CAM2_BOX_POS_LR,
-        485 + admin_settings.CAM2_BOX_POS_LR,
-        615 + admin_settings.CAM2_BOX_POS_LR,
-        740 + admin_settings.CAM2_BOX_POS_LR,
-        875 + admin_settings.CAM2_BOX_POS_LR,
-        1005 + admin_settings.CAM2_BOX_POS_LR,
-        1130 + admin_settings.CAM2_BOX_POS_LR,
-        1260 + admin_settings.CAM2_BOX_POS_LR,
-        1390 + admin_settings.CAM2_BOX_POS_LR,
-        1520 + admin_settings.CAM2_BOX_POS_LR,
-        1650 + admin_settings.CAM2_BOX_POS_LR,
-        1723 + admin_settings.CAM2_BOX_POS_LR,
-        1851 + admin_settings.CAM2_BOX_POS_LR,
-        1973 + admin_settings.CAM2_BOX_POS_LR
-    ]
-def cam2RightPositions():
-    return [
-        85 + admin_settings.CAM2_BOX_POS_LR,
-        208 + admin_settings.CAM2_BOX_POS_LR,
-        335 + admin_settings.CAM2_BOX_POS_LR,
-        460 + admin_settings.CAM2_BOX_POS_LR,
-        585 + admin_settings.CAM2_BOX_POS_LR,
-        710 + admin_settings.CAM2_BOX_POS_LR,
-        845 + admin_settings.CAM2_BOX_POS_LR,
-        970 + admin_settings.CAM2_BOX_POS_LR,
-        1100 + admin_settings.CAM2_BOX_POS_LR,
-        1230 + admin_settings.CAM2_BOX_POS_LR,
-        1360 + admin_settings.CAM2_BOX_POS_LR,
-        1490 + admin_settings.CAM2_BOX_POS_LR,
-        1610 + admin_settings.CAM2_BOX_POS_LR,
-        1690 + admin_settings.CAM2_BOX_POS_LR,
-        1818 + admin_settings.CAM2_BOX_POS_LR,
-        1941 + admin_settings.CAM2_BOX_POS_LR,
-        2038 + admin_settings.CAM2_BOX_POS_LR
-    ]
-def cam2TopBound():
-    return topBoxBound + admin_settings.CAM2_BOX_POS_UD - admin_settings.BOARD_WIDTH
-def cam2BotBound():
-    return botBoxBound - admin_settings.CAM2_BOX_POS_UD - admin_settings.BOARD_WIDTH
+
+# Side 1 vertical positions
+def side1TopBound():
+    return topBoxBound + handle_config.SIDE1_VERT - admin_settings.BOARD_WIDTH
+def side1BotBound():
+    return botBoxBound - handle_config.SIDE1_VERT - admin_settings.BOARD_WIDTH
 
 # crop image to plank based on offset
 def cropImg(origImg, camera):
@@ -159,8 +75,8 @@ def cropImg(origImg, camera):
     else:
         midPoint = int(width / 2) + midOffsetCam2
 
-    leftBound = midPoint - plankWidth
-    rightBound = midPoint + plankWidth
+    leftBound = midPoint - handle_config.FRAME_WIDTH
+    rightBound = midPoint + handle_config.FRAME_WIDTH
 
     # draw on boundaries
     # cv2.line(origImg, (leftBound, 0), (leftBound, height), (255,0,0), 5) # Top-Left to Bottom-Left
@@ -175,12 +91,12 @@ def cropImg(origImg, camera):
 def plotCircles(origImg, camera):
     height, width, _ = origImg.shape # img size
     
-    leftOffset = admin_settings.CAM1_TRANS_LEFT
-    rightOffset = width - admin_settings.CAM1_TRANS_RIGHT
+    leftOffset = handle_config.CAM1_TRANS_LEFT
+    rightOffset = width - handle_config.CAM1_TRANS_RIGHT
             
     if camera == 2:
-        leftOffset = admin_settings.CAM2_TRANS_LEFT
-        rightOffset = width - admin_settings.CAM2_TRANS_RIGHT
+        leftOffset = handle_config.CAM2_TRANS_LEFT
+        rightOffset = width - handle_config.CAM2_TRANS_RIGHT
 
     cv2.circle(origImg, (leftOffset, 0), 5, (0, 0, 255), 2)   # Top-Left
     cv2.circle(origImg, (rightOffset, 0), 5, (0, 0, 255), 2)  # Top-Right
@@ -196,12 +112,12 @@ def plotCircles(origImg, camera):
 def transform(origImg, camera):
     height, width, _ = origImg.shape # img size
     
-    leftOffset = admin_settings.CAM1_TRANS_LEFT
-    rightOffset = width - admin_settings.CAM1_TRANS_RIGHT
+    leftOffset = handle_config.CAM1_TRANS_LEFT
+    rightOffset = width - handle_config.CAM1_TRANS_RIGHT
             
     if camera == 2:
-        leftOffset = admin_settings.CAM2_TRANS_LEFT
-        rightOffset = width - admin_settings.CAM2_TRANS_RIGHT
+        leftOffset = handle_config.CAM2_TRANS_LEFT
+        rightOffset = width - handle_config.CAM2_TRANS_RIGHT
 
     pts1 = np.float32([[leftOffset, 0], [rightOffset, 0], [0, height], [width, height]])
     pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
@@ -226,73 +142,65 @@ def threshImg(origImg, camera, ignoreFlags):
     greyImg = cv2.cvtColor(origImg, cv2.COLOR_BGR2GRAY)
     threshImg = None
 
-    # draw thresh boxes
-    if camera == 1:
-        possibleBoxes = len(cam1BoxThresh())
-        for x in range(possibleBoxes - admin_settings.CAM1_BOX_COUNT, possibleBoxes):
-            if not ignoreFlags and program_state.THRESH_BOX_MODE:
-                cv2.rectangle(origImg, (cam1LeftPositions()[x], cam1TopBound()), (cam1RightPositions(width)[x], height - cam1BotBound()), (255, 0, 0), 5)
-                        
-            newThresh = greyImg[cam1TopBound():height - cam1BotBound(), cam1LeftPositions()[x]:cam1RightPositions(width)[x]].copy()
-            _, newThresh = cv2.threshold(newThresh, cam1LineThresh(), 255, 0)
-
-            if threshImg is None:
-                threshImg = newThresh
-            else:
-                threshImg = cv2.hconcat([threshImg, newThresh])
-    else:
-        for x in range(0, admin_settings.CAM2_BOX_COUNT):
-            if not ignoreFlags and program_state.THRESH_BOX_MODE:
-                cv2.rectangle(origImg, (cam2LeftPositons()[x], cam2TopBound()), (cam2RightPositions()[x], height - cam2BotBound()), (255, 0, 0), 5)
-            
-            newThresh = greyImg[cam2TopBound():height - cam2BotBound(), cam2LeftPositons()[x]:cam2RightPositions()[x]].copy()
-            _, newThresh = cv2.threshold(newThresh, cam2LineThresh(), 255, 0)
-
-            if threshImg is None:
-                threshImg = newThresh
-            else:
-                threshImg = cv2.hconcat([threshImg, newThresh])
-
-    totalPixels = threshImg.size
-    whitePixels = cv2.countNonZero(threshImg)
-    blackPixels = totalPixels - whitePixels
-
-    return threshImg, round(blackPixels / totalPixels * 100, 2)
-
-# thresh line image and return black vs white count
-def lineImg(origImg, camera, ignoreFlags):
-    height, width, _ = origImg.shape
-
-    # grey image
-    greyImg = cv2.cvtColor(origImg, cv2.COLOR_BGR2GRAY)
-    threshImg = None
+    program_state.admin_box_change(32)
 
     # draw thresh boxes
     if camera == 1:
         possibleBoxes = len(cam1BoxThresh())
-        for x in range(possibleBoxes - admin_settings.CAM1_BOX_COUNT + 1, possibleBoxes):
-            if not ignoreFlags and program_state.THRESH_BOX_MODE:
-                cv2.rectangle(origImg, (cam1RightPositions(width)[x - 1], cam1TopBound()), (cam1LeftPositions()[x], height - cam1BotBound()), (0, 0, 255), 5)
+        for x in range(0, possibleBoxes):
+            inUse = x > possibleBoxes - admin_settings.CAM1_BOX_COUNT # boxes that are used in current thresh
+            modifying = program_state.CAM1_BOX_MODIFY                 # box that user is currently modifying
 
-            newThresh = greyImg[cam1TopBound():height - cam1BotBound(), cam1RightPositions(width)[x - 1]:cam1LeftPositions()[x]].copy()
-            _, newThresh = cv2.threshold(newThresh, cam1BoxThresh()[x], 255, 0)
+            leftPos = getattr(handle_config, 'SIDE1_CAM1_BOX' + str(x) + '_LEFT') 
+            rightPos = getattr(handle_config, 'SIDE1_CAM1_BOX' + str(x) + '_RIGHT')
 
-            if threshImg is None:
-                threshImg = newThresh
-            else:
-                threshImg = cv2.hconcat([threshImg, newThresh])
+            if not ignoreFlags and program_state.THRESH_BOX_1_MODE:
+                rectColour = (255, 0, 0)
+
+                if x == modifying:
+                    rectColour = (0, 255, 0)
+
+                if inUse:
+                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, 5)
+                else:
+                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, -1)
+
+            if inUse:
+                newThresh = greyImg[side1TopBound():height - side1BotBound(), leftPos:rightPos].copy()
+                _, newThresh = cv2.threshold(newThresh, cam1BoxThresh()[x], 255, 0)
+
+                if threshImg is None:
+                    threshImg = newThresh
+                else:
+                    threshImg = cv2.hconcat([threshImg, newThresh])
     else:
-        for x in range(1, admin_settings.CAM2_BOX_COUNT):
-            if not ignoreFlags and program_state.THRESH_BOX_MODE:
-                cv2.rectangle(origImg, (cam2RightPositions()[x - 1], cam2TopBound()), (cam2LeftPositons()[x], height - cam2BotBound()), (0, 0, 255), 5)
+        possibleBoxes = len(cam2BoxThresh())
+        for x in range(0, possibleBoxes):            
+            inUse = x < admin_settings.CAM2_BOX_COUNT # boxes that are used in current thresh
+            modifying = program_state.CAM2_BOX_MODIFY # box that user is currently modifying
 
-            newThresh = greyImg[cam2TopBound():height - cam2BotBound(), cam2RightPositions()[x - 1]:cam2LeftPositons()[x]].copy()
-            _, newThresh = cv2.threshold(newThresh, cam2BoxThresh()[x], 255, 0)
+            leftPos = getattr(handle_config, 'SIDE1_CAM2_BOX' + str(x) + '_LEFT') 
+            rightPos = getattr(handle_config, 'SIDE1_CAM2_BOX' + str(x) + '_RIGHT')
 
-            if threshImg is None:
-                threshImg = newThresh
-            else:
-                threshImg = cv2.hconcat([threshImg, newThresh])
+            if not ignoreFlags and program_state.THRESH_BOX_1_MODE:
+                rectColour = (255, 0, 0)
+
+                if x == modifying:
+                    rectColour = (0, 255, 0)
+
+                if inUse:
+                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, 5)
+                else:
+                    cv2.rectangle(origImg, (leftPos, side1TopBound()), (rightPos, height - side1BotBound()), rectColour, -1)
+
+            if inUse:    
+                newThresh = greyImg[side1TopBound():height - side1BotBound(), leftPos:rightPos].copy()
+                _, newThresh = cv2.threshold(newThresh, cam2BoxThresh()[x], 255, 0)
+
+                if threshImg is None:
+                    threshImg = newThresh
+                else:
+                    threshImg = cv2.hconcat([threshImg, newThresh])
 
     totalPixels = threshImg.size
     whitePixels = cv2.countNonZero(threshImg)
@@ -352,9 +260,6 @@ def main(origImg, camera, ignoreFlags):
     # calculate box thresh values
     threshedImg, barkPercent = threshImg(origImg, camera, ignoreFlags)
 
-    # calculate line thresh values
-    linedImg, _ = lineImg(origImg, camera, ignoreFlags)
-
     # crop image to plank
     origImg = resizeImg(origImg)
 
@@ -363,7 +268,7 @@ def main(origImg, camera, ignoreFlags):
         origImg = resizeImg(threshedImg)
 
     # if line mode show thresh image
-    if not ignoreFlags and program_state.LINE_MODE:
-        origImg = resizeImg(linedImg)
+    if not ignoreFlags and program_state.THRESH_BOX_2_MODE:
+        origImg = resizeImg(threshedImg)
 
     return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent
