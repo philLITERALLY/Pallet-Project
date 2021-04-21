@@ -96,7 +96,7 @@ admin_mode = [
 admin_box1 = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
-    [sg.Image(size=(col_width, 20))], # extra padding
+    [sg.Image(size=(col_width, 10))], # extra padding
     [
         sg.Column([
             [
@@ -144,7 +144,7 @@ admin_box1 = [
 admin_box2 = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [sg.Text('SELECT BOX', key='-ADMIN-BOX2-TEXT-')],
-    [sg.Image(size=(col_width, 20))], # extra padding
+    [sg.Image(size=(col_width, 10))], # extra padding
     [
         sg.Column([
             [
@@ -184,7 +184,7 @@ admin_box2 = [
 boxes_layout = [
     [sg.Image(size=(col_width, 10))], # to help center items
     [sg.Text('BOX POSITION', key='-BOX-POS-TEXT-')],
-    [sg.Image(size=(col_width, 20))], # extra padding
+    [sg.Image(size=(col_width, 10))], # extra padding
     [
         sg.Column([
             [
