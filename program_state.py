@@ -7,6 +7,7 @@ SHOW_TRANSFORM = False
 THRESH_MODE = False
 THRESH_BOX_1_MODE = False
 THRESH_BOX_2_MODE = False
+BOX_MODIFY = 0
 CAM1_BOX_MODIFY = None
 CAM2_BOX_MODIFY = None
 CLEAR_RESULTS = False
@@ -52,6 +53,8 @@ def set_thresh_boxes_1(value):
     THRESH_BOX_1_MODE = value
     SIDE_STATE = 1
 
+    admin_box_change(0)
+
     # if turning on this mode then disable others
     if value:
         SHOW_TRANSFORM = False
@@ -62,6 +65,8 @@ def set_thresh_boxes_2(value):
     global SHOW_TRANSFORM, THRESH_BOX_1_MODE, THRESH_BOX_2_MODE, THRESH_MODE, SIDE_STATE
     THRESH_BOX_2_MODE = value
     SIDE_STATE = 2
+    
+    admin_box_change(0)
 
     # if turning on this mode then disable others
     if value:
@@ -91,18 +96,19 @@ def toggle_rotate_state():
         ROTATE_STATE = 1
 
 def admin_box_change(value):
-    global CAM1_BOX_MODIFY, CAM2_BOX_MODIFY
+    global BOX_MODIFY, CAM1_BOX_MODIFY, CAM2_BOX_MODIFY
 
     possible1Boxes = 15 # CHANGE TO BE Variable ?!
     possible2Boxes = 16 # CHANGE TO BE Variable ?!
 
-    if value < 0 or value > possible1Boxes + possible2Boxes:
+    if value < 0 or value > possible1Boxes + possible2Boxes + 1:
         return
 
-    if value <=  possible1Boxes:
+    BOX_MODIFY = value
+
+    if value <= possible1Boxes:
         CAM1_BOX_MODIFY = value
         CAM2_BOX_MODIFY = None
     else:
         CAM1_BOX_MODIFY = None
         CAM2_BOX_MODIFY = value - possible1Boxes - 1
-

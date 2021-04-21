@@ -167,14 +167,14 @@ admin_box2 = [
         sg.Column([
             [
                 sg.Button('-', key='-SIDE1-BOX--', size=(4, 2)),
-                sg.Text('BOX 0', key='-SIDE1-BOX-', size=(6, 1), justification='c'),
+                sg.Text('0', key='-SIDE1-BOX-', size=(6, 1), justification='c'),
                 sg.Button('+', key='-SIDE1-BOX+-', size=(4, 2))
             ]
         ], key='-SIDE1-BOX-SELECT-LAYOUT-', visible=False),
         sg.Column([
             [
                 sg.Button('-', key='-SIDE2-BOX--', size=(4, 2)),
-                sg.Text('BOX 0', key='-SIDE2-BOX-', size=(6, 1), justification='c'),
+                sg.Text('0', key='-SIDE2-BOX-', size=(6, 1), justification='c'),
                 sg.Button('+', key='-SIDE2-BOX+-', size=(4, 2))
             ]
         ], key='-SIDE2-BOX-SELECT-LAYOUT-', visible=False),
@@ -188,10 +188,12 @@ boxes_layout = [
     [
         sg.Column([
             [
+                sg.Text('WIDTH', size=(8, 1), justification='left'),
                 sg.Button('-', key='-SIDE1-BOX-WIDTH--', size=(4, 2)),
                 sg.Text('WIDTH', key='-SIDE1-BOX-WIDTH-', size=(4, 1), justification='c'),
                 sg.Button('+', key='-SIDE1-BOX-WIDTH+-', size=(4, 2))
             ], [
+                sg.Text('POSITION', size=(8, 1), justification='left'),
                 sg.Button('-', key='-SIDE1-BOX-POS--', size=(4, 2)),
                 sg.Text('POSITION', key='-SIDE1-BOX-POS-', size=(4, 1), justification='c'),
                 sg.Button('+', key='-SIDE1-BOX-POS+-', size=(4, 2))
@@ -199,10 +201,12 @@ boxes_layout = [
         ], key='-SIDE1-BOXES-LAYOUT-', visible=False),
         sg.Column([
             [
+                sg.Text('WIDTH', size=(8, 1), justification='left'),
                 sg.Button('-', key='-SIDE2-BOX-WIDTH--', size=(4, 2)),
                 sg.Text('WIDTH', key='-SIDE2-BOX-WIDTH-', size=(4, 1), justification='c'),
                 sg.Button('+', key='-SIDE2-BOX-WIDTH+-', size=(4, 2))
             ], [
+                sg.Text('POSITION', size=(8, 1), justification='left'),
                 sg.Button('-', key='-SIDE2-BOX-POS--', size=(4, 2)),
                 sg.Text('POSITION', key='-SIDE2-BOX-POS-', size=(4, 1), justification='c'),
                 sg.Button('+', key='-SIDE2-BOX-POS+-', size=(4, 2))

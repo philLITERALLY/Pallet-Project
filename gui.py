@@ -15,6 +15,10 @@ def main(window):
         if event in (sg.WIN_CLOSED, 'Exit'):
             program_state.stop_program()
             break
+        
+        side = 1
+        if 'SIDE2' in event:
+            side = 2
 
         # admin events
         if event in ('-SETUP-', '-CANCEL-', '-TRANSFORM-MODE-', '-BOXES-1-MODE-', '-BOXES-2-MODE-', '-BARK-MODE-'):
@@ -29,12 +33,28 @@ def main(window):
             handle_events.transform(event, window)
             
         # box position events
-        if event in ('-CAM1-LEFT-', '-CAM1-RIGHT-', '-SIDE1-UP-', '-SIDE1-DOWN-', '-CAM2-LEFT-', '-CAM2-RIGHT-', '-CAM2-UP-', '-CAM2-DOWN-'):
-            handle_events.boxes(event)
+        if event in ('-SIDE1-LEFT-', '-SIDE1-RIGHT-', '-SIDE1-UP-', '-SIDE1-DOWN-', '-SIDE2-LEFT-', '-SIDE2-RIGHT-', '-SIDE2-UP-', '-SIDE2-DOWN-'):
+            handle_events.boxes(event, window)
 
         # thresh events
         if event in ('-CAM1-THRESH--', '-CAM1-THRESH+-', '-CAM2-THRESH--', '-CAM2-THRESH+-'):
             handle_events.thresh(event, window)
+
+        # changing individual box
+        if event in ('-SIDE1-BOX--', '-SIDE1-BOX+-', '-SIDE2-BOX--', '-SIDE2-BOX+-'):
+            value = 1
+            if '--' in event: 
+                value = -1
+
+            handle_events.boxChange(event, window, side, value)
+
+        # modifying an individual box
+        if 'BOX-WIDTH' in event or 'BOX-POS' in event:
+            value = 2
+            if '--' in event: 
+                value = -2
+
+            handle_events.modifyBox(event, window, side, value)
 
         # When the reset button is pressed
         if event == '-RESET-':

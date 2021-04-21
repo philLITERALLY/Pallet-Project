@@ -144,8 +144,6 @@ def threshImg(origImg, camera, side, ignoreFlags):
     greyImg = cv2.cvtColor(origImg, cv2.COLOR_BGR2GRAY)
     threshImg = None
 
-    program_state.admin_box_change(32)
-
     # draw thresh boxes
     if camera == 1:
         possibleBoxes = len(cam1BoxThresh())

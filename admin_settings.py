@@ -83,10 +83,6 @@ def set_board_length(value):
     else: 
         CAM2_BOX_COUNT = 17
 
-def set_cam1_box_lr(value):
-    global CAM1_BOX_POS_LR
-    CAM1_BOX_POS_LR += value
-
 def set_cam2_box_lr(value):
     global CAM2_BOX_POS_LR
     CAM2_BOX_POS_LR += value
