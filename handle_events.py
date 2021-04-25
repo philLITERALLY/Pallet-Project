@@ -38,6 +38,7 @@ def admin(event, window):
     window.FindElement('-SIDE1-BOX-SELECT-LAYOUT-').Update(visible=False)
     window.FindElement('-SIDE2-BOX-SELECT-LAYOUT-').Update(visible=False)
     window.FindElement('-BOX-POS-TEXT-').Update(visible=False)
+    window.FindElement('-IO-LAYOUT-').Update(visible=False)
     window.FindElement('-SIDE1-BOXES-LAYOUT-').Update(visible=False)
     window.FindElement('-SIDE2-BOXES-LAYOUT-').Update(visible=False)
     window.FindElement('-ADMIN-BOX1-TEXT-').Update('CAM 1')
@@ -56,6 +57,7 @@ def admin(event, window):
         window.FindElement('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
+        window.FindElement('-IO-LAYOUT-').Update(visible=True)
         
     # When the cancel button is pressed
     if event == '-CANCEL-':
@@ -76,6 +78,7 @@ def admin(event, window):
         window.FindElement('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
+        window.FindElement('-IO-LAYOUT-').Update(visible=True)
 
     # When bark thresh mode button is pressed
     if event == '-BARK-MODE-':
@@ -85,6 +88,7 @@ def admin(event, window):
         window.FindElement('-BARK-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
+        window.FindElement('-IO-LAYOUT-').Update(visible=True)
 
     # When boxes mode button is pressed
     if event == '-BOXES-1-MODE-':

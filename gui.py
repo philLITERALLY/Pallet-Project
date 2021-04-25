@@ -1,13 +1,18 @@
 '''This module does handles the UI and UI events'''
 
+from tkinter.constants import S
 import PySimpleGUI as sg
 
 # my modules
 import program_state    # Programs State
 import handle_events    # handles the UI button events
 import handle_config    # module to handle config settings
+import worker_thread    # main thread that handles workflow
+import aio              # handles the aio
 
 def main(window):
+    singleState = False
+
     while not program_state.STOP_PROGRAM:
         event, values = window.read()
         
@@ -19,6 +24,39 @@ def main(window):
         side = 1
         if 'SIDE2' in event:
             side = 2
+
+        # When the camera button is pressed switch the cameras
+        if event == '-CAMERA-':
+            tempCam1 = worker_thread.camera1
+            worker_thread.camera1 = worker_thread.camera2
+            worker_thread.camera2 = tempCam1
+
+        # When the single button is pressed perform actions
+        if event == '-SINGLE-':
+            
+            # PAUL NOTES            
+            # 1st press - Out0 on,wait for IN0&1,Out1 on wait 50ms Out2 on wait for IN3 grab images.
+            if not singleState:                
+                window.FindElement('-SINGLE-').Update('IN PROGRESS', button_color=('black', 'red'))
+                
+                setup_ok = worker_thread.setup_for_image(window) # get set up to take image
+                if not setup_ok:
+                    continue
+
+                singleState = not singleState
+                window.FindElement('-SINGLE-').Update('SINGLE', button_color=('black', 'yellow'))
+
+            # 2th press - Out2 off wait IN2,Out 0 & 1 off.
+            else:
+                window.FindElement('-SINGLE-').Update(button_color=sg.theme_button_color())
+                worker_thread.drop_plank(window)
+                aio.setOutput(0, 0, window)                                       # turn board stop off
+                singleState = not singleState
+
+        # When the rotate button is pressed perform actions
+        if event == '-ROTATE-':
+            program_state.toggle_rotate_state()                               # change rotate state
+            aio.setOutput(3, program_state.ROTATE_STATE, window)              # send new rotate state
 
         # admin events
         if event in ('-SETUP-', '-CANCEL-', '-TRANSFORM-MODE-', '-BOXES-1-MODE-', '-BOXES-2-MODE-', '-BARK-MODE-'):
