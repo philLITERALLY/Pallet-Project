@@ -66,17 +66,14 @@ reject_layout = [
     ],
     [sg.Image(size=(col_width, 10))], # to help center items
     [
-        sg.Button('START', key='-START-'),
-        sg.Button('STOP', key='-STOP-')
+        sg.Button('START', key='-START-', size=(15, 2)),
+        sg.Button('STOP', key='-STOP-', size=(15, 2))
     ]
 ]
 
 setup_layout = [
     [sg.Image(size=(col_width, 10))], # to help center items
-    [
-        sg.Button('SETUP', key='-SETUP-', size=(15, 3)),
-        sg.Button('CAMERA', key='-CAMERA-', size=(15, 3)),
-    ],
+    [sg.Button('SETUP', key='-SETUP-', size=(15, 3))],
     [sg.Text('INPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-INPUT-')],
     [sg.Text('OUTPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-OUTPUT-')],
     [sg.Text('', key='-SLEEP-', size=(11, 1))]
@@ -185,14 +182,16 @@ admin_box2 = [
 ]
 
 boxes_layout = [
-    [sg.Image(size=(col_width, 10))], # to help center items
+    [sg.Image(size=(col_width, 1))], # to help center items
     [sg.Text('BOX POSITION', key='-BOX-POS-TEXT-')],
-    [sg.Image(size=(col_width, 10))], # extra padding
     [        
-        sg.Column([[
-            sg.Button('SINGLE', key='-SINGLE-', size=(15, 3)),
-            sg.Button('ROTATE  ', key='-ROTATE-', size=(15, 3)),
-        ]], key='-IO-LAYOUT-', visible=False),
+        sg.Column([
+            [
+                sg.Button('SINGLE', key='-SINGLE-', size=(15, 2)),
+                sg.Button('ROTATE  ', key='-ROTATE-', size=(15, 2)),
+            ],
+            [sg.Button('CAMERA', key='-CAMERA-', size=(15, 2))],
+        ], key='-IO-LAYOUT-', visible=False),
         sg.Column([
             [
                 sg.Text('WIDTH', size=(8, 1), justification='left'),
