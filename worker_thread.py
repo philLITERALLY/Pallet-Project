@@ -26,15 +26,21 @@ def setup_for_image(window):
 
     currentRPosition = aio.getInputState(0, window)                   # get current R Position
     currentLPosition = aio.getInputState(1, window)                   # get current L Position
+    print('currentRPosition: ', currentRPosition)
+    print('currentLPosition: ', currentLPosition)
     if currentRPosition or currentLPosition:                          # if board already in position wait for it to clear first
         rPosition = aio.waitInputState(0, False, window)              # wait for board to leave position R
-        lPosition = aio.waitInputState(1, False, window)              # wait for board to leave position L
+        lPosition = aio.waitInputState(1, False, window)              # wait for board to leave position L        
+        print('rPosition: ', rPosition)
+        print('lPosition: ', lPosition)
         if not rPosition or not lPosition:                            # if program is stopped
             return False                                              # exit loop
     
     # once board has cleared position 
     rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R
-    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L
+    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L    
+    print('rPosition 2: ', rPosition)
+    print('lPosition 2: ', lPosition)
     if not rPosition or not lPosition:                                # if program is stopped
         return False                                                  # exit loop
 

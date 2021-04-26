@@ -2,6 +2,7 @@
 
 from tkinter.constants import S
 import PySimpleGUI as sg
+import concurrent.futures
 
 # my modules
 import program_state    # Programs State
@@ -39,7 +40,13 @@ def main(window):
             if not singleState:                
                 window.FindElement('-SINGLE-').Update('IN PROGRESS', button_color=('black', 'red'))
                 
-                setup_ok = worker_thread.setup_for_image(window) # get set up to take image
+                # setup_ok = worker_thread.setup_for_image(window) # get set up to take image
+                
+                with concurrent.futures.ThreadPoolExecutor() as executor:
+                    threadTest = executor.submit(worker_thread.setup_for_image, window)
+                    setup_ok = threadTest.result()
+                    print(setup_ok)
+
                 if not setup_ok:
                     continue
 

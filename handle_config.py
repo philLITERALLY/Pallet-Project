@@ -23,6 +23,7 @@ def init():
 
     # Board settings
     global BOARD_WIDTH, BOARD_LENGTH
+    global CAM1_BOX_COUNT, CAM2_BOX_COUNT
 
     # Rejection settings
     global REJECT_LEVEL
@@ -52,6 +53,8 @@ def init():
     # Get Board Settings
     BOARD_WIDTH = config.getint('BOARD SETTINGS', 'BOARD_WIDTH')
     BOARD_LENGTH = config.getint('BOARD SETTINGS', 'BOARD_LENGTH')
+    CAM1_BOX_COUNT = config.getint('BOARD SETTINGS', 'CAM1_BOX_COUNT')
+    CAM2_BOX_COUNT = config.getint('BOARD SETTINGS', 'CAM2_BOX_COUNT')
 
     # Get Rejection Settings
     REJECT_LEVEL = config.getint('REJECT SETTINGS', 'REJECT_LEVEL')

@@ -60,12 +60,16 @@ def inputState(inputs, inPort):
 
 def waitInputState(inPort, state, window):
     currentAIO = AIO_INSTANCE.RelInPortB(0, 4)          # Port for listening to flags
+    print('currentAIO: ', currentAIO)
     currentInState = inputState(currentAIO, inPort)     # get state of given input
+    print('currentInState: ', currentInState)
     IN_STATE[inPort] = int(currentInState == True)
     updateInState(window)
 
+    print('state: ', state)
     while currentInState != state:                      # while state of input doesn't equal given state keep checking
-        if not program_state.RUN_MODE:                  # if user requests program stop break out of the check
+        if not (program_state.SHOW_TRANSFORM or program_state.THRESH_MODE) and not program_state.RUN_MODE:                  # if user requests program stop break out of the check
+            print('stopped')
             return False
         
         time.sleep(0.01)                                # sleep before checking inputs again
@@ -74,6 +78,8 @@ def waitInputState(inPort, state, window):
         currentInState = inputState(currentAIO, inPort) # get state of given input
         IN_STATE[inPort] = int(currentInState == True)
         updateInState(window)
+
+    print('changed: ', changed)
 
     return True                                         # when input matches requested state return true
 
