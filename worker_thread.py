@@ -61,6 +61,8 @@ def setup_for_image(window):
     if not liftUp:                                                    # if program is stopped
         return False                                                  # exit loop
 
+    return True
+
 def drop_plank(window):
     aio.setOutput(2, 0, window)                                       # turn lift off
     liftDown = aio.waitInputState(2, True, window)                    # wait for lift down
@@ -71,6 +73,8 @@ def drop_plank(window):
     clampOpen = aio.waitInputState(6, True, window)                   # wait for clamp open
     if not clampOpen:                                                 # if program is stopped
         return False                                                  # exit loop
+
+    return True
 
 def main(window):
     try:
@@ -194,7 +198,6 @@ def main(window):
                     if not setup_ok:
                         continue
 
-                    singleState = not singleState
                     window.FindElement('-SINGLE-').Update('SINGLE', button_color=('black', 'yellow'))
 
                 if program_state.DROP_PLANK:
@@ -206,7 +209,6 @@ def main(window):
                         continue
 
                     aio.setOutput(0, 0, window)                                       # turn board stop off
-                    singleState = not singleState
     
     except Exception as e:
         print('Exception: ', e)
