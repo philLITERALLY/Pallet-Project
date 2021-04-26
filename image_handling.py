@@ -63,10 +63,10 @@ def cam2BoxThresh():
 # Get vertical positions
 def topBound(side):
     vertPos = getattr(handle_config, 'SIDE' + str(side) + '_VERT')
-    return topBoxBound + vertPos - admin_settings.BOARD_WIDTH
+    return topBoxBound + vertPos - handle_config.BOARD_WIDTH
 def botBound(side):
     vertPos = getattr(handle_config, 'SIDE' + str(side) + '_VERT')
-    return botBoxBound - vertPos - admin_settings.BOARD_WIDTH
+    return botBoxBound - vertPos - handle_config.BOARD_WIDTH
 
 # crop image to plank based on offset
 def cropImg(origImg, camera):
@@ -148,7 +148,7 @@ def threshImg(origImg, camera, side, ignoreFlags):
     if camera == 1:
         possibleBoxes = len(cam1BoxThresh())
         for x in range(0, possibleBoxes):
-            inUse = x > possibleBoxes - admin_settings.CAM1_BOX_COUNT # boxes that are used in current thresh
+            inUse = x > possibleBoxes - handle_config.CAM1_BOX_COUNT # boxes that are used in current thresh
             modifying = program_state.CAM1_BOX_MODIFY                 # box that user is currently modifying
 
             leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM1_BOX' + str(x) + '_LEFT') 
@@ -176,7 +176,7 @@ def threshImg(origImg, camera, side, ignoreFlags):
     else:
         possibleBoxes = len(cam2BoxThresh())
         for x in range(0, possibleBoxes):            
-            inUse = x < admin_settings.CAM2_BOX_COUNT # boxes that are used in current thresh
+            inUse = x < handle_config.CAM2_BOX_COUNT # boxes that are used in current thresh
             modifying = program_state.CAM2_BOX_MODIFY # box that user is currently modifying
 
             leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM2_BOX' + str(x) + '_LEFT') 

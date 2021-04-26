@@ -1,19 +1,10 @@
 '''This module handles the various admin controlled settings'''
 
-BOARD_WIDTH = 0
-BOARD_LENGTH = 1200
-CAM1_BOX_COUNT = 14
-CAM2_BOX_COUNT = 13
-CAM1_BOX_POS_LR = 0
-CAM2_BOX_POS_LR = 0
-    
-def set_board_width(value):
-    global BOARD_WIDTH
-    BOARD_WIDTH = value
+import handle_config    # Programs Configuration
     
 def set_board_length(value):
-    global BOARD_LENGTH, CAM1_BOX_COUNT, CAM2_BOX_COUNT
-    BOARD_LENGTH = value
+
+    handle_config.setValue('BOARD SETTINGS', 'BOARD_LENGTH', value)
     
     if value < 30 * 2:
         CAM1_BOX_COUNT = 1
@@ -83,6 +74,5 @@ def set_board_length(value):
     else: 
         CAM2_BOX_COUNT = 17
 
-def set_cam2_box_lr(value):
-    global CAM2_BOX_POS_LR
-    CAM2_BOX_POS_LR += value
+    handle_config.setValue('BOARD SETTINGS', 'CAM1_BOX_COUNT', CAM1_BOX_COUNT)
+    handle_config.setValue('BOARD SETTINGS', 'CAM2_BOX_COUNT', CAM2_BOX_COUNT)

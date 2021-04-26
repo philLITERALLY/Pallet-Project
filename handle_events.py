@@ -132,33 +132,33 @@ def admin(event, window):
 
 def board(event, window):
     if event == '-WIDTH-70-': # 70
-        admin_settings.set_board_width(-52)
+        handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', -52)
         window.FindElement('-WIDTH-70-').Update(button_color=('black', 'yellow'))
 
         window.FindElement('-WIDTH-96-').Update(button_color=sg.theme_button_color())
         window.FindElement('-WIDTH-120-').Update(button_color=sg.theme_button_color())
     
     if event == '-WIDTH-96-':
-        admin_settings.set_board_width(0) # 0 is neutral
+        handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', 0)
         window.FindElement('-WIDTH-96-').Update(button_color=('black', 'yellow'))
         
         window.FindElement('-WIDTH-70-').Update(button_color=sg.theme_button_color())
         window.FindElement('-WIDTH-120-').Update(button_color=sg.theme_button_color())
     
     if event == '-WIDTH-120-':
-        admin_settings.set_board_width(47)
+        handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', 47)
         window.FindElement('-WIDTH-120-').Update(button_color=('black', 'yellow'))
         
         window.FindElement('-WIDTH-70-').Update(button_color=sg.theme_button_color())
         window.FindElement('-WIDTH-96-').Update(button_color=sg.theme_button_color())
 
     if event == '-LENGTH--':
-        newLength = admin_settings.BOARD_LENGTH - 10
+        newLength = handle_config.BOARD_LENGTH - 10
         admin_settings.set_board_length(newLength)
         window.FindElement('-BOARD-LENGTH-').update(str(newLength))
 
     if event == '-LENGTH+-':
-        newLength = admin_settings.BOARD_LENGTH + 10
+        newLength = handle_config.BOARD_LENGTH + 10
         admin_settings.set_board_length(newLength)
         window.FindElement('-BOARD-LENGTH-').update(str(newLength))
 

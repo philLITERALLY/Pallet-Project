@@ -21,6 +21,9 @@ def init():
     global CAM_WIDTH, CAM_HEIGHT, CAM_EXPOSURE
     global FRAME_WIDTH
 
+    # Board settings
+    global BOARD_WIDTH, BOARD_LENGTH
+
     # Rejection settings
     global REJECT_LEVEL
 
@@ -45,6 +48,10 @@ def init():
     CAM_HEIGHT = config.getint('CAMERA', 'CAM_HEIGHT')
     CAM_EXPOSURE = config.getint('CAMERA', 'CAM_EXPOSURE')
     FRAME_WIDTH = config.getint('CAMERA', 'FRAME_WIDTH')
+
+    # Get Board Settings
+    BOARD_WIDTH = config.getint('BOARD SETTINGS', 'BOARD_WIDTH')
+    BOARD_LENGTH = config.getint('BOARD SETTINGS', 'BOARD_LENGTH')
 
     # Get Rejection Settings
     REJECT_LEVEL = config.getint('REJECT SETTINGS', 'REJECT_LEVEL')
