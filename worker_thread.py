@@ -26,21 +26,15 @@ def setup_for_image(window):
 
     currentRPosition = aio.getInputState(0, window)                   # get current R Position
     currentLPosition = aio.getInputState(1, window)                   # get current L Position
-    print('currentRPosition: ', currentRPosition)
-    print('currentLPosition: ', currentLPosition)
     if currentRPosition or currentLPosition:                          # if board already in position wait for it to clear first
         rPosition = aio.waitInputState(0, False, window)              # wait for board to leave position R
-        lPosition = aio.waitInputState(1, False, window)              # wait for board to leave position L        
-        print('rPosition: ', rPosition)
-        print('lPosition: ', lPosition)
+        lPosition = aio.waitInputState(1, False, window)              # wait for board to leave position L
         if not rPosition or not lPosition:                            # if program is stopped
             return False                                              # exit loop
     
     # once board has cleared position 
     rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R
-    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L    
-    print('rPosition 2: ', rPosition)
-    print('lPosition 2: ', lPosition)
+    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L
     if not rPosition or not lPosition:                                # if program is stopped
         return False                                                  # exit loop
 
@@ -190,6 +184,29 @@ def main(window):
                     aio.setOutput(5, 0, window)                                       # when stopped turn fault off
                     aio.setOutput(7, 0, window)                                       # when stopped turn good board off
                     aio.setOutput(8, 0, window)                                       # when stopped turn light off
+
+                if program_state.SETUP_PLANK:
+                    program_state.setup_plank(False)
+
+                    window.FindElement('-SINGLE-').Update('IN PROGRESS', button_color=('black', 'red'))
+
+                    setup_ok = setup_for_image(window)
+                    if not setup_ok:
+                        continue
+
+                    singleState = not singleState
+                    window.FindElement('-SINGLE-').Update('SINGLE', button_color=('black', 'yellow'))
+
+                if program_state.DROP_PLANK:
+                    program_state.drop_plank(False)
+
+                    window.FindElement('-SINGLE-').Update(button_color=sg.theme_button_color())
+                    drop_ok = drop_plank(window)
+                    if not drop_ok:
+                        continue
+
+                    aio.setOutput(0, 0, window)                                       # turn board stop off
+                    singleState = not singleState
     
     except Exception as e:
         print('Exception: ', e)

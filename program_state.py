@@ -1,6 +1,8 @@
 '''This module handles the programs state'''
 
 RUN_MODE = False
+SETUP_PLANK = False
+DROP_PLANK = True
 FAULT = False
 STOP_PROGRAM = False
 SHOW_TRANSFORM = False
@@ -19,6 +21,14 @@ SIDE_STATE = 1
 def set_run_mode(value):
     global RUN_MODE
     RUN_MODE = value
+
+def setup_plank(value):
+    global SETUP_PLANK
+    SETUP_PLANK = value
+
+def drop_plank(value):
+    global DROP_PLANK
+    DROP_PLANK = value
 
 def set_fault(value):
     global FAULT
