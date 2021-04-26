@@ -37,6 +37,7 @@ def updateInState(window):
         str(IN_STATE[7]) + ' ' + \
         str(IN_STATE[8])
     window.FindElement('-AIO-INPUT-').update(inStr)
+    window.FindElement('-AIO-INPUT-2-').update(inStr)
 
 def updateOutState(window):
     outStr = 'OUTPUT: ' + \
@@ -50,6 +51,7 @@ def updateOutState(window):
         str(OUT_STATE[7]) + ' ' + \
         str(OUT_STATE[8])
     window.FindElement('-AIO-OUTPUT-').update(outStr)
+    window.FindElement('-AIO-OUTPUT-2-').update(outStr)
 
 def inputState(inputs, inPort):
     binary = format(inputs, 'b').zfill(9) # get binary for inputs

@@ -187,10 +187,12 @@ boxes_layout = [
     [        
         sg.Column([
             [
-                sg.Button('SINGLE', key='-SINGLE-', size=(15, 2)),
-                sg.Button('ROTATE  ', key='-ROTATE-', size=(15, 2)),
+                sg.Button('SINGLE', key='-SINGLE-', size=(12, 2)),
+                sg.Button('ROTATE', key='-ROTATE-', size=(12, 2)),
+                sg.Button('CAMERA', key='-CAMERA-', size=(12, 2)),
             ],
-            [sg.Button('CAMERA', key='-CAMERA-', size=(15, 2))],
+            [sg.Text('INPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-INPUT-2-')],
+            [sg.Text('OUTPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-OUTPUT-2-')],
         ], key='-IO-LAYOUT-', visible=False),
         sg.Column([
             [
