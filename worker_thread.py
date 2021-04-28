@@ -61,6 +61,8 @@ def setup_for_image(window):
     if not liftUp:                                                    # if program is stopped
         return False                                                  # exit loop
 
+    aio.setOutput(0, 0, window)                                       # turn board stop on
+
     return True
 
 def drop_plank(window):
@@ -129,8 +131,6 @@ def main(window):
                     window.FindElement('-SIDE2-STATUS-').update('\nFAIL', background_color=('red'))   # update flag for side 2 to fail
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green')) # update flag for side 2 to pass
-
-                aio.setOutput(0, 0, window)                                       # turn board stop off
 
                 # if either side is over REJECT (10%) then it's a reject                
                 reject = side1Bark > handle_config.REJECT_LEVEL or side2Bark > handle_config.REJECT_LEVEL
@@ -207,8 +207,6 @@ def main(window):
                     drop_ok = drop_plank(window)
                     if not drop_ok:
                         continue
-
-                    aio.setOutput(0, 0, window)                                       # turn board stop off
     
     except Exception as e:
         print('Exception: ', e)
