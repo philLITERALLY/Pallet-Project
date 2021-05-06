@@ -91,6 +91,8 @@ def main(window):
                 if not setup_ok:
                     continue
                 
+                time.sleep(0.2)                                                   # wait 200 ms before grabbing frame
+
                 frame1 = camera1.read()                                           # grab camera 1
                 frame2 = camera2.read()                                           # grab camera 2                    
                 side1cam1, side1cam1Bark = image_handling.main(frame1, 1, 1, True)   # process camera 1 side 1
@@ -108,6 +110,8 @@ def main(window):
 
                 currentCCW = aio.getInputState(4, window)                         # get current CCW state
                 currentCW = aio.getInputState(5, window)                          # get current CW state
+
+                time.sleep(0.2)                                                   # wait 200 ms before rotating plank
 
                 program_state.toggle_rotate_state()                               # change rotate state
                 aio.setOutput(3, program_state.ROTATE_STATE, window)              # send new rotate state
