@@ -35,21 +35,18 @@ class VideoCapture:
   # read frames as soon as they are available, keeping only most recent one
   def _reader(self):
     while True:
+      _, _ = self.cap.read()
+
+  def read(self):
+    while True:
       ret, frame = self.cap.read()
       if not ret:                   # capture frame error
         print('Image read error')
-        break
+        continue
       if np.sum(frame) == 0:        # frame empty for some reason
         continue
-      if not self.q.empty():        # if queue is not empty clear it
-        try:
-          self.q.get_nowait()       # discard previous (unprocessed) frame
-        except queue.Empty:
-          pass
-      self.q.put(frame)
 
-  def read(self):
-    return self.q.get()
+      return frame
 
   def release(self):
       self.cap.release()

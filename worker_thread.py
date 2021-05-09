@@ -91,10 +91,10 @@ def main(window):
                 if not setup_ok:
                     continue
                 
-                time.sleep(0.2)                                                   # wait 200 ms before grabbing frame
+                time.sleep(handle_config.WAIT_GRAB)                               # wait before image grab
 
                 frame1 = camera1.read()                                           # grab camera 1
-                frame2 = camera2.read()                                           # grab camera 2                    
+                frame2 = camera2.read()                                           # grab camera 2
                 side1cam1, side1cam1Bark = image_handling.main(frame1, 1, 1, True)   # process camera 1 side 1
                 side1cam2, side1cam2Bark = image_handling.main(frame2, 2, 1, True)   # process camera 2 side 1
                 side1Bark = round((side1cam1Bark + side1cam2Bark) / 2, 2)         # calculate bark count
@@ -108,6 +108,8 @@ def main(window):
                 else:
                     window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
+                time.sleep(handle_config.AFTER_GRAB)                              # wait after image grab
+
                 currentCCW = aio.getInputState(4, window)                         # get current CCW state
                 currentCW = aio.getInputState(5, window)                          # get current CW state
 
@@ -120,6 +122,8 @@ def main(window):
                 cwState = aio.waitInputState(5, not currentCW, window)            # wait for CW state change
                 if not ccwState or not cwState:                                   # if program is stopped
                     continue                                                      # exit loop
+
+                time.sleep(handle_config.WAIT_GRAB)                               # wait before image grab
 
                 frame1 = camera1.read()                                           # grab camera 1
                 frame2 = camera2.read()                                           # grab camera 2
@@ -136,6 +140,8 @@ def main(window):
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green')) # update flag for side 2 to pass
 
+                time.sleep(handle_config.AFTER_GRAB)                              # wait after image grab
+
                 # if either side is over REJECT (10%) then it's a reject                
                 reject = side1Bark > handle_config.REJECT_LEVEL or side2Bark > handle_config.REJECT_LEVEL
 
@@ -143,6 +149,8 @@ def main(window):
                 if not reject and side1Bark < side2Bark:
                     currentCCW = aio.getInputState(4, window)                     # get current CCW state
                     currentCW = aio.getInputState(5, window)                      # get current CW state
+
+                    time.sleep(0.2)                                                   # wait 200 ms before rotating plank
 
                     program_state.toggle_rotate_state()                           # change rotate state
                     aio.setOutput(3, program_state.ROTATE_STATE, window)          # send new rotate state
