@@ -17,6 +17,9 @@ def init():
     # Config File
     global config
 
+    # Setup Delay settings
+    global START_DELAY
+
     # Setup Camera Settings
     global CAM_WIDTH, CAM_HEIGHT, CAM_EXPOSURE
     global FRAME_WIDTH, WAIT_GRAB, AFTER_GRAB
@@ -43,6 +46,9 @@ def init():
     # Load config file
     config = ConfigParser()
     config.read(my_path + '/config.ini')
+
+    # Get Delay Settings
+    START_DELAY = config.getfloat('DELAY', 'START_DELAY')
 
     # Get Camera Settings
     CAM_WIDTH = config.getint('CAMERA', 'CAM_WIDTH')

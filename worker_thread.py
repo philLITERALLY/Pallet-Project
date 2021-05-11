@@ -83,6 +83,8 @@ def main(window):
         while not program_state.STOP_PROGRAM:
             if program_state.RUN_MODE:                                            # if running
 
+                time.sleep(handle_config.START_DELAY)                             # wait before starting the next loop
+
                 reset_view.main(window)                                           # clear images and plank stats
 
                 aio.setOutput(8, 1, window)                                       # turn running light on
