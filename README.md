@@ -1,6 +1,6 @@
 ### Contents
 
-[I/O Map](https://github.com/philLITERALLY/Pallet-Project#I/O-Map)
+[I/O Map](https://github.com/philLITERALLY/Pallet-Project#IO-Map)
 * [Inputs](https://github.com/philLITERALLY/Pallet-Project#Inputs)
 * [Outputs](https://github.com/philLITERALLY/Pallet-Project#Outputs)
 
