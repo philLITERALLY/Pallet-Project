@@ -18,7 +18,7 @@ def init():
     global config
 
     # Setup Delay settings
-    global START_DELAY, WAIT_GRAB, AFTER_GRAB
+    global START_DELAY, WAIT_GRAB, AFTER_GRAB, JAM_DELAY
 
     # Setup Camera Settings
     global CAM_WIDTH, CAM_HEIGHT, CAM_EXPOSURE
@@ -51,6 +51,7 @@ def init():
     START_DELAY = config.getfloat('DELAY', 'START_DELAY')
     WAIT_GRAB = config.getfloat('DELAY', 'WAIT_GRAB')
     AFTER_GRAB = config.getfloat('DELAY', 'AFTER_GRAB')
+    JAM_DELAY = config.getfloat('DELAY', 'JAM_DELAY')
 
     # Get Camera Settings
     CAM_WIDTH = config.getint('CAMERA', 'CAM_WIDTH')

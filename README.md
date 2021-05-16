@@ -24,6 +24,7 @@ Whenever a user then hits `STOP` we reset all the AIO values (apart from rotate)
     1. Turn Board Stops On (OUT0 ON)
     2. Get current R+L (IN0 + IN1)
     3. If R or L ON wait for board to leave (IN0 + IN1 OFF)
+        1. Delay (jam_delay)
     4. Wait for R+L On (IN0 + IN1 ON)
     5. Turn Clamp On (OUT1 ON)
     6. Sleep for 0.05 secs
@@ -93,6 +94,7 @@ First push (Set up for image):
 1. Turn Board Stops On (OUT0 ON)
 2. Get current R+L (IN0 + IN1)
 3. If R or L ON wait for board to leave (IN0 + IN1 OFF)
+    1. Delay (jam_delay)
 4. Wait for R+L On (IN0 + IN1 ON)
 5. Turn Clamp On (OUT1 ON)
 6. Sleep for 0.05 secs
@@ -129,6 +131,7 @@ The values in `config.ini` are described below:
 | start_delay | Runs at the start of every loop before the board stops go on | :x: |
 | wait_grab | Runs just before each image grab | :x: |
 | after_grab | Runs after each image grab | :x: |
+| jam_delay | Runs if there's a board already in place, wait for it to clear | :x: |
 | [CAMERA] | Contains information that modifies the camera | |
 | cam_width | Width of the camera image | :x: |
 | cam_height | Height of the camera image | :x: |
