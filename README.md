@@ -1,5 +1,9 @@
 ### Contents
 
+[I/O Map](https://github.com/philLITERALLY/Pallet-Project#I/O-Map)
+* [Inputs](https://github.com/philLITERALLY/Pallet-Project#Inputs)
+* [Outputs](https://github.com/philLITERALLY/Pallet-Project#Outputs)
+
 [Running Mode](https://github.com/philLITERALLY/Pallet-Project#running-mode)
 * [Process](https://github.com/philLITERALLY/Pallet-Project#process)
 
@@ -9,6 +13,35 @@
 
 [Config Options](https://github.com/philLITERALLY/Pallet-Project#config-options)
 
+# I/O Map
+
+## Inputs
+
+| Port | Description | Multi |
+| -- | -- | -- |
+| 0 | Board in position R | White |
+| 1 | Board in position L | Yellow |
+| 2 | Lift DOWN | Orange |
+| 3 | Lift UP | Red |
+| 4 | Rotate CCW | Light Blue |
+| 5 | Rotate CW | Purple |
+| 6 | Clamp OPEN | Black |
+| 7 | Clamp CLOSED R | Grey |
+| 8 | Clamp CLOSED L | Pink |
+
+## Outputs
+
+| Port | Description | Multi |
+| -- | -- | -- |
+| 0 | Board stops ON | White/Red |
+| 1 | Clamp | Yellow/Red |
+| 2 | Lift | Green/Red |
+| 3 | Rotate | Red/Blue |
+| 4 | Reject | Red/Brown |
+| 5 | Fault | Red/Black |
+| 6 | Not working | - |
+| 7 | Good Board | White |
+| 8 | Running | Green |
 
 # Running Mode
 
