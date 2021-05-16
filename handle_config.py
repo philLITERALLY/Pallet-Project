@@ -18,11 +18,11 @@ def init():
     global config
 
     # Setup Delay settings
-    global START_DELAY
+    global START_DELAY, WAIT_GRAB, AFTER_GRAB
 
     # Setup Camera Settings
     global CAM_WIDTH, CAM_HEIGHT, CAM_EXPOSURE
-    global FRAME_WIDTH, WAIT_GRAB, AFTER_GRAB
+    global FRAME_WIDTH
 
     # Board settings
     global BOARD_WIDTH, BOARD_LENGTH
@@ -49,14 +49,14 @@ def init():
 
     # Get Delay Settings
     START_DELAY = config.getfloat('DELAY', 'START_DELAY')
+    WAIT_GRAB = config.getfloat('DELAY', 'WAIT_GRAB')
+    AFTER_GRAB = config.getfloat('DELAY', 'AFTER_GRAB')
 
     # Get Camera Settings
     CAM_WIDTH = config.getint('CAMERA', 'CAM_WIDTH')
     CAM_HEIGHT = config.getint('CAMERA', 'CAM_HEIGHT')
     CAM_EXPOSURE = config.getint('CAMERA', 'CAM_EXPOSURE')
     FRAME_WIDTH = config.getint('CAMERA', 'FRAME_WIDTH')
-    WAIT_GRAB = config.getfloat('CAMERA', 'WAIT_GRAB')
-    AFTER_GRAB = config.getfloat('CAMERA', 'AFTER_GRAB')
 
     # Get Board Settings
     BOARD_WIDTH = config.getint('BOARD SETTINGS', 'BOARD_WIDTH')
