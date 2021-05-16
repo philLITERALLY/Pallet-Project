@@ -1,3 +1,13 @@
+### Contents
+
+[Running Mode](https://github.com/philLITERALLY/Pallet-Project#running-mode)
+* [Process](https://github.com/philLITERALLY/Pallet-Project#process)
+[SETUP Funcionality](https://github.com/philLITERALLY/Pallet-Project#setup-funcionality)
+* [SINGLE Button](https://github.com/philLITERALLY/Pallet-Project#single-button)
+* [ROTATE Button](https://github.com/philLITERALLY/Pallet-Project#rotate-button)
+[Config Options](https://github.com/philLITERALLY/Pallet-Project#config-options)
+
+
 # Running Mode
 
 Whenever a user hits the `START` button we start the process listed below.
@@ -73,7 +83,7 @@ When a user clicks SETUP they are brought to an adminstrative page. From here us
 
 ## SINGLE Button
 
-When first pushed the SINGLE Button runs the "Set up for image" function and marks the button as active. 
+When first pushed the SINGLE Button runs the "Set up for image" function and marks the button as active.
 
 On it's second push it runs the "Drop Plank" function and deactivates the button.
 
@@ -105,7 +115,7 @@ The ROTATE Button simply toggles the rotate state (OUT3).
 
 # Config Options
 
-There is a `config.ini` file which holds configurable variables that modify the process. 
+There is a `config.ini` file which holds configurable variables that modify the process.
 
 **NOTE:** When you edit these values you need to restart the application to take effect
 
@@ -114,31 +124,31 @@ The values in `config.ini` are described below:
 | Name | Description | Modified By UI? |
 | ------------- | ------------- | ------------- |
 | [DELAY] | This section handles any delays (in seconds) | |
-| start_delay | Runs at the start of every loop before the board stops go on | ✘ |
-| wait_grab | Runs just before each image grab | ✘ |
-| after_grab | Runs after each image grab | ✘ |
+| start_delay | Runs at the start of every loop before the board stops go on | :x: |
+| wait_grab | Runs just before each image grab | :x: |
+| after_grab | Runs after each image grab | :x: |
 | [CAMERA] | Contains information that modifies the camera | |
-| cam_width | Width of the camera image | ✘ |
-| cam_height | Height of the camera image | ✘ |
-| cam_exposure | Exposure of the camera image | ✘ |
-| frame_width | Width that contains plank | ✘ |
+| cam_width | Width of the camera image | :x: |
+| cam_height | Height of the camera image | :x: |
+| cam_exposure | Exposure of the camera image | :x: |
+| frame_width | Width that contains plank | :x: |
 | [BOARD SETTINGS] | Contains settings for the board/plank | |
-| board_width | Width of the board i.e. 70, 96, 120 | ✔ |
-| board_length | Length of the board (determines how many boxes to use) | ✔ |
-| cam1_box_count | Amount of boxes for camera 1 | ✔ |
-| cam2_box_count | Amount of boxes for camera 2 | ✔ |
+| board_width | Width of the board i.e. 70, 96, 120 | :heavy_check_mark: |
+| board_length | Length of the board (determines how many boxes to use) | :heavy_check_mark: |
+| cam1_box_count | Amount of boxes for camera 1 | :heavy_check_mark: |
+| cam2_box_count | Amount of boxes for camera 2 | :heavy_check_mark: |
 | [REJECT SETTINGS] | Contains settings reject level | |
-| reject_level | What percent of bark is considered a reject | ✔ |
+| reject_level | What percent of bark is considered a reject | :heavy_check_mark: |
 | [TRANSFORM SETTINGS] | Contains settings for plane transformation | |
-| cam1_trans_left | Position to determine plane adjust | ✔ |
-| cam1_trans_right | Position to determine plane adjust | ✔ |
-| cam2_trans_left | Position to determine plane adjust | ✔ |
-| cam2_trans_right | Position to determine plane adjust | ✔ |
+| cam1_trans_left | Position to determine plane adjust | :heavy_check_mark: |
+| cam1_trans_right | Position to determine plane adjust | :heavy_check_mark: |
+| cam2_trans_left | Position to determine plane adjust | :heavy_check_mark: |
+| cam2_trans_right | Position to determine plane adjust | :heavy_check_mark: |
 | [THRESH SETTINGS] | Contains settings for threshing of image | |
-| cam1_thresh | Thresh value applied to cam1 image | ✔ |
-| cam2_thresh | Thresh value applied to cam2 image | ✔ |
+| cam1_thresh | Thresh value applied to cam1 image | :heavy_check_mark: |
+| cam2_thresh | Thresh value applied to cam2 image | :heavy_check_mark: |
 | [BOX POSITIONING] | Contains values for box positions | |
-| side`{X}`_vert | Vertical positioning of side `X` boxes | ✔ |
-| side`{1}`\_cam`{2}`\_box`{3}`\_`{4}` | Determines horizontal position of box | ✔ |
+| side`{X}`_vert | Vertical positioning of side `X` boxes | :heavy_check_mark: |
+| side`{1}`\_cam`{2}`\_box`{3}`\_`{4}` | Determines horizontal position of box | :heavy_check_mark: |
 | [AIO] | Settings for AIO | |
-| aio_wait | Length of time to "pulse" AIO (in seconds) | ✘ |
+| aio_wait | Length of time to "pulse" AIO (in seconds) | :x: |
