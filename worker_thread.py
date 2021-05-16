@@ -20,6 +20,21 @@ global camera1, camera2
 camera1 = camera_setup.VideoCapture(0)  # setup camera one
 camera2 = camera_setup.VideoCapture(1)  # setup camera two
 
+def wait_board_clear(window):
+    rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R
+    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L
+    if not rPosition or not lPosition:                                # if program is stopped
+        return False                                                  # exit loop
+
+    rPosition = aio.waitInputState(0, False, window)                  # wait for board to leave position R
+    lPosition = aio.waitInputState(1, False, window)                  # wait for board to leave position L
+    if not rPosition or not lPosition:                                # if program is stopped
+        return False                                                  # exit loop
+
+    time.sleep(handle_config.JAM_DELAY)                               # delay to wait board clear
+
+    return True
+
 def setup_for_image(window):
     
     aio.setOutput(0, 1, window)                                       # turn board stop on
@@ -81,20 +96,29 @@ def drop_plank(window):
     return True
 
 def main(window):
+    firstRun = True                                                               # set up "first run" state
+
     try:
         while not program_state.STOP_PROGRAM:
             if program_state.RUN_MODE:                                            # if running
-
-                time.sleep(handle_config.START_DELAY)                             # wait before starting the next loop
 
                 reset_view.main(window)                                           # clear images and plank stats
 
                 aio.setOutput(8, 1, window)                                       # turn running light on
 
+                if firstRun:                                                      # on "first run"
+                    clear_ok = wait_board_clear(window)                           # wait for board to clear
+                    if not clear_ok:
+                        continue
+
+                    firstRun = False                                              # change "first run" state
+
+                time.sleep(handle_config.START_DELAY)                             # wait before starting the next loop
+
                 setup_ok = setup_for_image(window)                                # get set up to take image
                 if not setup_ok:
                     continue
-                
+
                 time.sleep(handle_config.WAIT_GRAB)                               # wait before image grab
 
                 frame1 = camera1.read()                                           # grab camera 1
@@ -181,7 +205,9 @@ def main(window):
                     
                     handle_count.plankPass(window)                                # update stats
     
-            else:                                                                          
+            else:
+
+                firstRun = True                                                            # reset "first run" state
 
                 window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
