@@ -2,9 +2,11 @@
 
 [Running Mode](https://github.com/philLITERALLY/Pallet-Project#running-mode)
 * [Process](https://github.com/philLITERALLY/Pallet-Project#process)
+
 [SETUP Funcionality](https://github.com/philLITERALLY/Pallet-Project#setup-funcionality)
 * [SINGLE Button](https://github.com/philLITERALLY/Pallet-Project#single-button)
 * [ROTATE Button](https://github.com/philLITERALLY/Pallet-Project#rotate-button)
+
 [Config Options](https://github.com/philLITERALLY/Pallet-Project#config-options)
 
 
