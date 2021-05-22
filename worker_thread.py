@@ -47,7 +47,7 @@ def setup_for_image(window):
         if not rPosition or not lPosition:                            # if program is stopped
             return False                                              # exit loop
 
-        time.sleep(handle_config.jam_delay)                           # sleep to ensure jam doesn't happen
+        time.sleep(handle_config.JAM_DELAY)                           # sleep to ensure jam doesn't happen
     
     # once board has cleared position 
     rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R

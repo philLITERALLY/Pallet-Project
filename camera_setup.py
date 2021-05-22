@@ -25,21 +25,20 @@ class VideoCapture:
     self.cap.set(15, handle_config.CAM_EXPOSURE)                 # CAM EXPOSURE
 
     for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
-        _, _ = self.cap.read()
+        _, self.frame = self.cap.read()
 
     info_logger.camera_settings(camera, self.cap)
 
-    self.q = queue.Queue()
-    t = threading.Thread(target=self._reader)
-    t.daemon = True
-    t.start()
+    self.run = True
+    self.t = threading.Thread(target=self._reader)
+    self.t.daemon = True
+    self.t.start()
 
   # read frames as soon as they are available, keeping only most recent one
   def _reader(self):
-    while True:
+    while self.run:
       ret, frame = self.cap.read()
       if not ret:                   # capture frame error
-        print('Image read error')
         continue
       if np.sum(frame) == 0:        # frame empty for some reason
         continue
@@ -50,10 +49,12 @@ class VideoCapture:
   def read(self):
     self.needImg = True 
 
-    while self.needImg:
+    while self.needImg and self.run:
       continue
 
     return self.frame
 
   def release(self):
-      self.cap.release()
+    self.run = False
+    self.t.join()
+    self.cap.release()
