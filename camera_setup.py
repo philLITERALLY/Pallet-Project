@@ -43,7 +43,9 @@ class VideoCapture:
       if np.sum(frame) == 0:        # frame empty for some reason
         continue
 
-      self.frame = frame
+      dim = (3840, 2160)
+      resized = cv2.resize(frame, dim, interpolation=cv2.INTER_AREA)
+      self.frame = resized
       self.needImg = False
 
   def read(self):
