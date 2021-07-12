@@ -97,26 +97,26 @@ OUT8 = 0
 # Changes IO array to value
 def calculateIOValue(values):
     returnVal = values[:]
-    returnVal.reverse()                                   # reverse array    
-    returnVal = ''.join(map(str, returnVal))              # turn array into string    
-    return int(returnVal, 2)                              # return binary string converted to decimal
+    returnVal.reverse()                                                    # reverse array    
+    returnVal = ''.join(map(str, returnVal))                               # turn array into string    
+    return int(returnVal, 2)                                               # return binary string converted to decimal
 
 # Change a given output state
 def setOutput(outPort, state, window):
     global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8
 
-    globals()['OUT' + str(outPort)] = state                          # update global variable to new state
+    globals()['OUT' + str(outPort)] = state                                # update global variable to new state
     OUT_STATE[outPort] = state
 
-    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8]     # create output array
-    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output)) # send output
+    output = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8]        # create output array
+    AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(output))                # send output
     updateOutState(window)
 
 # Pulse a given output
 def pulseOutput(outPort, state, window):
     global OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8
 
-    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8]              # create current state
+    initialState = [OUT0, OUT1, OUT2, OUT3, OUT4, OUT5, OUT6, OUT7, OUT8]  # create current state
     pulseState = initialState[:]                                           # clone current state
     pulseState[outPort] = state                                            # modify with pulse value
 
@@ -125,7 +125,7 @@ def pulseOutput(outPort, state, window):
 
     updateOutState(window)
 
-    time.sleep(handle_config.AIO_WAIT)                                         # sleep for 100 ms
+    time.sleep(handle_config.AIO_WAIT)                                     # sleep for 100 ms
 
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))          # set back to initial state
     OUT_STATE[outPort] = state

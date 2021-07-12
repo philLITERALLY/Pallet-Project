@@ -20,115 +20,55 @@ global camera1, camera2
 camera1 = camera_setup.VideoCapture(0)  # setup camera one
 camera2 = camera_setup.VideoCapture(1)  # setup camera two
 
-def wait_board_clear(window):
-    rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R
-    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L
-    if not rPosition or not lPosition:                                # if program is stopped
-        return False                                                  # exit loop
-
-    rPosition = aio.waitInputState(0, False, window)                  # wait for board to leave position R
-    lPosition = aio.waitInputState(1, False, window)                  # wait for board to leave position L
-    if not rPosition or not lPosition:                                # if program is stopped
-        return False                                                  # exit loop
-
-    time.sleep(handle_config.JAM_DELAY)                               # delay to wait board clear
-
-    return True
-
-def setup_for_image(window):
-    
-    aio.setOutput(0, 1, window)                                       # turn board stop on
-
-    currentRPosition = aio.getInputState(0, window)                   # get current R Position
-    currentLPosition = aio.getInputState(1, window)                   # get current L Position
-    if currentRPosition or currentLPosition:                          # if board already in position wait for it to clear first
-        rPosition = aio.waitInputState(0, False, window)              # wait for board to leave position R
-        lPosition = aio.waitInputState(1, False, window)              # wait for board to leave position L
-        if not rPosition or not lPosition:                            # if program is stopped
-            return False                                              # exit loop
-
-        time.sleep(handle_config.JAM_DELAY)                           # sleep to ensure jam doesn't happen
-    
-    # once board has cleared position 
-    rPosition = aio.waitInputState(0, True, window)                   # wait for board to be in position R
-    lPosition = aio.waitInputState(1, True, window)                   # wait for board to be in position L
-    if not rPosition or not lPosition:                                # if program is stopped
-        return False                                                  # exit loop
-
-    # board in position L & R
-    aio.setOutput(1, 1, window)                                       # turn clamp on
-    time.sleep(0.05)                                                  # sleep 50 ms
-    
-    clampR = aio.getInputState(7, window)
-    clampL = aio.getInputState(8, window)
-    if clampL or clampR:                                              # if clamps are not closed
-        aio.setOutput(5, 1, window)                                   # turn fault on
-        program_state.set_fault(True)                                 # let program know we have fault
-        window.write_event_value('-FAULT-', True)                     # let gui know we have fault
-
-        while program_state.FAULT:                                    # while program is at fault
-            aio.pulseOutput(6, 0, window)                             # pulse light off
-            time.sleep(0.5)                                           # sleep for 500ms
-
-        return False                                                  # running loop
-
-    aio.setOutput(2, 1, window)                                       # turn lift on
-    
-    liftUp = aio.waitInputState(3, True, window)                      # wait for lift up
-    if not liftUp:                                                    # if program is stopped
-        return False                                                  # exit loop
-
-    aio.setOutput(0, 0, window)                                       # turn board stop on
-
-    return True
-
-def drop_plank(window):
-    aio.setOutput(2, 0, window)                                       # turn lift off
-    liftDown = aio.waitInputState(2, True, window)                    # wait for lift down
-    if not liftDown:                                                  # if program is stopped
-        return False                                                  # exit loop
-
-    aio.setOutput(1, 0, window)                                       # turn clamp off
-    clampOpen = aio.waitInputState(6, True, window)                   # wait for clamp open
-    if not clampOpen:                                                 # if program is stopped
-        return False                                                  # exit loop
-
-    return True
-
 def main(window):
-    firstRun = True                                                               # set up "first run" state
+    firstRun = True                                                                # set up "first run" state
+    nextSide1Cam1, nextSide1Cam1Bark = None, None
+    nextSide1Cam2, nextSide1Cam2Bark = None, None
+    side1Cam1, side1Cam1Bark = None, None
+    side1Cam2, side1Cam2Bark = None, None
+    side2Cam1, side2Cam1Bark = None, None
+    side2Cam2, side2Cam2Bark = None, None
+    side1Bark, side2Bark = None, None
 
     try:
         while not program_state.STOP_PROGRAM:
-            if program_state.RUN_MODE:                                            # if running
+            if program_state.RUN_MODE:                                             # if running
 
-                reset_view.main(window)                                           # clear images and plank stats
+                reset_view.main(window)                                            # clear images and plank stats
 
-                aio.setOutput(8, 1, window)                                       # turn running light on
+                aio.setOutput(8, 1, window)                                        # turn running light on
 
-                if firstRun:                                                      # on "first run"
-                    clear_ok = wait_board_clear(window)                           # wait for board to clear
-                    if not clear_ok:
-                        continue
+                time.sleep(handle_config.START_DELAY)                              # wait before starting the next loop
 
-                    firstRun = False                                              # change "first run" state
+                boardIn = aio.waitInputState(0, True, window)                      # wait for board in place
+                if not boardIn:                                                    # if program is stopped
+                    return False                                                   # exit loop
 
-                time.sleep(handle_config.START_DELAY)                             # wait before starting the next loop
+                if not firstRun:                                                   # use previous capture for current plank
+                    side1Cam1, side1Cam1Bark = nextSide1Cam1, nextSide1Cam1Bark
+                    side1Cam2, side1Cam2Bark = nextSide1Cam2, nextSide1Cam2Bark
+                    side1Bark = round((side1Cam1Bark + side1Cam2Bark) / 2, 2)      # calculate bark count
 
-                setup_ok = setup_for_image(window)                                # get set up to take image
-                if not setup_ok:
+                frame1 = camera1.read()                                                    # grab camera 1
+                frame2 = camera2.read()                                                    # grab camera 2
+                nextSide1Cam1, nextSide1Cam1Bark = image_handling.main(frame1, 1, 1, True) # process camera 1 left side
+                nextSide1Cam2, nextSide1Cam2Bark = image_handling.main(frame2, 2, 1, True) # process camera 2 left side
+                
+                if not firstRun:
+                    side2Cam1, side2Cam1Bark = image_handling.main(frame1, 1, 2, True) # process camera 1 right side
+                    side2Cam2, side2Cam2Bark = image_handling.main(frame2, 2, 2, True) # process camera 2 right side
+                    side2Bark = round((side2Cam1Bark + side2Cam2Bark) / 2, 2)          # calculate bark count
+
+                time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
+                
+                aio.pulseOutput(1, 1, window)                                      # request flip
+
+                if firstRun:
+                    firstRun = False                                               # change "first run" state
                     continue
-
-                time.sleep(handle_config.WAIT_GRAB)                               # wait before image grab
-
-                frame1 = camera1.read()                                           # grab camera 1
-                frame2 = camera2.read()                                           # grab camera 2
-                side1cam1, side1cam1Bark = image_handling.main(frame1, 1, 1, True)   # process camera 1 side 1
-                side1cam2, side1cam2Bark = image_handling.main(frame2, 2, 1, True)   # process camera 2 side 1
-                side1Bark = round((side1cam1Bark + side1cam2Bark) / 2, 2)         # calculate bark count
-
-                window.FindElement('-SIDE-1-CAM-1-').update(data=side1cam1)                    # update img for side 1 camera 1
-                window.FindElement('-SIDE-1-CAM-2-').update(data=side1cam2)                    # update img for side 1 camera 2                    
+               
+                window.FindElement('-SIDE-1-CAM-1-').update(data=side1Cam1)                    # update img for side 1 camera 1
+                window.FindElement('-SIDE-1-CAM-2-').update(data=side1Cam2)                    # update img for side 1 camera 2                    
                 window.FindElement('-%-BARK-1-').update('\nSIDE 1:- % BARK ' + str(side1Bark)) # update count of bark count for side 1
 
                 if side1Bark > handle_config.REJECT_LEVEL:
@@ -136,31 +76,8 @@ def main(window):
                 else:
                     window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
-                time.sleep(handle_config.AFTER_GRAB)                              # wait after image grab
-
-                currentCCW = aio.getInputState(4, window)                         # get current CCW state
-                currentCW = aio.getInputState(5, window)                          # get current CW state
-
-                time.sleep(0.2)                                                   # wait 200 ms before rotating plank
-
-                program_state.toggle_rotate_state()                               # change rotate state
-                aio.setOutput(3, program_state.ROTATE_STATE, window)              # send new rotate state
-
-                ccwState = aio.waitInputState(4, not currentCCW, window)          # wait for CCW state change
-                cwState = aio.waitInputState(5, not currentCW, window)            # wait for CW state change
-                if not ccwState or not cwState:                                   # if program is stopped
-                    continue                                                      # exit loop
-
-                time.sleep(handle_config.WAIT_GRAB)                               # wait before image grab
-
-                frame1 = camera1.read()                                           # grab camera 1
-                frame2 = camera2.read()                                           # grab camera 2
-                side2cam1, side2cam1Bark = image_handling.main(frame1, 1, 2, True)   # process camera 1 side 2
-                side2cam2, side2cam2Bark = image_handling.main(frame2, 2, 2, True)   # process camera 2 side 2
-                side2Bark = round((side2cam1Bark + side2cam2Bark) / 2, 2)         # calculate bark count
-
-                window.FindElement('-SIDE-2-CAM-1-').update(data=side2cam1)                    # update img for side 2 camera 1
-                window.FindElement('-SIDE-2-CAM-2-').update(data=side2cam2)                    # update img for side 2 camera 2
+                window.FindElement('-SIDE-2-CAM-1-').update(data=side2Cam1)                    # update img for side 2 camera 1
+                window.FindElement('-SIDE-2-CAM-2-').update(data=side2Cam2)                    # update img for side 2 camera 2
                 window.FindElement('-%-BARK-2-').update('\nSIDE 2:- % BARK ' + str(side2Bark)) # update count of bark count for side 2
 
                 if side2Bark > handle_config.REJECT_LEVEL:
@@ -168,46 +85,26 @@ def main(window):
                 else:
                     window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green')) # update flag for side 2 to pass
 
-                time.sleep(handle_config.AFTER_GRAB)                              # wait after image grab
-
                 # if either side is over REJECT (10%) then it's a reject                
                 reject = side1Bark > handle_config.REJECT_LEVEL or side2Bark > handle_config.REJECT_LEVEL
 
-                # if plank isn't a reject and is side 1
-                if not reject and side1Bark < side2Bark:
-                    currentCCW = aio.getInputState(4, window)                     # get current CCW state
-                    currentCW = aio.getInputState(5, window)                      # get current CW state
-
-                    time.sleep(0.2)                                                   # wait 200 ms before rotating plank
-
-                    program_state.toggle_rotate_state()                           # change rotate state
-                    aio.setOutput(3, program_state.ROTATE_STATE, window)          # send new rotate state
-
-                    ccwState = aio.waitInputState(4, not currentCCW, window)      # wait for CCW state change
-                    cwState = aio.waitInputState(5, not currentCW, window)        # wait for CW state change
-                    if not ccwState or not cwState:                               # if program is stopped
-                        continue                                                  # exit loop
-
-                drop_ok = drop_plank(window)                                      # drop plank
-                if not drop_ok:
-                    continue                
-
                 if reject:
-                    aio.setOutput(4, 1, window)                                   # turn reject on
-                    time.sleep(0.2)                                               # sleep for 20ms
-                    aio.setOutput(4, 0, window)                                   # turn reject off       
-
-                    handle_count.plankFail(window)                                # update stats
+                    aio.pulseOutput(4, 1, window)                                      # pulse reject
+                elif side1Bark < side2Bark:
+                    aio.pulseOutput(2, 1, window)                                      # pulse good
                 else:
-                    aio.setOutput(7, 1, window)                                   # turn good board on
-                    time.sleep(0.2)                                               # sleep for 20ms
-                    aio.setOutput(7, 0, window)                                   # turn good board off       
-                    
-                    handle_count.plankPass(window)                                # update stats
-    
+                    aio.pulseOutput(3, 1, window)                                      # pulse flip
+
             else:
 
-                firstRun = True                                                            # reset "first run" state
+                firstRun = True                               # reset "first run" state
+                nextSide1Cam1, nextSide1Cam1Bark = None, None # clear images
+                nextSide1Cam2, nextSide1Cam2Bark = None, None # clear images
+                side1Cam1, side1Cam1Bark = None, None         # clear images
+                side1Cam2, side1Cam2Bark = None, None         # clear images
+                side2Cam1, side2Cam1Bark = None, None         # clear images
+                side2Cam2, side2Cam2Bark = None, None         # clear images
+                side1Bark, side2Bark = None, None             # reset stats
 
                 window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
@@ -220,35 +117,15 @@ def main(window):
                     reset_view.main(window)
                     
                     # Reset Outputs
-                    aio.setOutput(0, 0, window)                                       # when stopped turn board stop off
-                    aio.setOutput(1, 0, window)                                       # when stopped turn clamp off
-                    aio.setOutput(2, 0, window)                                       # when stopped turn lift off
-                    ## if program_state.ROTATE_STATE == 1:                            # when stopped turn rotate off
-                    ##     program_state.toggle_rotate_state()
-                    ##     aio.setOutput(3, program_state.ROTATE_STATE)
-                    aio.setOutput(4, 0, window)                                       # when stopped turn reject off
-                    aio.setOutput(5, 0, window)                                       # when stopped turn fault off
-                    aio.setOutput(7, 0, window)                                       # when stopped turn good board off
-                    aio.setOutput(8, 0, window)                                       # when stopped turn light off
-
-                if program_state.SETUP_PLANK:
-                    program_state.setup_plank(False)
-
-                    window.FindElement('-SINGLE-').Update('IN PROGRESS', button_color=('black', 'red'))
-
-                    setup_ok = setup_for_image(window)
-                    if not setup_ok:
-                        continue
-
-                    window.FindElement('-SINGLE-').Update('SINGLE', button_color=('black', 'yellow'))
-
-                if program_state.DROP_PLANK:
-                    program_state.drop_plank(False)
-
-                    window.FindElement('-SINGLE-').Update(button_color=sg.theme_button_color())
-                    drop_ok = drop_plank(window)
-                    if not drop_ok:
-                        continue
+                    aio.setOutput(0, 0, window)                                       # when stopped turn 0 off
+                    aio.setOutput(1, 0, window)                                       # when stopped turn 1 off
+                    aio.setOutput(2, 0, window)                                       # when stopped turn 2 off
+                    aio.setOutput(3, 0, window)                                       # when stopped turn 3 off
+                    aio.setOutput(4, 0, window)                                       # when stopped turn 4 off
+                    aio.setOutput(5, 0, window)                                       # when stopped turn 5 off
+                    aio.setOutput(7, 0, window)                                       # when stopped turn 6 off
+                    aio.setOutput(7, 0, window)                                       # when stopped turn 7 off
+                    aio.setOutput(8, 0, window)                                       # when stopped turn 8 off
     
     except Exception as e:
         print('Exception: ', e)
