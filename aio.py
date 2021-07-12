@@ -128,5 +128,5 @@ def pulseOutput(outPort, state, window):
     time.sleep(handle_config.AIO_WAIT)                                     # sleep for 100 ms
 
     AIO_INSTANCE.RelOutPort(0, 0, calculateIOValue(initialState))          # set back to initial state
-    OUT_STATE[outPort] = state
+    OUT_STATE[outPort] = initialState[outPort]
     updateOutState(window)

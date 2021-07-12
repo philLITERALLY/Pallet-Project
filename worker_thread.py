@@ -38,11 +38,19 @@ def main(window):
 
                 aio.setOutput(8, 1, window)                                        # turn running light on
 
+                # FOR TESTS
+                aio.setOutput(1, 1, window)
+                # FOR TESTS
+
                 time.sleep(handle_config.START_DELAY)                              # wait before starting the next loop
 
                 boardIn = aio.waitInputState(0, True, window)                      # wait for board in place
                 if not boardIn:                                                    # if program is stopped
                     return False                                                   # exit loop
+
+                # FOR TESTS
+                aio.setOutput(1, 0, window)
+                # FOR TESTS
 
                 if not firstRun:                                                   # use previous capture for current plank
                     side1Cam1, side1Cam1Bark = nextSide1Cam1, nextSide1Cam1Bark
@@ -58,10 +66,11 @@ def main(window):
                     side2Cam1, side2Cam1Bark = image_handling.main(frame1, 1, 2, True) # process camera 1 right side
                     side2Cam2, side2Cam2Bark = image_handling.main(frame2, 2, 2, True) # process camera 2 right side
                     side2Bark = round((side2Cam1Bark + side2Cam2Bark) / 2, 2)          # calculate bark count
-
-                time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
                 
-                aio.pulseOutput(1, 1, window)                                      # request flip
+                # FOR TESTS
+                aio.setOutput(1, 1, window)
+                # aio.pulseOutput(1, 1, window)                                      # request flip
+                # FOR TESTS
 
                 if firstRun:
                     firstRun = False                                               # change "first run" state
@@ -94,6 +103,8 @@ def main(window):
                     aio.pulseOutput(2, 1, window)                                      # pulse good
                 else:
                     aio.pulseOutput(3, 1, window)                                      # pulse flip
+
+                time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
 
             else:
 
