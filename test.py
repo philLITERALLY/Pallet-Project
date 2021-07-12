@@ -5,9 +5,14 @@ import numpy as np
 import PIL.Image
 
 # my modules
-import layouts          # UI Layouts
+# import layouts          # UI Layouts
+class layouts:
+    row_size = 475
+    img_width = 1272.0
+
 import program_state    # Programs State
 import handle_config    # Programs Configuration
+handle_config.init()    # config settings need loaded
 
 midOffsetCam1 = -40
 midOffsetCam2 = -20
@@ -79,7 +84,7 @@ def cropImg(origImg, camera, side):
     leftBound = midPoint - handle_config.FRAME_WIDTH
     rightBound = midPoint + handle_config.FRAME_WIDTH
 
-    # draw on boundaries
+    # # draw on boundaries
     # cv2.line(origImg, (leftBound, 0), (leftBound, height), (255,0,0), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (midPoint, 0), (midPoint, height), (0,255,0), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (rightBound, 0), (rightBound, height), (0,0,255), 5) # Top-Left to Bottom-Left
@@ -111,7 +116,7 @@ def plotCircles(origImg, camera, side):
         cv2.circle(origImg, (side1option2, 0), 5, (0, 0, 255), 2)  # Top-Right
         cv2.circle(origImg, (0, height), 5, (0, 0, 255), 2)  # Bottom-Left
         cv2.circle(origImg, (side1option3, height), 5, (0, 0, 255), 2) # Bottom-Right
-
+        
         cv2.line(origImg, (side1option1, 0), (0, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
         cv2.line(origImg, (side1option2, 0), (side1option3, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
 
@@ -120,7 +125,7 @@ def plotCircles(origImg, camera, side):
         cv2.circle(origImg, (side2option1, 0), 5, (0, 0, 255), 2)  # Top-Right
         cv2.circle(origImg, (side2option2, height), 5, (0, 0, 255), 2)  # Bottom-Left
         cv2.circle(origImg, (side2option3, height), 5, (0, 0, 255), 2) # Bottom-Right
-
+        
         cv2.line(origImg, (0, 0), (side2option2, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
         cv2.line(origImg, (side2option1, 0), (side2option3, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
     
@@ -136,7 +141,7 @@ def transform(origImg, camera, side):
     if camera == 2:
         leftOffset = handle_config.CAM2_TRANS_LEFT
         rightOffset = width - handle_config.CAM2_TRANS_RIGHT
-
+    
     side1option1 = 380
     side1option2 = width
     side1option3 = 850
@@ -149,7 +154,7 @@ def transform(origImg, camera, side):
         pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
     else:
         pts1 = np.float32([[0, 0], [side2option1, 0], [side2option2, height], [side2option3, height]])
-        pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
+        pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])        
 
     transformed = cv2.getPerspectiveTransform(pts1, pts2)
     return cv2.warpPerspective(origImg, transformed, (width, height))
@@ -272,6 +277,7 @@ def main(origImg, camera, side, ignoreFlags):
 
     # crop image to plank
     origImg = cropImg(origImg, camera, side)
+    barkPercent = 0
 
     # show transform
     if not ignoreFlags and program_state.SHOW_TRANSFORM:
@@ -291,7 +297,7 @@ def main(origImg, camera, side, ignoreFlags):
     origImg = resizeImg(origImg)
 
     # if thresh mode show thresh image
-    if not ignoreFlags and program_state.THRESH_MODE:
+    if True:
         origImg = resizeImg(threshedImg)
 
     return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent
