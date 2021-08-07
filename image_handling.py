@@ -161,6 +161,9 @@ def analyseImg(origImg, camera, side, filename):
     cv2.imwrite('tests/' + filename + '/columnA.jpg', columnA)
     cv2.imwrite('tests/' + filename + '/columnB.jpg', columnB)
     cv2.imwrite('tests/' + filename + '/columnC.jpg', columnC)
+    cv2.imwrite('tests/columnA/' + filename + '.jpg', columnA)
+    cv2.imwrite('tests/columnB/' + filename + '.jpg', columnB)
+    cv2.imwrite('tests/columnC/' + filename + '.jpg', columnC)
 
     columnAPerc = barkCalc(columnA)
     columnBPerc = barkCalc(columnB)
@@ -231,7 +234,7 @@ def main(origImg, camera, ignoreFlags, filename):
     side1columnAPerc, side1columnBPerc, side1columnCPerc = analyseImg(threshedSide1Img, camera, 1, filename)
     # side2columnAPerc, side2columnBPerc, side2columnCPerc = analyseImg(threshedSide2Img, camera, 2)
 
-    print(filename, ' || ', side1columnAPerc, ' || ', side1columnBPerc, ' || ', side1columnCPerc)
+    print(filename, ' || A', side1columnAPerc, ' || B', side1columnBPerc, ' || C', side1columnCPerc)
 
     # crop image to plank
     origImg = resizeImg(origImg)
