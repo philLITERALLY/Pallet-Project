@@ -222,6 +222,8 @@ def main(origImg, camera, ignoreFlags, filename):
     side1 = cropToLength(side1, camera)
     side2 = cropToLength(side2, camera)
 
+    cv2.imwrite('tests/' + filename + '/original.jpg', side1)
+
     # calculate box thresh values
     threshedSide1Img, side1Percent = threshImg(side1, camera)
     threshedSide2Img, side2Percent = threshImg(side2, camera)
