@@ -6,6 +6,7 @@ from PySimpleGUI.PySimpleGUI import Column
 # my modules
 import handle_config  # Programs Configuration
 import program_state  # Programs state
+handle_config.init()    # config settings need loaded
 
 default_vert_padding = 3
 default_horz_padding = 8
@@ -83,12 +84,11 @@ setup_layout = [
 admin_mode = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [
-        sg.Button('TRANSFORM', key='-TRANSFORM-MODE-', size=(15, 2)),
-        sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
+        sg.Button('LIVE', key='-LIVE-MODE-', size=(31, 2)),
     ],
     [
-        sg.Button('SIDE 1 BOXES', key='-BOXES-1-MODE-', size=(15, 2)),
-        sg.Button('SIDE 2 BOXES', key='-BOXES-2-MODE-', size=(15, 2))
+        sg.Button('TRANSFORM', key='-TRANSFORM-MODE-', size=(15, 2)),
+        sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
     ],
     [sg.Button('CANCEL', key='-CANCEL-', size=(31, 2))]
 ]

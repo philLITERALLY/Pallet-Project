@@ -59,13 +59,14 @@ def main(window):
 
                 frame1 = camera1.read()                                                    # grab camera 1
                 frame2 = camera2.read()                                                    # grab camera 2
-                nextSide1Cam1, nextSide1Cam1Bark = image_handling.main(frame1, 1, 1, True) # process camera 1 left side
-                nextSide1Cam2, nextSide1Cam2Bark = image_handling.main(frame2, 2, 1, True) # process camera 2 left side
-                
-                if not firstRun:
-                    side2Cam1, side2Cam1Bark = image_handling.main(frame1, 1, 2, True) # process camera 1 right side
-                    side2Cam2, side2Cam2Bark = image_handling.main(frame2, 2, 2, True) # process camera 2 right side
-                    side2Bark = round((side2Cam1Bark + side2Cam2Bark) / 2, 2)          # calculate bark count
+                if firstRun:
+                    nextSide1Cam1, _, nextSide1Cam1Bark, _ = image_handling.main(frame1, 1, True)
+                    nextSide1Cam2, _, nextSide1Cam2Bark, _ = image_handling.main(frame1, 2, True)
+                else:
+                    nextSide1Cam1, side2Cam1, nextSide1Cam1Bark, side2Cam1Bark = image_handling.main(frame1, 1, True)
+                    nextSide1Cam2, side2Cam2, nextSide1Cam2Bark, side2Cam2Bark = image_handling.main(frame1, 2, True)
+                    side2Bark = round((side2Cam1Bark + side2Cam2Bark) / 2, 2)
+
                 
                 # FOR TESTS
                 aio.setOutput(1, 1, window)
@@ -119,9 +120,8 @@ def main(window):
 
                 window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
-                if program_state.THRESH_MODE or \
-                    program_state.THRESH_BOX_1_MODE or \
-                    program_state.THRESH_BOX_2_MODE or \
+                if program_state.LIVE_MODE or \
+                    program_state.THRESH_MODE or \
                     program_state.SHOW_TRANSFORM:
                     admin_view.main(camera1, camera2, window)
                 else:

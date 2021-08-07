@@ -9,147 +9,89 @@ import layouts          # UI Layouts
 import program_state    # Programs State
 import handle_config    # Programs Configuration
 
-midOffsetCam1 = -40
-midOffsetCam2 = -20
-planeOffset = 100
+def transformCoords(origImg, camera, side):
+    _, width, _ = origImg.shape # img size
 
-topBoxBound = 100
-botBoxBound = 120
+    if camera == 1 and side == 1:
+        coord1 = 190
+        coord2 = width
+        coord3 = 0
+        coord4 = width - 40
+    elif camera == 1 and side == 2:
+        coord1 = 0
+        coord2 = width - 190
+        coord3 = 40
+        coord4 = width
+    elif camera == 2 and side == 1:
+        coord1 = 160
+        coord2 = width - 40
+        coord3 = 35
+        coord4 = width - 30
+    elif camera == 2 and side == 2:
+        coord1 = 0
+        coord2 = width - 230
+        coord3 = 80
+        coord4 = width
+    
+    return coord1, coord2, coord3, coord4
 
-# thresh settings for camera 1
-def cam1BoxThresh():
-    return [
-        80 + handle_config.CAM1_THRESH,
-        80 + handle_config.CAM1_THRESH,
-        100 + handle_config.CAM1_THRESH,
-        100 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH, 
-        120 + handle_config.CAM1_THRESH, 
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH, 
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH,
-        120 + handle_config.CAM1_THRESH
-    ]
+def cropToWidth(origImg, camera):
+    height, _, _ = origImg.shape
 
-# thresh settings for camera 2
-def cam2BoxThresh():
-    return [
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        120 + handle_config.CAM2_THRESH,
-        100 + handle_config.CAM2_THRESH,
-        100 + handle_config.CAM2_THRESH,
-        80 + handle_config.CAM2_THRESH,
-        80 + handle_config.CAM2_THRESH,
-        80 + handle_config.CAM2_THRESH
-    ]
-
-# Get vertical positions
-def topBound(side):
-    vertPos = getattr(handle_config, 'SIDE' + str(side) + '_VERT')
-    return topBoxBound + vertPos - handle_config.BOARD_WIDTH
-def botBound(side):
-    vertPos = getattr(handle_config, 'SIDE' + str(side) + '_VERT')
-    return botBoxBound - vertPos - handle_config.BOARD_WIDTH
-
-# crop image to plank based on offset
-def cropImg(origImg, camera, side):
-    height, width, _ = origImg.shape
-
-    if side == 1:
-        midPoint = 1210
+    if camera == 1:
+        side1Mid = 1560
+        side2Mid = 2320
     else:
-        midPoint = 2530
+        side1Mid = 1690
+        side2Mid = 2405
 
-    leftBound = midPoint - handle_config.FRAME_WIDTH
-    rightBound = midPoint + handle_config.FRAME_WIDTH
+    # Handle Side 1
+    left1Bound = side1Mid - handle_config.FRAME_WIDTH
+    right1Bound = side1Mid + handle_config.FRAME_WIDTH
 
-    # draw on boundaries
-    # cv2.line(origImg, (leftBound, 0), (leftBound, height), (255,0,0), 5) # Top-Left to Bottom-Left
-    # cv2.line(origImg, (midPoint, 0), (midPoint, height), (0,255,0), 5) # Top-Left to Bottom-Left
-    # cv2.line(origImg, (rightBound, 0), (rightBound, height), (0,0,255), 5) # Top-Left to Bottom-Left
+    # draw side 1 boundaries
+    # cv2.line(origImg, (left1Bound, 0), (left1Bound, height), (255,0,0), 5) # Top-Left to Bottom-Left
+    # cv2.line(origImg, (side1Mid, 0), (side1Mid, height), (0,255,0), 5) # Top-Left to Bottom-Left
+    # cv2.line(origImg, (right1Bound, 0), (right1Bound, height), (0,0,255), 5) # Top-Left to Bottom-Left
 
-    origImg = origImg[0:height, leftBound:rightBound]
+    # Handle Side 2
+    left2Bound = side2Mid - handle_config.FRAME_WIDTH
+    right2Bound = side2Mid + handle_config.FRAME_WIDTH
 
-    return origImg
+    # draw side 2 boundaries
+    # cv2.line(origImg, (left2Bound, 0), (left2Bound, height), (255,0,0), 5) # Top-Left to Bottom-Left
+    # cv2.line(origImg, (side2Mid, 0), (side2Mid, height), (0,255,0), 5) # Top-Left to Bottom-Left
+    # cv2.line(origImg, (right2Bound, 0), (right2Bound, height), (0,0,255), 5) # Top-Left to Bottom-Left
+
+    side1 = origImg[0:height, left1Bound:right1Bound].copy()
+    side2 = origImg[0:height, left2Bound:right2Bound].copy()
+
+    return side1, side2
 
 # plot transformation circles on image
 def plotCircles(origImg, camera, side):
     height, width, _ = origImg.shape # img size
+
+    coord1, coord2, coord3, coord4 = transformCoords(origImg, camera, side)
     
-    leftOffset = handle_config.CAM1_TRANS_LEFT
-    rightOffset = width - handle_config.CAM1_TRANS_RIGHT
-            
-    if side == 2:
-        leftOffset = handle_config.CAM2_TRANS_LEFT
-        rightOffset = width - handle_config.CAM2_TRANS_RIGHT
+    cv2.circle(origImg, (coord1, 0), 5, (0, 0, 255), 2)   # Top-Left
+    cv2.circle(origImg, (coord2, 0), 5, (0, 0, 255), 2)  # Top-Right
+    cv2.circle(origImg, (coord3, height), 5, (0, 0, 255), 2)  # Bottom-Left
+    cv2.circle(origImg, (coord4, height), 5, (0, 0, 255), 2) # Bottom-Right
     
-    side1option1 = 380
-    side1option2 = width
-    side1option3 = 850
-    side2option1 = 650
-    side2option2 = 100
-    side2option3 = width
-
-    if side == 1:
-        cv2.circle(origImg, (side1option1, 0), 5, (0, 0, 255), 2)   # Top-Left
-        cv2.circle(origImg, (side1option2, 0), 5, (0, 0, 255), 2)  # Top-Right
-        cv2.circle(origImg, (0, height), 5, (0, 0, 255), 2)  # Bottom-Left
-        cv2.circle(origImg, (side1option3, height), 5, (0, 0, 255), 2) # Bottom-Right
-
-        cv2.line(origImg, (side1option1, 0), (0, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
-        cv2.line(origImg, (side1option2, 0), (side1option3, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
-
-    else:
-        cv2.circle(origImg, (0, 0), 5, (0, 0, 255), 2)   # Top-Left
-        cv2.circle(origImg, (side2option1, 0), 5, (0, 0, 255), 2)  # Top-Right
-        cv2.circle(origImg, (side2option2, height), 5, (0, 0, 255), 2)  # Bottom-Left
-        cv2.circle(origImg, (side2option3, height), 5, (0, 0, 255), 2) # Bottom-Right
-
-        cv2.line(origImg, (0, 0), (side2option2, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
-        cv2.line(origImg, (side2option1, 0), (side2option3, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
+    cv2.line(origImg, (coord1, 0), (coord3, height), (0, 0, 255), 2) # Top-Left to Bottom-Left
+    cv2.line(origImg, (coord2, 0), (coord4, height), (0, 0, 255), 2) # Top-Right to Bottom-Right
     
     return origImg
 
 # transform image to plane
 def transform(origImg, camera, side):
     height, width, _ = origImg.shape # img size
+
+    coord1, coord2, coord3, coord4 = transformCoords(origImg, camera, side)
     
-    leftOffset = handle_config.CAM1_TRANS_LEFT
-    rightOffset = width - handle_config.CAM1_TRANS_RIGHT
-            
-    if camera == 2:
-        leftOffset = handle_config.CAM2_TRANS_LEFT
-        rightOffset = width - handle_config.CAM2_TRANS_RIGHT
-
-    side1option1 = 380
-    side1option2 = width
-    side1option3 = 850
-    side2option1 = 650
-    side2option2 = 100
-    side2option3 = width
-
-    if side == 1:
-        pts1 = np.float32([[side1option1, 0], [side1option2, 0], [0, height], [side1option3, height]])
-        pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
-    else:
-        pts1 = np.float32([[0, 0], [side2option1, 0], [side2option2, height], [side2option3, height]])
-        pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])
+    pts1 = np.float32([[coord1, 0], [coord2, 0], [coord3, height], [coord4, height]])
+    pts2 = np.float32([[0, 0], [width, 0], [0, height], [width, height]])     
 
     transformed = cv2.getPerspectiveTransform(pts1, pts2)
     return cv2.warpPerspective(origImg, transformed, (width, height))
@@ -163,77 +105,68 @@ def rotateImg(origImg, camera):
 
     return origImg
 
-# thresh box image and return black vs white count
-def threshImg(origImg, camera, side, ignoreFlags):
+def cropToLength(origImg, camera):
     height, width, _ = origImg.shape
 
+    if camera == 1:
+        crop = 450
+        # cv2.line(origImg, (crop, 0), (crop, height), (255,255,255), 5) # Top-Left to Bottom-Left
+        origImg = origImg[0:height, crop:width].copy()
+    elif camera == 2:
+        crop = 1550
+        # cv2.line(origImg, (crop, 0), (crop, height), (255,255,255), 5) # Top-Left to Bottom-Left
+        origImg = origImg[0:height, 0:crop].copy()
+
+    return origImg
+
+# thresh box image and return black vs white count
+def threshImg(origImg, camera):
     # grey image
     greyImg = cv2.cvtColor(origImg, cv2.COLOR_BGR2GRAY)
-    threshImg = None
 
     # draw thresh boxes
     if camera == 1:
-        possibleBoxes = len(cam1BoxThresh())
-        for x in range(0, possibleBoxes):
-            inUse = x > possibleBoxes - handle_config.CAM1_BOX_COUNT # boxes that are used in current thresh
-            modifying = program_state.CAM1_BOX_MODIFY                 # box that user is currently modifying
-
-            leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM1_BOX' + str(x) + '_LEFT') 
-            rightPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM1_BOX' + str(x) + '_RIGHT')
-
-            if not ignoreFlags and (program_state.THRESH_BOX_1_MODE or program_state.THRESH_BOX_2_MODE):
-                rectColour = (255, 0, 0)
-
-                if x == modifying:
-                    rectColour = (0, 255, 0)
-
-                if inUse:
-                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, 5)
-                else:
-                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, -1)
-
-            if inUse:
-                newThresh = greyImg[topBound(side):height - botBound(side), leftPos:rightPos].copy()
-                _, newThresh = cv2.threshold(newThresh, cam1BoxThresh()[x], 255, 0)
-
-                if threshImg is None:
-                    threshImg = newThresh
-                else:
-                    threshImg = cv2.hconcat([threshImg, newThresh])
+        _, threshImg = cv2.threshold(greyImg, handle_config.CAM1_THRESH, 255, 0)
     else:
-        possibleBoxes = len(cam2BoxThresh())
-        for x in range(0, possibleBoxes):            
-            inUse = x < handle_config.CAM2_BOX_COUNT # boxes that are used in current thresh
-            modifying = program_state.CAM2_BOX_MODIFY # box that user is currently modifying
-
-            leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM2_BOX' + str(x) + '_LEFT') 
-            rightPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM2_BOX' + str(x) + '_RIGHT')
-
-            if not ignoreFlags and (program_state.THRESH_BOX_1_MODE or program_state.THRESH_BOX_2_MODE):
-                rectColour = (255, 0, 0)
-
-                if x == modifying:
-                    rectColour = (0, 255, 0)
-
-                if inUse:
-                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, 5)
-                else:
-                    cv2.rectangle(origImg, (leftPos, topBound(side)), (rightPos, height - botBound(side)), rectColour, -1)
-
-            if inUse:    
-                newThresh = greyImg[topBound(side):height - botBound(side), leftPos:rightPos].copy()
-                _, newThresh = cv2.threshold(newThresh, cam2BoxThresh()[x], 255, 0)
-
-                if threshImg is None:
-                    threshImg = newThresh
-                else:
-                    threshImg = cv2.hconcat([threshImg, newThresh])
+        _, threshImg = cv2.threshold(greyImg, handle_config.CAM2_THRESH, 255, 0)
 
     totalPixels = threshImg.size
     whitePixels = cv2.countNonZero(threshImg)
     blackPixels = totalPixels - whitePixels
 
     return threshImg, round(blackPixels / totalPixels * 100, 2)
+
+# calculate percentage of black pixels in given img
+def barkCalc(origImg):
+    totalPixels = origImg.size
+    whitePixels = cv2.countNonZero(origImg)
+    blackPixels = totalPixels - whitePixels
+    return round(blackPixels / totalPixels * 100, 2)
+
+# gather bark percentages for the three columns
+def analyseImg(origImg, camera, side, filename):
+    height, width = origImg.shape
+
+    quarter = int(height / 4)
+    threeQuarter = quarter * 3
+
+    columnA = origImg[0:quarter, 0:width].copy()
+    columnB = origImg[quarter:threeQuarter, 0:width].copy()
+    columnC = origImg[threeQuarter:height, 0:width].copy()
+
+    cv2.imshow('Camera ' + str(camera) + ' Side ' + str(side) + ' - columnA', columnA)
+    cv2.imshow('Camera ' + str(camera) + ' Side ' + str(side) + ' - columnB', columnB)
+    cv2.imshow('Camera ' + str(camera) + ' Side ' + str(side) + ' - columnC', columnC)
+
+    cv2.imwrite('tests/' + filename + '/columnA.jpg', columnA)
+    cv2.imwrite('tests/' + filename + '/columnB.jpg', columnB)
+    cv2.imwrite('tests/' + filename + '/columnC.jpg', columnC)
+
+    columnAPerc = barkCalc(columnA)
+    columnBPerc = barkCalc(columnB)
+    columnCPerc = barkCalc(columnC)
+
+    return columnAPerc, columnBPerc, columnCPerc
 
 # resize img to fit ui
 def resizeImg(origImg):    
@@ -267,31 +200,89 @@ def resizeImg(origImg):
 
     return origImg
 
-# main img function
-def main(origImg, camera, side, ignoreFlags): 
-
-    # crop image to plank
-    origImg = cropImg(origImg, camera, side)
+def main(origImg, camera, ignoreFlags, filename):
+    # crop image to plank width
+    side1, side2 = cropToWidth(origImg, camera)
 
     # show transform
     if not ignoreFlags and program_state.SHOW_TRANSFORM:
-        origImg = plotCircles(origImg, camera, side)
+        side1 = plotCircles(side1, camera, 1)
+        side2 = plotCircles(side2, camera, 2)
 
     # perform transform
     if ignoreFlags or not program_state.SHOW_TRANSFORM:
-        origImg = transform(origImg, camera, side)
+        side1 = transform(side1, camera, 1)
+        side2 = transform(side2, camera, 2)
     
-    # crop image to plank
-    origImg = rotateImg(origImg, camera)
+    # rotate image
+    side1 = rotateImg(side1, camera)
+    side2 = rotateImg(side2, camera)
+
+    # crop image to plank length
+    side1 = cropToLength(side1, camera)
+    side2 = cropToLength(side2, camera)
 
     # calculate box thresh values
-    threshedImg, barkPercent = threshImg(origImg, camera, side, ignoreFlags)
+    threshedSide1Img, side1Percent = threshImg(side1, camera)
+    threshedSide2Img, side2Percent = threshImg(side2, camera)
+
+    side1columnAPerc, side1columnBPerc, side1columnCPerc = analyseImg(threshedSide1Img, camera, 1, filename)
+    # side2columnAPerc, side2columnBPerc, side2columnCPerc = analyseImg(threshedSide2Img, camera, 2)
+
+    print(filename, ' || ', side1columnAPerc, ' || ', side1columnBPerc, ' || ', side1columnCPerc)
 
     # crop image to plank
     origImg = resizeImg(origImg)
+    side1 = resizeImg(side1)
+    side2 = resizeImg(side2)
 
-    # if thresh mode show thresh image
-    if not ignoreFlags and program_state.THRESH_MODE:
-        origImg = resizeImg(threshedImg)
+    # # if thresh mode show thresh image
+    if True: # not ignoreFlags and program_state.THRESH_MODE:
+        side1 = resizeImg(threshedSide1Img)
+        side2 = resizeImg(threshedSide2Img)
 
-    return cv2.imencode('.png', origImg)[1].tobytes(), barkPercent
+    # if camera == 1:
+    #     return side1, side2, side1Percent, side2Percent
+    # else:
+    #     return side2, side1, side2Percent, side1Percent
+
+    if camera == 1:
+        return cv2.imencode('.png', side1)[1].tobytes(), \
+            cv2.imencode('.png', side2)[1].tobytes(), \
+            side1Percent, side2Percent
+    else: 
+        return cv2.imencode('.png', side2)[1].tobytes(), \
+            cv2.imencode('.png', side1)[1].tobytes(), \
+            side2Percent, side1Percent
+
+
+
+
+
+handle_config.init()    # config settings need loaded
+
+# cam1 = cv2.imread('tests/Pallet_r2_cam1.jpg')
+# cam2 = cv2.imread('tests/Pallet_R2_cam2.jpg')
+
+# cam1side1, cam1side2, cam1side1Perc, cam1side2Perc = main(cam1, 1, True)
+# cam2side1, cam2side2, cam2side1Perc, cam2side2Perc = main(cam2, 2, True)
+
+Pallet_r2_cam1 = cv2.imread('tests/Pallet_r2_cam1.jpg')
+Pallet_r2_cam1_barked = cv2.imread('tests/Pallet_r2_cam1_barked.jpg')
+Pallet_r2_cam1_barked_edge = cv2.imread('tests/Pallet_r2_cam1_barked_edge.jpg')
+Pallet_r2_cam1_barked_single = cv2.imread('tests/Pallet_r2_cam1_barked_single.jpg')
+
+Pallet_r2_cam1, _, _, _ = main(Pallet_r2_cam1, 1, True, 'Pallet_r2_cam1')
+Pallet_r2_cam1_barked, _, _, _ = main(Pallet_r2_cam1_barked, 1, True, 'Pallet_r2_cam1_barked')
+Pallet_r2_cam1_barked_edge, _, _, _ = main(Pallet_r2_cam1_barked_edge, 1, True, 'Pallet_r2_cam1_barked_edge')
+Pallet_r2_cam1_barked_single, _, _, _ = main(Pallet_r2_cam1_barked_single, 1, True, 'Pallet_r2_cam1_barked_single')
+
+# cv2.imshow('Cam 1', cam1)
+# cv2.imshow('cam1side1', cam1side1)
+# cv2.imshow('cam1side2', cam1side2)
+# cv2.imshow('Cam 2', cam2)
+# cv2.imshow('cam2side1', cam2side1)
+# cv2.imshow('cam2side2', cam2side2)
+
+cv2.waitKey(0)
+cv2.destroyAllWindows()
