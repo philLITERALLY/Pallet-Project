@@ -70,7 +70,7 @@ def cropToWidth(origImg, camera):
 
 # plot transformation circles on image
 def plotCircles(origImg, camera, side):
-    height, width, _ = origImg.shape # img size
+    height, _, _ = origImg.shape # img size
 
     coord1, coord2, coord3, coord4 = transformCoords(origImg, camera, side)
     
@@ -130,11 +130,7 @@ def threshImg(origImg, camera):
     else:
         _, threshImg = cv2.threshold(greyImg, handle_config.CAM2_THRESH, 255, 0)
 
-    totalPixels = threshImg.size
-    whitePixels = cv2.countNonZero(threshImg)
-    blackPixels = totalPixels - whitePixels
-
-    return threshImg, round(blackPixels / totalPixels * 100, 2)
+    return threshImg
 
 # calculate percentage of black pixels in given img
 def barkCalc(origImg):
@@ -144,32 +140,37 @@ def barkCalc(origImg):
     return round(blackPixels / totalPixels * 100, 2)
 
 # gather bark percentages for the three columns
-def analyseImg(origImg, camera, side, filename):
-    height, width = origImg.shape
+def analyseImg(origImg, threshImg):
+    height, width, _ = origImg.shape
+
+    midWidth = int(width / 2)
 
     quarter = int(height / 4)
     threeQuarter = quarter * 3
 
-    columnA = origImg[0:quarter, 0:width].copy()
-    columnB = origImg[quarter:threeQuarter, 0:width].copy()
-    columnC = origImg[threeQuarter:height, 0:width].copy()
-
-    cv2.imshow('Camera ' + str(camera) + ' Side ' + str(side) + ' - columnA', columnA)
-    cv2.imshow('Camera ' + str(camera) + ' Side ' + str(side) + ' - columnB', columnB)
-    cv2.imshow('Camera ' + str(camera) + ' Side ' + str(side) + ' - columnC', columnC)
-
-    cv2.imwrite('tests/' + filename + '/columnA.jpg', columnA)
-    cv2.imwrite('tests/' + filename + '/columnB.jpg', columnB)
-    cv2.imwrite('tests/' + filename + '/columnC.jpg', columnC)
-    cv2.imwrite('tests/columnA/' + filename + '.jpg', columnA)
-    cv2.imwrite('tests/columnB/' + filename + '.jpg', columnB)
-    cv2.imwrite('tests/columnC/' + filename + '.jpg', columnC)
+    columnA = threshImg[0:quarter, 0:width].copy()
+    columnB = threshImg[quarter:threeQuarter, 0:width].copy()
+    columnC = threshImg[threeQuarter:height, 0:width].copy()
 
     columnAPerc = barkCalc(columnA)
     columnBPerc = barkCalc(columnB)
     columnCPerc = barkCalc(columnC)
+    
+    # if not thresh or transform mode show columns
+    if not program_state.THRESH_MODE and not program_state.SHOW_TRANSFORM:
+        cv2.line(origImg, (0, quarter), (width, quarter), (0, 0, 255), 5) # 25% line
+        cv2.line(origImg, (0, threeQuarter), (width, threeQuarter), (0, 0, 255), 5) # 75% line
 
-    return columnAPerc, columnBPerc, columnCPerc
+        _, textHeight = cv2.getTextSize("A", cv2.FONT_HERSHEY_SIMPLEX, 3, 3)
+        quarterTxt = int(quarter / 2) + textHeight
+        midText = quarter * 2 + textHeight
+        threeQuarterTxt = threeQuarter + quarterTxt
+
+        cv2.putText(origImg, "A", (midWidth, quarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+        cv2.putText(origImg, "B", (midWidth, midText), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+        cv2.putText(origImg, "C", (midWidth, threeQuarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+
+    return origImg, columnAPerc, columnBPerc, columnCPerc
 
 # resize img to fit ui
 def resizeImg(origImg):    
@@ -203,7 +204,7 @@ def resizeImg(origImg):
 
     return origImg
 
-def main(origImg, camera, ignoreFlags, filename):
+def main(origImg, camera, ignoreFlags):
     # crop image to plank width
     side1, side2 = cropToWidth(origImg, camera)
 
@@ -225,16 +226,12 @@ def main(origImg, camera, ignoreFlags, filename):
     side1 = cropToLength(side1, camera)
     side2 = cropToLength(side2, camera)
 
-    cv2.imwrite('tests/' + filename + '/original.jpg', side1)
-
     # calculate box thresh values
-    threshedSide1Img, side1Percent = threshImg(side1, camera)
-    threshedSide2Img, side2Percent = threshImg(side2, camera)
+    threshedSide1Img = threshImg(side1, camera)
+    threshedSide2Img = threshImg(side2, camera)
 
-    side1columnAPerc, side1columnBPerc, side1columnCPerc = analyseImg(threshedSide1Img, camera, 1, filename)
-    # side2columnAPerc, side2columnBPerc, side2columnCPerc = analyseImg(threshedSide2Img, camera, 2)
-
-    print(filename, ' || A', side1columnAPerc, ' || B', side1columnBPerc, ' || C', side1columnCPerc)
+    side1, side1columnAPerc, side1columnBPerc, side1columnCPerc = analyseImg(side1, threshedSide1Img)
+    side2, side2columnAPerc, side2columnBPerc, side2columnCPerc = analyseImg(side2, threshedSide2Img)
 
     # crop image to plank
     origImg = resizeImg(origImg)
@@ -242,52 +239,17 @@ def main(origImg, camera, ignoreFlags, filename):
     side2 = resizeImg(side2)
 
     # # if thresh mode show thresh image
-    if True: # not ignoreFlags and program_state.THRESH_MODE:
+    if not ignoreFlags and program_state.THRESH_MODE:
         side1 = resizeImg(threshedSide1Img)
         side2 = resizeImg(threshedSide2Img)
 
-    # if camera == 1:
-    #     return side1, side2, side1Percent, side2Percent
-    # else:
-    #     return side2, side1, side2Percent, side1Percent
-
-    if camera == 1:
+    if camera == 2:
         return cv2.imencode('.png', side1)[1].tobytes(), \
             cv2.imencode('.png', side2)[1].tobytes(), \
-            side1Percent, side2Percent
+            side1columnAPerc, side1columnBPerc, side1columnCPerc, \
+            side2columnAPerc, side2columnBPerc, side2columnCPerc
     else: 
         return cv2.imencode('.png', side2)[1].tobytes(), \
             cv2.imencode('.png', side1)[1].tobytes(), \
-            side2Percent, side1Percent
-
-
-
-
-
-handle_config.init()    # config settings need loaded
-
-# cam1 = cv2.imread('tests/Pallet_r2_cam1.jpg')
-# cam2 = cv2.imread('tests/Pallet_R2_cam2.jpg')
-
-# cam1side1, cam1side2, cam1side1Perc, cam1side2Perc = main(cam1, 1, True)
-# cam2side1, cam2side2, cam2side1Perc, cam2side2Perc = main(cam2, 2, True)
-
-Pallet_r2_cam1 = cv2.imread('tests/Pallet_r2_cam1.jpg')
-Pallet_r2_cam1_barked = cv2.imread('tests/Pallet_r2_cam1_barked.jpg')
-Pallet_r2_cam1_barked_edge = cv2.imread('tests/Pallet_r2_cam1_barked_edge.jpg')
-Pallet_r2_cam1_barked_single = cv2.imread('tests/Pallet_r2_cam1_barked_single.jpg')
-
-Pallet_r2_cam1, _, _, _ = main(Pallet_r2_cam1, 1, True, 'Pallet_r2_cam1')
-Pallet_r2_cam1_barked, _, _, _ = main(Pallet_r2_cam1_barked, 1, True, 'Pallet_r2_cam1_barked')
-Pallet_r2_cam1_barked_edge, _, _, _ = main(Pallet_r2_cam1_barked_edge, 1, True, 'Pallet_r2_cam1_barked_edge')
-Pallet_r2_cam1_barked_single, _, _, _ = main(Pallet_r2_cam1_barked_single, 1, True, 'Pallet_r2_cam1_barked_single')
-
-# cv2.imshow('Cam 1', cam1)
-# cv2.imshow('cam1side1', cam1side1)
-# cv2.imshow('cam1side2', cam1side2)
-# cv2.imshow('Cam 2', cam2)
-# cv2.imshow('cam2side1', cam2side1)
-# cv2.imshow('cam2side2', cam2side2)
-
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+            side1columnAPerc, side1columnBPerc, side1columnCPerc, \
+            side2columnAPerc, side2columnBPerc, side2columnCPerc

@@ -5,8 +5,6 @@ from PySimpleGUI.PySimpleGUI import Column
 
 # my modules
 import handle_config  # Programs Configuration
-import program_state  # Programs state
-handle_config.init()    # config settings need loaded
 
 default_vert_padding = 3
 default_horz_padding = 8
@@ -234,7 +232,7 @@ main_layout = [
         sg.Image(key='-SIDE-1-CAM-2-', pad=(0, 0), size=(half_width, row_size)),
     ],
     [
-        sg.Text('\nSIDE 1:- % BARK XXX', key='-%-BARK-1-', size=(30, 3), justification='center', pad=((0, 200), (0, 0))),
+        sg.Text('\nSIDE 1 (% BARK)  ||  COL-A: XXX  ||  COL-B: XXX  ||  COL-C: XXX', key='-%-BARK-1-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
         sg.Text('\nXXX', key='-SIDE1-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
     ],
     [
@@ -243,7 +241,7 @@ main_layout = [
     ],
     [
         sg.Column([[
-            sg.Text('\nSIDE 2:- % BARK XXX', key='-%-BARK-2-', size=(30, 3), justification='center', pad=((0, 200), (0, 0))),
+            sg.Text('\nSIDE 2 (% BARK)  ||  COL-A: XXX  ||  COL-B: XXX  ||  COL-C: XXX', key='-%-BARK-2-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
             sg.Text('\nXXX', key='-SIDE2-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
         ]], key='-SIDE2-STATS-')
     ],
