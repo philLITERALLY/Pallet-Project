@@ -29,7 +29,7 @@ def init():
     global CAM1_BOX_COUNT, CAM2_BOX_COUNT
 
     # Rejection settings
-    global REJECT_LEVEL
+    global EDGE_REJECT_LEVEL, MID_REJECT_LEVEL
 
     # Transform settings
     global CAM1_TRANS_LEFT, CAM1_TRANS_RIGHT, CAM2_TRANS_LEFT, CAM2_TRANS_RIGHT
@@ -63,7 +63,8 @@ def init():
     CAM2_BOX_COUNT = config.getint('BOARD SETTINGS', 'CAM2_BOX_COUNT')
 
     # Get Rejection Settings
-    REJECT_LEVEL = config.getint('REJECT SETTINGS', 'REJECT_LEVEL')
+    EDGE_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'EDGE_REJECT_LEVEL')
+    MID_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'MID_REJECT_LEVEL')
 
     # Get Transform Settings
     CAM1_TRANS_LEFT = config.getint('TRANSFORM SETTINGS', 'CAM1_TRANS_LEFT')

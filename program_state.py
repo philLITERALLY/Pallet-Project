@@ -7,10 +7,8 @@ FAULT = False
 STOP_PROGRAM = False
 LIVE_MODE = False
 SHOW_TRANSFORM = False
+COLUMN_MODE = False
 THRESH_MODE = False
-BOX_MODIFY = 0
-CAM1_BOX_MODIFY = None
-CAM2_BOX_MODIFY = None
 CLEAR_RESULTS = False
 TOTAL_INSPECTED = 0
 TOTAL_PASSED = 0
@@ -38,31 +36,44 @@ def stop_program():
     STOP_PROGRAM = True
 
 def set_live(value):
-    global LIVE_MODE, SHOW_TRANSFORM, THRESH_MODE
+    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE, THRESH_MODE
     LIVE_MODE = value
 
     # if turning on this mode then disable others
     if value:
         SHOW_TRANSFORM = False
+        COLUMN_MODE = False
         THRESH_MODE = False
 
 def set_transform(value):
-    global LIVE_MODE, SHOW_TRANSFORM, THRESH_MODE
+    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE,  THRESH_MODE
     SHOW_TRANSFORM = value
 
     # if turning on this mode then disable others
     if value:
         LIVE_MODE = False
+        COLUMN_MODE = False
+        THRESH_MODE = False
+
+def set_column(value):
+    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE, THRESH_MODE
+    COLUMN_MODE = value
+
+    # if turning on this mode then disable others
+    if value:
+        LIVE_MODE = False
+        SHOW_TRANSFORM = False
         THRESH_MODE = False
 
 def set_thresh(value):
-    global LIVE_MODE, SHOW_TRANSFORM, THRESH_MODE
+    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE, THRESH_MODE
     THRESH_MODE = value
 
     # if turning on this mode then disable others
     if value:
         LIVE_MODE = False
         SHOW_TRANSFORM = False
+        COLUMN_MODE = False
 
 def clear_results():
     global TOTAL_INSPECTED, TOTAL_PASSED
@@ -84,21 +95,3 @@ def toggle_rotate_state():
         ROTATE_STATE = 0
     else:
         ROTATE_STATE = 1
-
-def admin_box_change(value):
-    global BOX_MODIFY, CAM1_BOX_MODIFY, CAM2_BOX_MODIFY
-
-    possible1Boxes = 15 # CHANGE TO BE Variable ?!
-    possible2Boxes = 16 # CHANGE TO BE Variable ?!
-
-    if value < 0 or value > possible1Boxes + possible2Boxes + 1:
-        return
-
-    BOX_MODIFY = value
-
-    if value <= possible1Boxes:
-        CAM1_BOX_MODIFY = value
-        CAM2_BOX_MODIFY = None
-    else:
-        CAM1_BOX_MODIFY = None
-        CAM2_BOX_MODIFY = value - possible1Boxes - 1

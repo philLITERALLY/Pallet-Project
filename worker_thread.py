@@ -2,8 +2,7 @@
 
 import PySimpleGUI as sg
 import time
-from os import listdir
-from os.path import isfile, join
+import keyboard
 
 # my modules
 import handle_config    # module to handle config settings
@@ -17,20 +16,38 @@ import reset_view       # clears the UI
 
 global camera1, camera2
 
-camera1 = camera_setup.VideoCapture(0)  # setup camera one
-camera2 = camera_setup.VideoCapture(1)  # setup camera two
+manualTesting = False
 
-def main(window):
-    firstRun = True                                                                # set up "first run" state
-    nextSide1Cam1, nextSide1Cam1Bark = None, None
-    nextSide1Cam2, nextSide1Cam2Bark = None, None
-    side1Cam1, side1Cam1Bark = None, None
-    side1Cam2, side1Cam2Bark = None, None
-    side2Cam1, side2Cam1Bark = None, None
-    side2Cam2, side2Cam2Bark = None, None
-    side1Bark, side2Bark = None, None
+if manualTesting:
+    camera1 = camera_setup.StaticImage(0)   # setup static image one
+    camera2 = camera_setup.StaticImage(1)   # setup static image two
+else:
+    camera1 = camera_setup.VideoCapture(0)  # setup camera one
+    camera2 = camera_setup.VideoCapture(1)  # setup camera two
 
-    # try:
+def waitKey():
+    while True:
+        if not (program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.COLUMN_MODE or program_state.THRESH_MODE) and not program_state.RUN_MODE:
+            program_state.set_run_mode(False)
+            return False
+
+        if keyboard.is_pressed('n'):
+            program_state.set_run_mode(False)
+            return False
+
+        if keyboard.is_pressed('y'):
+            return True
+
+
+def runProgram(window):
+    firstRun = True
+    nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC = None, None, None, None
+    nextSide1Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC = None, None, None, None
+    side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = None, None, None, None
+    side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
+    side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
+    side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
+
     while not program_state.STOP_PROGRAM:
         if program_state.RUN_MODE:                                             # if running
 
@@ -44,28 +61,31 @@ def main(window):
 
             time.sleep(handle_config.START_DELAY)                              # wait before starting the next loop
 
-            boardIn = aio.waitInputState(0, True, window)                      # wait for board in place
-            if not boardIn:                                                    # if program is stopped
-                return False                                                   # exit loop
+            if manualTesting:
+                boardIn = waitKey()                                             # wait for board in place
+                if not boardIn:
+                    continue
+            else:
+                boardIn = aio.waitInputState(0, True, window)                  # wait for board in place
+                if not boardIn:
+                    continue
 
             # FOR TESTS
             aio.setOutput(1, 0, window)
             # FOR TESTS
 
             if not firstRun:                                                   # use previous capture for current plank
-                side1Cam1, side1Cam1Bark = nextSide1Cam1, nextSide1Cam1Bark
-                side1Cam2, side1Cam2Bark = nextSide1Cam2, nextSide1Cam2Bark
-                side1Bark = round((side1Cam1Bark + side1Cam2Bark) / 2, 2)      # calculate bark count
+                side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC
+                side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = nextSide1Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC
 
             frame1 = camera1.read()                                                    # grab camera 1
             frame2 = camera2.read()                                                    # grab camera 2
             if firstRun:
-                nextSide1Cam1, _, nextSide1Cam1Bark, _ = image_handling.main(frame1, 1, True)
-                nextSide1Cam2, _, nextSide1Cam2Bark, _ = image_handling.main(frame1, 2, True)
+                nextSide1Cam1, _, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC, _, _, _ = image_handling.main(frame1, 1, True)
+                nextSide1Cam2, _, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC, _, _, _ = image_handling.main(frame2, 2, True)
             else:
-                nextSide1Cam1, side2Cam1, nextSide1Cam1Bark, side2Cam1Bark = image_handling.main(frame1, 1, True)
-                nextSide1Cam2, side2Cam2, nextSide1Cam2Bark, side2Cam2Bark = image_handling.main(frame1, 2, True)
-                side2Bark = round((side2Cam1Bark + side2Cam2Bark) / 2, 2)
+                nextSide1Cam1, side2Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = image_handling.main(frame1, 1, True)
+                nextSide1Cam2, side2Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
 
             
             # FOR TESTS
@@ -78,51 +98,95 @@ def main(window):
                 continue
             
             window.FindElement('-SIDE-1-CAM-1-').update(data=side1Cam1)                    # update img for side 1 camera 1
-            window.FindElement('-SIDE-1-CAM-2-').update(data=side1Cam2)                    # update img for side 1 camera 2                    
-            window.FindElement('-%-BARK-1-').update('\nSIDE 1:- % BARK ' + str(side1Bark)) # update count of bark count for side 1
+            window.FindElement('-SIDE-1-CAM-2-').update(data=side1Cam2)                    # update img for side 1 camera 2
+            
+            side1ColABark = round((side1Cam1BarkA + side1Cam2BarkA) / 2, 2)
+            side1ColBBark = round((side1Cam1BarkB + side1Cam2BarkB) / 2, 2)
+            side1ColCBark = round((side1Cam1BarkC + side1Cam2BarkC) / 2, 2)
+            window.FindElement('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColABark) + '  ||  B: ' + str(side1ColBBark) + '  ||  C: ' + str(side1ColCBark)) # update count of bark count for side 1
 
-            if side1Bark > handle_config.REJECT_LEVEL:
-                window.FindElement('-SIDE1-STATUS-').update('\nFAIL', background_color=('red'))
+            side1failState = []
+            if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
+                side1failState.append('COL A')
+            if side1ColBBark > handle_config.MID_REJECT_LEVEL:
+                side1failState.append('COL B')
+            if side1ColCBark > handle_config.EDGE_REJECT_LEVEL:
+                side1failState.append('COL C')
+
+            if len(side1failState) > 0:
+                window.FindElement('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=('red'))
             else:
                 window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
             window.FindElement('-SIDE-2-CAM-1-').update(data=side2Cam1)                    # update img for side 2 camera 1
             window.FindElement('-SIDE-2-CAM-2-').update(data=side2Cam2)                    # update img for side 2 camera 2
-            window.FindElement('-%-BARK-2-').update('\nSIDE 2:- % BARK ' + str(side2Bark)) # update count of bark count for side 2
 
-            if side2Bark > handle_config.REJECT_LEVEL:
-                window.FindElement('-SIDE2-STATUS-').update('\nFAIL', background_color=('red'))   # update flag for side 2 to fail
+            side2ColABark = round((side2Cam1BarkA + side2Cam2BarkA) / 2, 2)
+            side2ColBBark = round((side2Cam1BarkB + side2Cam2BarkB) / 2, 2)
+            side2ColCBark = round((side2Cam1BarkC + side2Cam2BarkC) / 2, 2)
+            window.FindElement('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColABark) + '  ||  B: ' + str(side2ColBBark) + '  ||  C: ' + str(side2ColCBark)) # update count of bark count for side 2
+
+            side2failState = []
+            if side2ColABark > handle_config.EDGE_REJECT_LEVEL:
+                side2failState.append('COL A')
+            if side2ColBBark > handle_config.MID_REJECT_LEVEL:
+                side2failState.append('COL B')
+            if side2ColCBark > handle_config.EDGE_REJECT_LEVEL:
+                side2failState.append('COL C')
+
+            if len(side2failState) > 0:
+                window.FindElement('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=('red'))
             else:
-                window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green')) # update flag for side 2 to pass
+                window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))
 
-            # if either side is over REJECT (10%) then it's a reject                
-            reject = side1Bark > handle_config.REJECT_LEVEL or side2Bark > handle_config.REJECT_LEVEL
+            # if side 1 fails
+            if len(side1failState) > 0:
+                # and side 2 col b is less than reject level
+                if side2ColBBark < handle_config.MID_REJECT_LEVEL:
+                    print('GOOD 1')
+                    handle_count.plankPass(window)                                     # update stats
+                    aio.pulseOutput(2, 1, window)                                      # pulse good
 
-            if reject:
-                aio.pulseOutput(4, 1, window)                                      # pulse reject
-            elif side1Bark < side2Bark:
-                aio.pulseOutput(2, 1, window)                                      # pulse good
+                else:
+                    print('REJECT 1')
+                    handle_count.plankFail(window)                                     # update stats
+                    aio.pulseOutput(4, 1, window)                                      # pulse reject
             else:
-                aio.pulseOutput(3, 1, window)                                      # pulse flip
+                # if side 2 col b is more than reject level
+                if side2ColBBark > handle_config.MID_REJECT_LEVEL:
+                    print('REJECT 2')
+                    handle_count.plankFail(window)                                     # update stats
+                    aio.pulseOutput(4, 1, window)                                      # pulse reject
+
+                # else if col a and/or col c is more than reject level
+                elif len(side2failState) > 0:
+                    print('FLIP 2')
+                    handle_count.plankPass(window)                                     # update stats
+                    aio.pulseOutput(3, 1, window)                                      # pulse flip
+
+                else:
+                    print('GOOD 2')
+                    handle_count.plankPass(window)                                     # update stats
+                    aio.pulseOutput(2, 1, window)                                      # pulse good
 
             time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
 
         else:
 
             firstRun = True                               # reset "first run" state
-            nextSide1Cam1, nextSide1Cam1Bark = None, None # clear images
-            nextSide1Cam2, nextSide1Cam2Bark = None, None # clear images
-            side1Cam1, side1Cam1Bark = None, None         # clear images
-            side1Cam2, side1Cam2Bark = None, None         # clear images
-            side2Cam1, side2Cam1Bark = None, None         # clear images
-            side2Cam2, side2Cam2Bark = None, None         # clear images
-            side1Bark, side2Bark = None, None             # reset stats
+            nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC = None, None, None, None
+            nextSide1Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC = None, None, None, None
+            side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = None, None, None, None
+            side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
+            side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
+            side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
 
             window.FindElement('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
             if program_state.LIVE_MODE or \
-                program_state.THRESH_MODE or \
-                program_state.SHOW_TRANSFORM:
+                program_state.SHOW_TRANSFORM or \
+                program_state.COLUMN_MODE or \
+                program_state.THRESH_MODE:
                 admin_view.main(camera1, camera2, window)
             else:
                 reset_view.main(window)
@@ -137,9 +201,16 @@ def main(window):
                 aio.setOutput(7, 0, window)                                       # when stopped turn 6 off
                 aio.setOutput(7, 0, window)                                       # when stopped turn 7 off
                 aio.setOutput(8, 0, window)                                       # when stopped turn 8 off
-    
-    # except Exception as e:
-    #     print('Exception: ', e)
+
+def main(window):
+
+    if manualTesting:
+        runProgram(window)
+    else:
+        try:
+            runProgram(window)
+        except Exception as e:
+            print('Exception: ', e)
 
     camera1.release()
     camera2.release()

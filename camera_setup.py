@@ -60,3 +60,16 @@ class VideoCapture:
     self.run = False
     self.t.join()
     self.cap.release()
+
+class StaticImage:
+    def __init__(self, camera):
+      if camera == 1:
+        self.image = cv2.imread("C:/Users/The Beast/Documents/Pallet Final/images/Pallet_r2_cam2_bark_single.jpg")
+      else:
+        self.image = cv2.imread("C:/Users/The Beast/Documents/Pallet Final/images/Pallet_r2_cam1_bark_single.jpg")
+
+    def read(self):
+      return self.image
+
+    def release(self):
+      self.image = None

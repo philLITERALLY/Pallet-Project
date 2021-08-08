@@ -251,5 +251,5 @@ def main(origImg, camera, ignoreFlags):
     else: 
         return cv2.imencode('.png', side2)[1].tobytes(), \
             cv2.imencode('.png', side1)[1].tobytes(), \
-            side1columnAPerc, side1columnBPerc, side1columnCPerc, \
-            side2columnAPerc, side2columnBPerc, side2columnCPerc
+            side2columnAPerc, side2columnBPerc, side2columnCPerc, \
+            side1columnAPerc, side1columnBPerc, side1columnCPerc

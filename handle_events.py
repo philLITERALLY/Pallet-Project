@@ -6,40 +6,17 @@ import program_state    # Programs State
 import admin_settings   # Admin settings
 import handle_config    # Programs Configuration
 
-def updateBoxDetailsText(window, side):
-    # Figure out what CAM and BOX we're on
-    cam = 1
-    box = program_state.CAM1_BOX_MODIFY
-    if program_state.CAM2_BOX_MODIFY != None:
-        cam = 2
-        box = program_state.CAM2_BOX_MODIFY
-
-    # Get boxes details
-    leftPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM' + str(cam) + '_BOX' + str(box) + '_LEFT')
-    rightPos = getattr(handle_config, 'SIDE' + str(side) + '_CAM' + str(cam) + '_BOX' + str(box) + '_RIGHT')
-
-    # Update text for what width of box we're modifying
-    window.FindElement('-SIDE' + str(side) + '-BOX-WIDTH-').Update(str(rightPos - leftPos))
-
-    # Update text for what start position of box we're modifying
-    window.FindElement('-SIDE' + str(side) + '-BOX-POS-').Update(str(leftPos))
-
 def admin(event, window):
     window.FindElement('-LIVE-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
+    window.FindElement('-COLUMN-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-BARK-MODE-').Update(button_color=sg.theme_button_color())
     window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=False)
     window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=False)
     window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=False)
     window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE1-VERTICAL-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE2-VERTICAL-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE1-BOX-SELECT-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE2-BOX-SELECT-LAYOUT-').Update(visible=False)
     window.FindElement('-BOX-POS-TEXT-').Update(visible=False)
     window.FindElement('-IO-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE1-BOXES-LAYOUT-').Update(visible=False)
-    window.FindElement('-SIDE2-BOXES-LAYOUT-').Update(visible=False)
     window.FindElement('-ADMIN-BOX1-TEXT-').Update('CAM 1')
     window.FindElement('-ADMIN-BOX2-TEXT-').Update('CAM 2')
         
@@ -54,8 +31,6 @@ def admin(event, window):
 
         # turn transform button on
         window.FindElement('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
-        window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
         window.FindElement('-IO-LAYOUT-').Update(visible=True)
         
     # When the cancel button is pressed
@@ -74,6 +49,7 @@ def admin(event, window):
 
         # turn live button on
         window.FindElement('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
+        window.FindElement('-IO-LAYOUT-').Update(visible=True)
 
     # When transform mode button is pressed
     if event == '-TRANSFORM-MODE-':
@@ -83,6 +59,14 @@ def admin(event, window):
         window.FindElement('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
         window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
+        window.FindElement('-IO-LAYOUT-').Update(visible=True)
+
+    # When column mode button is pressed
+    if event == '-COLUMN-MODE-':
+        program_state.set_column(True)     # turn on column view mode
+
+        # turn transform button on
+        window.FindElement('-COLUMN-MODE-').Update(button_color=('black', 'yellow'))
         window.FindElement('-IO-LAYOUT-').Update(visible=True)
 
     # When bark thresh mode button is pressed

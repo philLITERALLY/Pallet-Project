@@ -48,10 +48,10 @@ def main(window):
         # When the rotate button is pressed perform actions
         if event == '-ROTATE-':
             program_state.toggle_rotate_state()                               # change rotate state
-            aio.setOutput(3, program_state.ROTATE_STATE, window)              # send new rotate state
+            aio.setOutput(4, program_state.ROTATE_STATE, window)              # send new rotate state
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-BARK-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-COLUMN-MODE-', '-BARK-MODE-'):
             handle_events.admin(event, window)
 
         # board events
@@ -84,16 +84,28 @@ def main(window):
             program_state.set_run_mode(False)
 
         # When the increase reject value is pressed
-        if event == '-REJECT+-':
-            handle_config.setValue('REJECT SETTINGS', 'REJECT_LEVEL', handle_config.REJECT_LEVEL + 1)
-            rejectStr = str(handle_config.REJECT_LEVEL) + '%'
-            window.FindElement('-REJECT-LEVEL-').update(rejectStr)
+        if event == '-EDGE-REJECT+-':
+            handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL + 1)
+            rejectStr = str(handle_config.EDGE_REJECT_LEVEL) + '%'
+            window.FindElement('-EDGE-REJECT-LEVEL-').update(rejectStr)
             
         # When the decrease reject value is pressed
-        if event == '-REJECT--':
-            handle_config.setValue('REJECT SETTINGS', 'REJECT_LEVEL', handle_config.REJECT_LEVEL - 1)
-            rejectStr = str(handle_config.REJECT_LEVEL) + '%'
-            window.FindElement('-REJECT-LEVEL-').update(rejectStr)
+        if event == '-EDGE-REJECT--':
+            handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL - 1)
+            rejectStr = str(handle_config.EDGE_REJECT_LEVEL) + '%'
+            window.FindElement('-EDGE-REJECT-LEVEL-').update(rejectStr)
+
+        # When the increase reject value is pressed
+        if event == '-MID-REJECT+-':
+            handle_config.setValue('REJECT SETTINGS', 'MID_REJECT_LEVEL', handle_config.MID_REJECT_LEVEL + 1)
+            rejectStr = str(handle_config.MID_REJECT_LEVEL) + '%'
+            window.FindElement('-MID-REJECT-LEVEL-').update(rejectStr)
+            
+        # When the decrease reject value is pressed
+        if event == '-MID-REJECT--':
+            handle_config.setValue('REJECT SETTINGS', 'MID_REJECT_LEVEL', handle_config.MID_REJECT_LEVEL - 1)
+            rejectStr = str(handle_config.MID_REJECT_LEVEL) + '%'
+            window.FindElement('-MID-REJECT-LEVEL-').update(rejectStr)
 
         # When fault is flagged
         if event == '-FAULT-':
