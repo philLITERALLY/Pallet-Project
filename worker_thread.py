@@ -27,14 +27,6 @@ else:
 
 def waitKey():
     while True:
-        if not (program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.COLUMN_MODE or program_state.THRESH_MODE) and not program_state.RUN_MODE:
-            program_state.set_run_mode(False)
-            return False
-
-        if keyboard.is_pressed('n'):
-            program_state.set_run_mode(False)
-            return False
-
         if keyboard.is_pressed('y'):
             return True
 
@@ -63,8 +55,6 @@ def runProgram(window):
 
             if manualTesting:
                 boardIn = waitKey()                                             # wait for board in place
-                if not boardIn:
-                    continue
             else:
                 boardIn = aio.waitInputState(0, True, window)                  # wait for board in place
                 if not boardIn:
