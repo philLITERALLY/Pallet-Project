@@ -63,12 +63,38 @@ class VideoCapture:
 
 class StaticImage:
     def __init__(self, camera):
-      if camera == 1:
-        self.image = cv2.imread("C:/Users/The Beast/Documents/Pallet Final/images/Pallet_r2_cam2_bark_single.jpg")
+      self.camera = camera
+      self.number = 1
+      if camera == 0:
+        self.image = cv2.imread("images/Pallet_r2_cam1.jpg")
       else:
-        self.image = cv2.imread("C:/Users/The Beast/Documents/Pallet Final/images/Pallet_r2_cam1_bark_single.jpg")
+        self.image = cv2.imread("images/Pallet_R2_cam2.jpg")
 
     def read(self):
+      if self.camera == 0:
+        if self.number == 0:
+          self.image = cv2.imread("images/Pallet_r2_cam1.jpg")
+          self.number = 1
+        elif self.number == 1:
+          self.image = cv2.imread("images/Pallet_r2_cam1_barked.jpg")
+          self.number = 2
+        elif self.number == 2:
+          self.image = cv2.imread("images/Pallet_r2_cam1_barked_single.jpg")
+          self.number = 3
+        elif self.number == 3:
+          self.image = cv2.imread("images/Pallet_r2_cam1_barked_edge.jpg")
+          self.number = 4
+        else:
+          self.image = cv2.imread("images/Pallet_r2_cam1_bark_single.jpg")
+          self.number = 0
+      else:
+        if self.number == 0:
+          self.image = cv2.imread("images/Pallet_R2_cam2.jpg")
+          self.number = 1
+        else:
+          self.image = cv2.imread("images/Pallet_R2_cam2_bark_single.jpg")
+          self.number = 0
+
       return self.image
 
     def release(self):
