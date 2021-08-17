@@ -155,11 +155,18 @@ boxes_layout = [
     [        
         sg.Column([
             [
-                sg.Button('SINGLE', key='-SINGLE-', size=(14, 3)),
+                sg.Column([
+                    [sg.Button('SINGLE', key='-SINGLE-', size=(12, 1))],
+                    [sg.Button('GRAB', key='-GRAB-', size=(12, 1))],
+                ]),
                 sg.Column([
                     [sg.Button('ROTATE', key='-ROTATE-', size=(12, 1))],
                     [sg.Button('CAMERA', key='-CAMERA-', size=(12, 1))],
                 ]),
+            ],
+            [
+                sg.Text('Filename: ', key='-FILENAME-TXT-'),
+                sg.InputText(key='-FILENAME-IN-'),
             ],
             [sg.Text('INPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-INPUT-2-')],
             [sg.Text('OUTPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-OUTPUT-2-')],

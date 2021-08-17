@@ -9,6 +9,7 @@ import handle_events    # handles the UI button events
 import handle_config    # module to handle config settings
 import worker_thread    # main thread that handles workflow
 import aio              # handles the aio
+import cv2
 
 def main(window):
     singleState = False
@@ -24,6 +25,14 @@ def main(window):
         side = 1
         if 'SIDE2' in event:
             side = 2
+
+        if event == '-GRAB-':
+            cam1 = worker_thread.camera1.read()
+            cam2 = worker_thread.camera2.read()
+
+            text_input = values['-FILENAME-IN-']
+            cv2.imwrite('images/stored/' + text_input + '_cam1.jpg', cam1)
+            cv2.imwrite('images/stored/' + text_input + '_cam2.jpg', cam2)
 
         # When the camera button is pressed switch the cameras
         if event == '-CAMERA-':
