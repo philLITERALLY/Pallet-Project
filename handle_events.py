@@ -7,36 +7,36 @@ import admin_settings   # Admin settings
 import handle_config    # Programs Configuration
 
 def admin(event, window):
-    window.FindElement('-LIVE-MODE-').Update(button_color=sg.theme_button_color())
-    window.FindElement('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
-    window.FindElement('-COLUMN-MODE-').Update(button_color=sg.theme_button_color())
-    window.FindElement('-BARK-MODE-').Update(button_color=sg.theme_button_color())
-    window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=False)
-    window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=False)
-    window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=False)
-    window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=False)
-    window.FindElement('-BOX-POS-TEXT-').Update(visible=False)
-    window.FindElement('-IO-LAYOUT-').Update(visible=False)
-    window.FindElement('-ADMIN-BOX1-TEXT-').Update('CAM 1')
-    window.FindElement('-ADMIN-BOX2-TEXT-').Update('CAM 2')
+    window.find_element('-LIVE-MODE-').Update(button_color=sg.theme_button_color())
+    window.find_element('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
+    window.find_element('-COLUMN-MODE-').Update(button_color=sg.theme_button_color())
+    window.find_element('-BARK-MODE-').Update(button_color=sg.theme_button_color())
+    window.find_element('-CAM1-TRANSFORM-LAYOUT-').Update(visible=False)
+    window.find_element('-CAM2-TRANSFORM-LAYOUT-').Update(visible=False)
+    window.find_element('-CAM1-THRESH-LAYOUT-').Update(visible=False)
+    window.find_element('-CAM2-THRESH-LAYOUT-').Update(visible=False)
+    window.find_element('-BOX-POS-TEXT-').Update(visible=False)
+    window.find_element('-IO-LAYOUT-').Update(visible=False)
+    window.find_element('-ADMIN-BOX1-TEXT-').Update('CAM 1')
+    window.find_element('-ADMIN-BOX2-TEXT-').Update('CAM 2')
         
     # When the setup button is pressed
     if event == '-SETUP-':
         # change to admin view
-        window.FindElement('-VIEW-LAYOUT-').Update(visible=False)
-        window.FindElement('-ADMIN-LAYOUT-').Update(visible=True)
+        window.find_element('-VIEW-LAYOUT-').Update(visible=False)
+        window.find_element('-ADMIN-LAYOUT-').Update(visible=True)
         
         # default state to live mode
         program_state.set_live(True)
 
         # turn transform button on
-        window.FindElement('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
+        window.find_element('-IO-LAYOUT-').Update(visible=True)
         
     # When the cancel button is pressed
     if event == '-CANCEL-':
-        window.FindElement('-VIEW-LAYOUT-').Update(visible=True)
-        window.FindElement('-ADMIN-LAYOUT-').Update(visible=False)
+        window.find_element('-VIEW-LAYOUT-').Update(visible=True)
+        window.find_element('-ADMIN-LAYOUT-').Update(visible=False)
         
         # make sure admin modes are off
         program_state.set_live(False)
@@ -48,68 +48,68 @@ def admin(event, window):
         program_state.set_live(True)     # turn on live view mode
 
         # turn live button on
-        window.FindElement('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
+        window.find_element('-IO-LAYOUT-').Update(visible=True)
 
     # When transform mode button is pressed
     if event == '-TRANSFORM-MODE-':
         program_state.set_transform(True)     # turn on transform view mode
 
         # turn transform button on
-        window.FindElement('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
-        window.FindElement('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
-        window.FindElement('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
+        window.find_element('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
+        window.find_element('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
+        window.find_element('-IO-LAYOUT-').Update(visible=True)
 
     # When column mode button is pressed
     if event == '-COLUMN-MODE-':
         program_state.set_column(True)     # turn on column view mode
 
         # turn transform button on
-        window.FindElement('-COLUMN-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-COLUMN-MODE-').Update(button_color=('black', 'yellow'))
+        window.find_element('-IO-LAYOUT-').Update(visible=True)
 
     # When bark thresh mode button is pressed
     if event == '-BARK-MODE-':
         program_state.set_thresh(True)       # turn on box thresh mode
 
         # turn thresh button on
-        window.FindElement('-BARK-MODE-').Update(button_color=('black', 'yellow'))
-        window.FindElement('-CAM1-THRESH-LAYOUT-').Update(visible=True)
-        window.FindElement('-CAM2-THRESH-LAYOUT-').Update(visible=True)
-        window.FindElement('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-BARK-MODE-').Update(button_color=('black', 'yellow'))
+        window.find_element('-CAM1-THRESH-LAYOUT-').Update(visible=True)
+        window.find_element('-CAM2-THRESH-LAYOUT-').Update(visible=True)
+        window.find_element('-IO-LAYOUT-').Update(visible=True)
 
 def board(event, window):
     if event == '-WIDTH-70-': # 70
         handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', -52)
-        window.FindElement('-WIDTH-70-').Update(button_color=('black', 'yellow'))
+        window.find_element('-WIDTH-70-').Update(button_color=('black', 'yellow'))
 
-        window.FindElement('-WIDTH-96-').Update(button_color=sg.theme_button_color())
-        window.FindElement('-WIDTH-120-').Update(button_color=sg.theme_button_color())
+        window.find_element('-WIDTH-96-').Update(button_color=sg.theme_button_color())
+        window.find_element('-WIDTH-120-').Update(button_color=sg.theme_button_color())
     
     if event == '-WIDTH-96-':
         handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', 0)
-        window.FindElement('-WIDTH-96-').Update(button_color=('black', 'yellow'))
+        window.find_element('-WIDTH-96-').Update(button_color=('black', 'yellow'))
         
-        window.FindElement('-WIDTH-70-').Update(button_color=sg.theme_button_color())
-        window.FindElement('-WIDTH-120-').Update(button_color=sg.theme_button_color())
+        window.find_element('-WIDTH-70-').Update(button_color=sg.theme_button_color())
+        window.find_element('-WIDTH-120-').Update(button_color=sg.theme_button_color())
     
     if event == '-WIDTH-120-':
         handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', 47)
-        window.FindElement('-WIDTH-120-').Update(button_color=('black', 'yellow'))
+        window.find_element('-WIDTH-120-').Update(button_color=('black', 'yellow'))
         
-        window.FindElement('-WIDTH-70-').Update(button_color=sg.theme_button_color())
-        window.FindElement('-WIDTH-96-').Update(button_color=sg.theme_button_color())
+        window.find_element('-WIDTH-70-').Update(button_color=sg.theme_button_color())
+        window.find_element('-WIDTH-96-').Update(button_color=sg.theme_button_color())
 
     if event == '-LENGTH--':
         newLength = handle_config.BOARD_LENGTH - 10
         admin_settings.set_board_length(newLength)
-        window.FindElement('-BOARD-LENGTH-').update(str(newLength))
+        window.find_element('-BOARD-LENGTH-').update(str(newLength))
 
     if event == '-LENGTH+-':
         newLength = handle_config.BOARD_LENGTH + 10
         admin_settings.set_board_length(newLength)
-        window.FindElement('-BOARD-LENGTH-').update(str(newLength))
+        window.find_element('-BOARD-LENGTH-').update(str(newLength))
 
 def transform(event, window):
     if event == '-CAM1-TOP--':
@@ -136,10 +136,10 @@ def transform(event, window):
     if event == '-CAM2-BOT+-':
         handle_config.setValue('TRANSFORM SETTINGS', 'CAM2_TRANS_RIGHT', handle_config.CAM2_TRANS_RIGHT + 2)
 
-    window.FindElement('-CAM1-TOP-').update(str(handle_config.CAM1_TRANS_RIGHT))
-    window.FindElement('-CAM1-BOT-').update(str(handle_config.CAM1_TRANS_LEFT))
-    window.FindElement('-CAM2-TOP-').update(str(handle_config.CAM2_TRANS_LEFT))
-    window.FindElement('-CAM2-BOT-').update(str(handle_config.CAM2_TRANS_RIGHT))
+    window.find_element('-CAM1-TOP-').update(str(handle_config.CAM1_TRANS_RIGHT))
+    window.find_element('-CAM1-BOT-').update(str(handle_config.CAM1_TRANS_LEFT))
+    window.find_element('-CAM2-TOP-').update(str(handle_config.CAM2_TRANS_LEFT))
+    window.find_element('-CAM2-BOT-').update(str(handle_config.CAM2_TRANS_RIGHT))
 
 def thresh(event, window):
     if event == '-CAM1-THRESH--':
@@ -154,5 +154,5 @@ def thresh(event, window):
     if event == '-CAM2-THRESH+-':
         handle_config.setValue('THRESH SETTINGS', 'CAM2_THRESH', handle_config.CAM2_THRESH + 5)
     
-    window.FindElement('-CAM1-THRESH-').update(str(handle_config.CAM1_THRESH))
-    window.FindElement('-CAM2-THRESH-').update(str(handle_config.CAM2_THRESH))
+    window.find_element('-CAM1-THRESH-').update(str(handle_config.CAM1_THRESH))
+    window.find_element('-CAM2-THRESH-').update(str(handle_config.CAM2_THRESH))

@@ -79,42 +79,42 @@ def main(window):
         if event == '-RESET-':
             program_state.clear_results()
 
-            window.FindElement('-TOTAL-PASSED-').update(str(0))
-            window.FindElement('-TOTAL-INSPECTED-').update(str(0))
+            window.find_element('-TOTAL-PASSED-').update(str(0))
+            window.find_element('-TOTAL-INSPECTED-').update(str(0))
 
         # When the start button is pressed
         if event == '-START-':
-            window.FindElement('-START-').Update(button_color=('black', 'yellow'))
+            window.find_element('-START-').Update(button_color=('black', 'yellow'))
             program_state.set_run_mode(True)
             
         # When the start button is pressed
         if event == '-STOP-':
-            window.FindElement('-START-').Update(button_color=sg.theme_button_color())
+            window.find_element('-START-').Update(button_color=sg.theme_button_color())
             program_state.set_run_mode(False)
 
         # When the increase reject value is pressed
         if event == '-EDGE-REJECT+-':
             handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL + 1)
             rejectStr = str(handle_config.EDGE_REJECT_LEVEL) + '%'
-            window.FindElement('-EDGE-REJECT-LEVEL-').update(rejectStr)
+            window.find_element('-EDGE-REJECT-LEVEL-').update(rejectStr)
             
         # When the decrease reject value is pressed
         if event == '-EDGE-REJECT--':
             handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL - 1)
             rejectStr = str(handle_config.EDGE_REJECT_LEVEL) + '%'
-            window.FindElement('-EDGE-REJECT-LEVEL-').update(rejectStr)
+            window.find_element('-EDGE-REJECT-LEVEL-').update(rejectStr)
 
         # When the increase reject value is pressed
         if event == '-MID-REJECT+-':
             handle_config.setValue('REJECT SETTINGS', 'MID_REJECT_LEVEL', handle_config.MID_REJECT_LEVEL + 1)
             rejectStr = str(handle_config.MID_REJECT_LEVEL) + '%'
-            window.FindElement('-MID-REJECT-LEVEL-').update(rejectStr)
+            window.find_element('-MID-REJECT-LEVEL-').update(rejectStr)
             
         # When the decrease reject value is pressed
         if event == '-MID-REJECT--':
             handle_config.setValue('REJECT SETTINGS', 'MID_REJECT_LEVEL', handle_config.MID_REJECT_LEVEL - 1)
             rejectStr = str(handle_config.MID_REJECT_LEVEL) + '%'
-            window.FindElement('-MID-REJECT-LEVEL-').update(rejectStr)
+            window.find_element('-MID-REJECT-LEVEL-').update(rejectStr)
 
         # When fault is flagged
         if event == '-FAULT-':

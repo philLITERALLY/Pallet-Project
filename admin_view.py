@@ -24,10 +24,10 @@ def main(camera1, camera2, window):
             side1Cam2columnA, side1Cam2columnB, side1Cam2columnC, \
             side2Cam2columnA, side2Cam2columnB, side2Cam2columnC = image_handling.main(frame2, 2, False)            # process camera 2 mods
 
-    window.FindElement('-SIDE-1-CAM-1-').update(data=side1Cam1)                              # update img for side 1 camera 1
-    window.FindElement('-SIDE-1-CAM-2-').update(data=side1Cam2)                              # update img for side 1 camera 2
-    window.FindElement('-SIDE-2-CAM-1-').update(data=side2Cam1)                               # update img for side 1 camera 1
-    window.FindElement('-SIDE-2-CAM-2-').update(data=side2Cam2)                               # update img for side 1 camera 2
+    window.find_element('-SIDE-1-CAM-1-').update(data=side1Cam1)                              # update img for side 1 camera 1
+    window.find_element('-SIDE-1-CAM-2-').update(data=side1Cam2)                              # update img for side 1 camera 2
+    window.find_element('-SIDE-2-CAM-1-').update(data=side2Cam1)                               # update img for side 1 camera 1
+    window.find_element('-SIDE-2-CAM-2-').update(data=side2Cam2)                               # update img for side 1 camera 2
 
     side1Bark = round((side1Cam1columnA + side1Cam1columnB + side1Cam1columnC + side1Cam2columnA + side1Cam2columnB + side1Cam2columnC) / 6, 2)
     side2Bark = round((side2Cam1columnA + side2Cam1columnB + side2Cam1columnC + side2Cam2columnA + side2Cam2columnB + side2Cam2columnC) / 6, 2)
@@ -40,8 +40,8 @@ def main(camera1, camera2, window):
     side2ColBBark = round((side2Cam1columnB + side2Cam2columnB) / 2, 2)
     side2ColCBark = round((side2Cam1columnC + side2Cam2columnC) / 2, 2)
     
-    window.FindElement('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColABark) + '  ||  B: ' + str(side1ColBBark) + '  ||  C: ' + str(side1ColCBark))
-    window.FindElement('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColABark) + '  ||  B: ' + str(side2ColBBark) + '  ||  C: ' + str(side2ColCBark))
+    window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColABark) + '  ||  B: ' + str(side1ColBBark) + '  ||  C: ' + str(side1ColCBark))
+    window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColABark) + '  ||  B: ' + str(side2ColBBark) + '  ||  C: ' + str(side2ColCBark))
 
     side1failState = []
     if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
@@ -52,9 +52,9 @@ def main(camera1, camera2, window):
         side1failState.append('COL C')
 
     if len(side1failState) > 0:
-        window.FindElement('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=('red'))
+        window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=('red'))
     else:
-        window.FindElement('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
+        window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
     side2failState = []
     if side2ColABark >handle_config. EDGE_REJECT_LEVEL:
@@ -65,6 +65,6 @@ def main(camera1, camera2, window):
         side2failState.append('COL C')
 
     if len(side2failState) > 0:
-        window.FindElement('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=('red'))
+        window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=('red'))
     else:
-        window.FindElement('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))
+        window.find_element('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))

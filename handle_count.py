@@ -7,8 +7,8 @@ import program_state    # Programs State
 def updateText(window):
     passed_perc = round(program_state.TOTAL_PASSED / program_state.TOTAL_INSPECTED * 100, 2)
 
-    window.FindElement('-TOTAL-PASSED-').update(str(passed_perc))
-    window.FindElement('-TOTAL-INSPECTED-').update(str(program_state.TOTAL_INSPECTED))
+    window.find_element('-TOTAL-PASSED-').update(str(passed_perc))
+    window.find_element('-TOTAL-INSPECTED-').update(str(program_state.TOTAL_INSPECTED))
 
 def plankPass(window):
     program_state.increase_total_inspected()    # add to total count
