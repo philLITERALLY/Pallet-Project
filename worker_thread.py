@@ -16,7 +16,7 @@ import reset_view       # clears the UI
 
 global camera1, camera2
 
-manualTesting = False
+manualTesting = True
 
 if manualTesting:
     camera1 = camera_setup.StaticImage(0)   # setup static image one

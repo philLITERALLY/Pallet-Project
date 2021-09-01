@@ -13,25 +13,25 @@ def transformCoords(origImg, camera, side):
     _, width, _ = origImg.shape # img size
 
     if camera == 1 and side == 1:
-        coord1 = 190
-        coord2 = width
+        coord1 = 210
+        coord2 = width - 10
         coord3 = 0
-        coord4 = width - 40
+        coord4 = width - 20
     elif camera == 1 and side == 2:
         coord1 = 0
-        coord2 = width - 190
-        coord3 = 40
+        coord2 = width - 310
+        coord3 = 110
         coord4 = width
     elif camera == 2 and side == 1:
-        coord1 = 160
-        coord2 = width - 40
+        coord1 = 280
+        coord2 = width - 20
         coord3 = 35
-        coord4 = width - 30
+        coord4 = width - 70
     elif camera == 2 and side == 2:
-        coord1 = 0
-        coord2 = width - 230
-        coord3 = 80
-        coord4 = width
+        coord1 = 20
+        coord2 = width - 300
+        coord3 = 90
+        coord4 = width - 20
     
     return coord1, coord2, coord3, coord4
 
@@ -39,24 +39,24 @@ def cropToWidth(origImg, camera):
     height, _, _ = origImg.shape
 
     if camera == 1:
-        side1Mid = 1560
-        side2Mid = 2320
+        left1Bound = 1410
+        right1Bound = 1980
+        left2Bound = 2155
+        right2Bound = 2815
     else:
-        side1Mid = 1690
-        side2Mid = 2405
+        left1Bound = 1290
+        right1Bound = 1910
+        left2Bound = 2055
+        right2Bound = 2705
 
-    # Handle Side 1
-    left1Bound = side1Mid - handle_config.FRAME_WIDTH
-    right1Bound = side1Mid + handle_config.FRAME_WIDTH
+    # calculate mid points
+    # side1Mid = int(left1Bound + (right1Bound - left1Bound) / 2)
+    # side2Mid = int(left2Bound + (right2Bound - left2Bound) / 2)
 
     # draw side 1 boundaries
     # cv2.line(origImg, (left1Bound, 0), (left1Bound, height), (255,0,0), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (side1Mid, 0), (side1Mid, height), (0,255,0), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (right1Bound, 0), (right1Bound, height), (0,0,255), 5) # Top-Left to Bottom-Left
-
-    # Handle Side 2
-    left2Bound = side2Mid - handle_config.FRAME_WIDTH
-    right2Bound = side2Mid + handle_config.FRAME_WIDTH
 
     # draw side 2 boundaries
     # cv2.line(origImg, (left2Bound, 0), (left2Bound, height), (255,0,0), 5) # Top-Left to Bottom-Left
@@ -108,12 +108,15 @@ def rotateImg(origImg, camera):
 def cropToLength(origImg, camera):
     height, width, _ = origImg.shape
 
+    cam1Length = 1460
+    cam2Length = 1310
+
     if camera == 1:
-        crop = 450
-        # cv2.line(origImg, (crop, 0), (crop, height), (255,255,255), 5) # Top-Left to Bottom-Left
+        crop = width - int(cam1Length / 1200 * handle_config.BOARD_LENGTH)
+        # cv2.line(origImg, (crop, 0), (crop, height), (255,0,0), 5) # Top-Left to Bottom-Left
         origImg = origImg[0:height, crop:width].copy()
     elif camera == 2:
-        crop = 1550
+        crop = int(cam2Length / 1200 * handle_config.BOARD_LENGTH)
         # cv2.line(origImg, (crop, 0), (crop, height), (255,255,255), 5) # Top-Left to Bottom-Left
         origImg = origImg[0:height, 0:crop].copy()
 
@@ -233,8 +236,7 @@ def main(origImg, camera, ignoreFlags):
     side1, side1columnAPerc, side1columnBPerc, side1columnCPerc = analyseImg(side1, threshedSide1Img)
     side2, side2columnAPerc, side2columnBPerc, side2columnCPerc = analyseImg(side2, threshedSide2Img)
 
-    # crop image to plank
-    origImg = resizeImg(origImg)
+    # resize image
     side1 = resizeImg(side1)
     side2 = resizeImg(side2)
 

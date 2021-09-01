@@ -36,7 +36,7 @@ board_settings = [
     [sg.Text('BOARD LENGTH')],
     [
         sg.Button('-', key='-LENGTH--', size=(4, 2)),
-        sg.Text('1200', key='-BOARD-LENGTH-'),
+        sg.Text(handle_config.BOARD_LENGTH, key='-BOARD-LENGTH-'),
         sg.Button('+', key='-LENGTH+-', size=(4, 2))
     ],
 ]
