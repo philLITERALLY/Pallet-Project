@@ -11,11 +11,8 @@ def admin(event, window):
     window.find_element('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-COLUMN-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-BARK-MODE-').Update(button_color=sg.theme_button_color())
-    window.find_element('-CAM1-TRANSFORM-LAYOUT-').Update(visible=False)
-    window.find_element('-CAM2-TRANSFORM-LAYOUT-').Update(visible=False)
     window.find_element('-CAM1-THRESH-LAYOUT-').Update(visible=False)
     window.find_element('-CAM2-THRESH-LAYOUT-').Update(visible=False)
-    window.find_element('-BOX-POS-TEXT-').Update(visible=False)
     window.find_element('-IO-LAYOUT-').Update(visible=False)
     window.find_element('-ADMIN-BOX1-TEXT-').Update('CAM 1')
     window.find_element('-ADMIN-BOX2-TEXT-').Update('CAM 2')
@@ -43,6 +40,10 @@ def admin(event, window):
         program_state.set_thresh(False)
         program_state.set_transform(False)
 
+    # When the shut down button is pressed
+    if event == '-SHUT-DOWN-':
+        program_state.stop_program()
+
     # When live mode button is pressed
     if event == '-LIVE-MODE-':
         program_state.set_live(True)     # turn on live view mode
@@ -57,8 +58,6 @@ def admin(event, window):
 
         # turn transform button on
         window.find_element('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
-        window.find_element('-CAM1-TRANSFORM-LAYOUT-').Update(visible=True)
-        window.find_element('-CAM2-TRANSFORM-LAYOUT-').Update(visible=True)
         window.find_element('-IO-LAYOUT-').Update(visible=True)
 
     # When column mode button is pressed
@@ -110,36 +109,6 @@ def board(event, window):
         newLength = handle_config.BOARD_LENGTH + 10
         admin_settings.set_board_length(newLength)
         window.find_element('-BOARD-LENGTH-').update(str(newLength))
-
-def transform(event, window):
-    if event == '-CAM1-TOP--':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM1_TRANS_RIGHT', handle_config.CAM1_TRANS_RIGHT + 2)
-
-    if event == '-CAM1-TOP+-':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM1_TRANS_RIGHT', handle_config.CAM1_TRANS_RIGHT - 2)
-
-    if event == '-CAM1-BOT--':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM1_TRANS_LEFT', handle_config.CAM1_TRANS_LEFT - 2)
-
-    if event == '-CAM1-BOT+-':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM1_TRANS_LEFT', handle_config.CAM1_TRANS_LEFT + 2)
-
-    if event == '-CAM2-TOP--':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM2_TRANS_LEFT', handle_config.CAM2_TRANS_LEFT + 2)
-
-    if event == '-CAM2-TOP+-':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM2_TRANS_LEFT', handle_config.CAM2_TRANS_LEFT - 2)
-
-    if event == '-CAM2-BOT--':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM2_TRANS_RIGHT', handle_config.CAM2_TRANS_RIGHT - 2)
-
-    if event == '-CAM2-BOT+-':
-        handle_config.setValue('TRANSFORM SETTINGS', 'CAM2_TRANS_RIGHT', handle_config.CAM2_TRANS_RIGHT + 2)
-
-    window.find_element('-CAM1-TOP-').update(str(handle_config.CAM1_TRANS_RIGHT))
-    window.find_element('-CAM1-BOT-').update(str(handle_config.CAM1_TRANS_LEFT))
-    window.find_element('-CAM2-TOP-').update(str(handle_config.CAM2_TRANS_LEFT))
-    window.find_element('-CAM2-BOT-').update(str(handle_config.CAM2_TRANS_RIGHT))
 
 def thresh(event, window):
     if event == '-CAM1-THRESH--':

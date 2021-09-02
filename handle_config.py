@@ -26,13 +26,9 @@ def init():
 
     # Board settings
     global BOARD_WIDTH, BOARD_LENGTH
-    global CAM1_BOX_COUNT, CAM2_BOX_COUNT
 
     # Rejection settings
     global EDGE_REJECT_LEVEL, MID_REJECT_LEVEL
-
-    # Transform settings
-    global CAM1_TRANS_LEFT, CAM1_TRANS_RIGHT, CAM2_TRANS_LEFT, CAM2_TRANS_RIGHT
 
     # Thresh settings
     global CAM1_THRESH, CAM2_THRESH
@@ -59,18 +55,10 @@ def init():
     # Get Board Settings
     BOARD_WIDTH = config.getint('BOARD SETTINGS', 'BOARD_WIDTH')
     BOARD_LENGTH = config.getint('BOARD SETTINGS', 'BOARD_LENGTH')
-    CAM1_BOX_COUNT = config.getint('BOARD SETTINGS', 'CAM1_BOX_COUNT')
-    CAM2_BOX_COUNT = config.getint('BOARD SETTINGS', 'CAM2_BOX_COUNT')
 
     # Get Rejection Settings
     EDGE_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'EDGE_REJECT_LEVEL')
     MID_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'MID_REJECT_LEVEL')
-
-    # Get Transform Settings
-    CAM1_TRANS_LEFT = config.getint('TRANSFORM SETTINGS', 'CAM1_TRANS_LEFT')
-    CAM1_TRANS_RIGHT = config.getint('TRANSFORM SETTINGS', 'CAM1_TRANS_RIGHT')
-    CAM2_TRANS_LEFT = config.getint('TRANSFORM SETTINGS', 'CAM2_TRANS_LEFT')
-    CAM2_TRANS_RIGHT = config.getint('TRANSFORM SETTINGS', 'CAM2_TRANS_RIGHT')
 
     # Get Thresh Settings
     CAM1_THRESH = config.getint('THRESH SETTINGS', 'CAM1_THRESH')

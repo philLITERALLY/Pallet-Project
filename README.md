@@ -176,15 +176,8 @@ The values in `config.ini` are described below:
 | [BOARD SETTINGS] | Contains settings for the board/plank | |
 | board_width | Width of the board i.e. 70, 96, 120 | :heavy_check_mark: |
 | board_length | Length of the board (determines how many boxes to use) | :heavy_check_mark: |
-| cam1_box_count | Amount of boxes for camera 1 | :heavy_check_mark: |
-| cam2_box_count | Amount of boxes for camera 2 | :heavy_check_mark: |
 | [REJECT SETTINGS] | Contains settings reject level | |
 | reject_level | What percent of bark is considered a reject | :heavy_check_mark: |
-| [TRANSFORM SETTINGS] | Contains settings for plane transformation | |
-| cam1_trans_left | Position to determine plane adjust | :heavy_check_mark: |
-| cam1_trans_right | Position to determine plane adjust | :heavy_check_mark: |
-| cam2_trans_left | Position to determine plane adjust | :heavy_check_mark: |
-| cam2_trans_right | Position to determine plane adjust | :heavy_check_mark: |
 | [THRESH SETTINGS] | Contains settings for threshing of image | |
 | cam1_thresh | Thresh value applied to cam1 image | :heavy_check_mark: |
 | cam2_thresh | Thresh value applied to cam2 image | :heavy_check_mark: |

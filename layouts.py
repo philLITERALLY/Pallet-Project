@@ -92,7 +92,10 @@ admin_mode = [
         sg.Button('COLUMNS', key='-COLUMN-MODE-', size=(15, 2)),
         sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
     ],
-    [sg.Button('CANCEL', key='-CANCEL-', size=(31, 2))]
+    [
+        sg.Button('CANCEL', key='-CANCEL-', size=(15, 2)),
+        sg.Button('SHUT DOWN', key='-SHUT-DOWN-', size=(15, 2), button_color=('black', 'red')),
+    ]
 ]
 
 admin_box1 = [
@@ -100,19 +103,6 @@ admin_box1 = [
     [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
     [sg.Image(size=(col_width, 10))], # extra padding
     [
-        sg.Column([
-            # [
-            #     sg.Text('TOP', size=(6, 1), justification='left'),
-            #     sg.Button('-', key='-CAM1-TOP--', size=(4, 2)),
-            #     sg.Text(str(handle_config.CAM1_TRANS_RIGHT), key='-CAM1-TOP-', size=(4, 1), justification='c'),
-            #     sg.Button('+', key='-CAM1-TOP+-', size=(4, 2))
-            # ], [
-            #     sg.Text('BOT', size=(6, 1), justification='left'),
-            #     sg.Button('-', key='-CAM1-BOT--', size=(4, 2)),
-            #     sg.Text(str(handle_config.CAM1_TRANS_LEFT), key='-CAM1-BOT-', size=(4, 1), justification='c'),
-            #     sg.Button('+', key='-CAM1-BOT+-', size=(4, 2))
-            # ]
-        ], key='-CAM1-TRANSFORM-LAYOUT-', visible=False),
         sg.Column([
             [
                 sg.Button('-', key='-CAM1-THRESH--', size=(4, 2)),
@@ -128,19 +118,6 @@ admin_box2 = [
     [sg.Text('SELECT BOX', key='-ADMIN-BOX2-TEXT-')],
     [sg.Image(size=(col_width, 10))], # extra padding
     [
-        sg.Column([
-            # [
-            #     sg.Text('TOP', size=(6, 1), justification='left'),
-            #     sg.Button('-', key='-CAM2-TOP--', size=(4, 2)),
-            #     sg.Text(str(handle_config.CAM2_TRANS_RIGHT), key='-CAM2-TOP-', size=(4, 1), justification='c'),
-            #     sg.Button('+', key='-CAM2-TOP+-', size=(4, 2))
-            # ], [
-            #     sg.Text('BOT', size=(6, 1), justification='left'),
-            #     sg.Button('-', key='-CAM2-BOT--', size=(4, 2)),
-            #     sg.Text(str(handle_config.CAM2_TRANS_LEFT), key='-CAM2-BOT-', size=(4, 1), justification='c'),
-            #     sg.Button('+', key='-CAM2-BOT+-', size=(4, 2))
-            # ]
-        ], key='-CAM2-TRANSFORM-LAYOUT-', visible=False),
         sg.Column([[
             sg.Button('-', key='-CAM2-THRESH--', size=(4, 2)),
                 sg.Text(' ' + str(handle_config.CAM2_THRESH) + ' ', key='-CAM2-THRESH-', size=(4, 1), justification='c'),
@@ -151,7 +128,6 @@ admin_box2 = [
 
 boxes_layout = [
     [sg.Image(size=(col_width, 1))], # to help center items
-    [sg.Text('BOX POSITION', key='-BOX-POS-TEXT-')],
     [        
         sg.Column([
             [

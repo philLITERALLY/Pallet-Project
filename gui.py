@@ -60,7 +60,7 @@ def main(window):
             aio.setOutput(4, program_state.ROTATE_STATE, window)              # send new rotate state
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-COLUMN-MODE-', '-BARK-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-COLUMN-MODE-', '-BARK-MODE-'):
             handle_events.admin(event, window)
 
         # board events
