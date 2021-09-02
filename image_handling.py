@@ -226,8 +226,9 @@ def main(origImg, camera, ignoreFlags):
     side2 = rotateImg(side2, camera)
 
     # crop image to plank length
-    side1 = cropToLength(side1, camera)
-    side2 = cropToLength(side2, camera)
+    if not program_state.SHOW_TRANSFORM:
+        side1 = cropToLength(side1, camera)
+        side2 = cropToLength(side2, camera)
 
     # calculate box thresh values
     threshedSide1Img = threshImg(side1, camera)
