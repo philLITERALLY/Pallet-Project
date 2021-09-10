@@ -16,7 +16,7 @@ import reset_view       # clears the UI
 
 global camera1, camera2
 
-manualTesting = False
+manualTesting = True
 
 if manualTesting:
     camera1 = camera_setup.StaticImage(0)   # setup static image one
@@ -29,6 +29,9 @@ def waitKey():
     while True:
         if keyboard.is_pressed('y'):
             return True
+
+        if not program_state.RUN_MODE:
+            return False
 
 
 def runProgram(window):
@@ -55,6 +58,8 @@ def runProgram(window):
 
             if manualTesting:
                 boardIn = waitKey()                                             # wait for board in place
+                if not boardIn:
+                    continue
             else:
                 boardIn = aio.waitInputState(0, True, window)                  # wait for board in place
                 if not boardIn:
