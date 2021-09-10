@@ -12,7 +12,6 @@ import aio              # handles the aio
 import cv2
 
 def main(window):
-    singleState = False
 
     while not program_state.STOP_PROGRAM:
         event, values = window.read()
@@ -39,25 +38,6 @@ def main(window):
             tempCam1 = worker_thread.camera1
             worker_thread.camera1 = worker_thread.camera2
             worker_thread.camera2 = tempCam1
-
-        # When the single button is pressed perform actions
-        if event == '-SINGLE-':
-            
-            # PAUL NOTES            
-            # 1st press - Out0 on,wait for IN0&1,Out1 on wait 50ms Out2 on wait for IN3 grab images.
-            if not singleState:
-                program_state.setup_plank(True)
-                singleState = not singleState
-
-            # 2th press - Out2 off wait IN2,Out 0 & 1 off.
-            else:
-                program_state.drop_plank(True)
-                singleState = not singleState
-
-        # When the rotate button is pressed perform actions
-        if event == '-ROTATE-':
-            program_state.toggle_rotate_state()                               # change rotate state
-            aio.setOutput(4, program_state.ROTATE_STATE, window)              # send new rotate state
 
         # admin events
         if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-COLUMN-MODE-', '-BARK-MODE-'):

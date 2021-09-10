@@ -10,7 +10,8 @@ default_vert_padding = 3
 default_horz_padding = 8
 text_pad = 20
 
-screen_width, screen_height = sg.Window.get_screen_size()
+# screen_width, screen_height = sg.Window.get_screen_size()
+screen_width, screen_height = 1280, 1024
 
 # calculate row size
 row_padding = default_vert_padding * 5
@@ -23,10 +24,12 @@ half_width = int((screen_width - (default_horz_padding * 3)) / 2)
 img_width = full_width / 2
 col_padding = default_horz_padding * 3
 col_width = int((full_width - col_padding) / 4)
+sm_col_width = int(col_width * 0.9)
+bg_col_width = int(col_width * 1.3)
 
 # view layouts
 board_settings = [
-    [sg.Image(size=(col_width, 1))], # to help center items
+    [sg.Image(size=(sm_col_width, 1))], # to help center items
     [sg.Text('BOARD WIDTH')],
     [
         sg.Button('70', key='-WIDTH-70-', size=(4, 2)),
@@ -42,9 +45,9 @@ board_settings = [
 ]
 
 stats_layout = [
-    [sg.Image(size=(col_width, 1))], # to help center items
+    [sg.Image(size=(sm_col_width, 1))], # to help center items
     [sg.Button('RESET', key='-RESET-', size=(8, 2))],
-    [sg.Image(size=(col_width, 20))], # extra padding
+    [sg.Image(size=(sm_col_width, 20))], # extra padding
     [
         sg.Text('% PASSED:- '),
         sg.Text('0', key='-TOTAL-PASSED-', size=(14, 1))
@@ -56,7 +59,7 @@ stats_layout = [
 ]
 
 reject_layout = [
-    [sg.Image(size=(col_width, 10))], # to help center items
+    [sg.Image(size=(bg_col_width, 10))], # to help center items
     [sg.Text('REJECT COL A + C || REJECT COLUMN B')],
     [
         sg.Button('-', key='-EDGE-REJECT--', size=(4, 2)),
@@ -66,7 +69,7 @@ reject_layout = [
         sg.Text(str(handle_config.MID_REJECT_LEVEL) + '%', key='-MID-REJECT-LEVEL-'),
         sg.Button('+', key='-MID-REJECT+-', size=(4, 2))
     ],
-    [sg.Image(size=(col_width, 10))], # to help center items
+    [sg.Image(size=(bg_col_width, 10))], # to help center items
     [
         sg.Button('START', key='-START-', size=(15, 2)),
         sg.Button('STOP', key='-STOP-', size=(15, 2))
@@ -74,7 +77,7 @@ reject_layout = [
 ]
 
 setup_layout = [
-    [sg.Image(size=(col_width, 10))], # to help center items
+    [sg.Image(size=(sm_col_width, 10))], # to help center items
     [sg.Button('SETUP', key='-SETUP-', size=(15, 3))],
     [sg.Text('INPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-INPUT-')],
     [sg.Text('OUTPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-OUTPUT-')],
@@ -131,19 +134,11 @@ boxes_layout = [
     [        
         sg.Column([
             [
-                sg.Column([
-                    [sg.Button('SINGLE', key='-SINGLE-', size=(12, 1))],
-                    [sg.Button('GRAB', key='-GRAB-', size=(12, 1))],
-                ]),
-                sg.Column([
-                    [sg.Button('ROTATE', key='-ROTATE-', size=(12, 1))],
-                    [sg.Button('CAMERA', key='-CAMERA-', size=(12, 1))],
-                ]),
+                sg.Button('GRAB', key='-GRAB-', size=(10, 2)),
+                sg.Button('CAMERA FLIP', key='-CAMERA-', size=(18, 2)),
             ],
-            [
-                sg.Text('Filename: ', key='-FILENAME-TXT-'),
-                sg.InputText(key='-FILENAME-IN-'),
-            ],
+            [sg.Text('FILENAME (W/O FILE TYPE): ', key='-FILENAME-TXT-')],
+            [sg.InputText(key='-FILENAME-IN-')],
             [sg.Text('INPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-INPUT-2-')],
             [sg.Text('OUTPUT: 0 0 0 0 0 0 0 0 0', key='-AIO-OUTPUT-2-')],
         ], key='-IO-LAYOUT-', visible=False),
@@ -176,10 +171,10 @@ main_layout = [
     [
         # view layout
         sg.Column([[
-            sg.Column(setup_layout, element_justification='c', size=(col_width, row_size), visible=True),   # admin setup button
-            sg.Column(board_settings, element_justification='c', size=(col_width, row_size)), # board settings (width/height)
-            sg.Column(stats_layout, element_justification='c', size=(col_width, row_size)),   # stats of current run
-            sg.Column(reject_layout, element_justification='c', size=(col_width, row_size)),  # bark reject settings
+            sg.Column(setup_layout, element_justification='c', size=(sm_col_width, row_size), visible=True),   # admin setup button
+            sg.Column(board_settings, element_justification='c', size=(sm_col_width, row_size)), # board settings (width/height)
+            sg.Column(stats_layout, element_justification='c', size=(sm_col_width, row_size)),   # stats of current run
+            sg.Column(reject_layout, element_justification='c', size=(bg_col_width, row_size)),  # bark reject settings
         ]], key='-VIEW-LAYOUT-', visible=True),
         # admin layout
         sg.Column([[

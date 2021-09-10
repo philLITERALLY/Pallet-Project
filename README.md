@@ -8,8 +8,6 @@
 * [Process](https://github.com/philLITERALLY/Pallet-Project#process)
 
 [SETUP Funcionality](https://github.com/philLITERALLY/Pallet-Project#setup-funcionality)
-* [SINGLE Button](https://github.com/philLITERALLY/Pallet-Project#single-button)
-* [ROTATE Button](https://github.com/philLITERALLY/Pallet-Project#rotate-button)
 
 [Config Options](https://github.com/philLITERALLY/Pallet-Project#config-options)
 
@@ -19,139 +17,79 @@
 
 | Port | Description | Multi |
 | -- | -- | -- |
-| 0 | Board in position R | White |
-| 1 | Board in position L | Yellow |
-| 2 | Lift DOWN | Orange |
-| 3 | Lift UP | Red |
-| 4 | Rotate CCW | Light Blue |
-| 5 | Rotate CW | Purple |
-| 6 | Clamp OPEN | Black |
-| 7 | Clamp CLOSED R | Grey |
-| 8 | Clamp CLOSED L | Pink |
+| 0 | Go pulse from PLC (20ms) | White |
+| 1 | ?? | Yellow |
+| 2 | ?? | Orange |
+| 3 | ?? | Red |
+| 4 | ?? | Light Blue |
+| 5 | ?? | Purple |
+| 6 | ?? | Black |
+| 7 | ?? | Grey |
+| 8 | ?? | Pink |
 
 ## Outputs
 
 | Port | Description | Multi |
 | -- | -- | -- |
-| 0 | Board stops ON | White/Red |
-| 1 | Clamp | Yellow/Red |
-| 2 | Lift | Green/Red |
-| 3 | Rotate | Red/Blue |
-| 4 | Reject | Red/Brown |
-| 5 | Fault | Red/Black |
+| 0 | Ready | White/Red |
+| 1 | Good board | Yellow/Red |
+| 2 | Flip | Green/Red |
+| 3 | Reject | Red/Blue |
+| 4 | ?? | Red/Brown |
+| 5 | ?? | Red/Black |
 | 6 | Not working | - |
-| 7 | Good Board | White |
-| 8 | Running | Green |
+| 7 | ?? | White |
+| 8 | ?? | Green |
 
 # Running Mode
 
 Whenever a user hits the `START` button we start the process listed below.
 
-Whenever a user then hits `STOP` we reset all the AIO values (apart from rotate).
+Whenever a user then hits `STOP` we reset all the AIO values.
 
 ## Process
 
-1. Running Light On (OUT8 ON)
-2. First loop, wait board clear:
-    1. Wait for R+L On (IN0 + IN1 ON)
-    2. Wait for R+L Off (IN0 + IN1 OFF)
-    3. Delay (jam_delay)
-3. Delay (start_delay)
-3. Set up for image:
-    1. Turn Board Stops On (OUT0 ON)
-    2. Get current R+L (IN0 + IN1)
-    3. If R or L ON wait for board to leave (IN0 + IN1 OFF)
-    4. Wait for R+L On (IN0 + IN1 ON)
-    5. Turn Clamp On (OUT1 ON)
-    6. Sleep for 0.05 secs
-    7. Check if Clamps are open (IN7 + IN8 ON) if they are then FAULT:
-        1. Turn Fault On (OUT5 ON)
-        2. Highlight FAULT in UI
-        3. While user hasn't accepted fault:
-            1. Pulse light (OUT6 ON)
-            2. Sleep for 0.5 secs
-    8. Turn Lift On (OUT2 ON)
-    9. Wait for Lift On (IN3 ON)
-    10. Turn Board Stops Off (OUT0 OFF)
-4. Delay (wait_grab)
-5. Read Camera 1
-6. Read Camera 2
-7. "Handle" Frame 1 (Get bark count and image)
-8. "Handle" Frame 2 (Get bark count and image)
-9. Figure out Side 1 Bark Count (Cam1 count + Cam2 count divided by two)
-10. Update UI
-11. Delay (after_grab)
-12. Get current CCW and CW (IN4 + IN5)
-13. Sleep for 0.2 secs
-14. Toggle Rotate State (OUT3 Switch)
-15. Wait for CCW and CW to change (IN4 + IN5)
-16. Delay (wait_grab)
-17. Read Camera 1
-18. Read Camera 2
-19. "Handle" Frame 1 (Get bark count and image)
-20. "Handle" Frame 2 (Get bark count and image)
-21. Figure out Side 2 Bark Count (Cam1 count + Cam2 count divided by two)
-22. Update UI
-23. Delay (after_grab)
-24. If either side is over "REJECT" (defined in UI) then it's a reject
-25. If Plank isn't a reject and less bark of Side 1:
-    1. Get current CCW and CW (IN4 + IN5)
-    2. Sleep for 0.2 secs
-    3. Toggle Rotate State (OUT3 Switch)
-    4. Wait for CCW and CW to change (IN4 + IN5)
-26. Drop Plank:
-    1. Turn Lift Off (OUT2 OFF)
-    2. Wait for Lift Down (IN2 ON)
-    3. Turn Clamp Off (OUT1 OFF)
-    4. Wait Clamp Open (IN6 ON)
-27. If Reject:
-    1. Turn Reject On (OUT4 ON)
-    2. Sleep for 0.2 secs
-    3. Turn Reject Off (OUT4 OFF)
-    4. Update Stats for UI
-28. If Not Reject:
-    1. Turn Good Board On (OUT7 ON)
-    2. Sleep for 0.2 secs
-    3. Turn Good Board Off (OUT7 OFF)
-    4. Update Stats for UI
+1. Wait for pulse on IN0
+2. Set OUT0 OFF
+3. Read Camera 1
+4. Read Camera 2
+5. "Handle" Camera 1 (If first run only calculate 2nd position)
+6. "Handle" Camera 2 (If first run only calculate 2nd position)
 
+7. If REJECT 2 Flag (previous board)
+    1. Set REJECT 1 flag
+    2. Clear REJECT 2 flag
+8. ELSE
+    1. Test Board 1 for bark IF
+        - A or C above fail threshold
+            1. Set FLIP flag
+        - B above fail threshold
+            1. Set REJECT 1 flag
+    2. (FUTURE) Test Board 1 for form IF
+        - FAIL
+            1. Set REJECT 1 flag
+
+    1. Test Board 2 for bark IF
+        - B above fail threshold
+            1. Set REJECT 2 flag
+    2. (FUTURE) Test Board 2 for form IF
+        - FAIL
+            1. Set REJECT 2 flag
+9. Set OUT0 ON (Next Board)
+10. IF:
+    1. REJECT flag 1 set
+        - Clear flag
+        - 100ms pulse OUT3 (Reject)
+    2. FLIP flag set
+        - Clear flag
+        - 100ms pulse OUT2 (Flip)
+    3. Neither flag set
+        * 100ms pulse OUT1 (Good)
+11. LOOP
 
 # SETUP Funcionality
 
 When a user clicks SETUP they are brought to an adminstrative page. From here users can modify how we handle the images and perform the bark check. They can also perform isolated I/O actions using buttons.
-
-## SINGLE Button
-
-When first pushed the SINGLE Button runs the "Set up for image" function and marks the button as active.
-
-On it's second push it runs the "Drop Plank" function and deactivates the button.
-
-First push (Set up for image):
-1. Turn Board Stops On (OUT0 ON)
-2. Get current R+L (IN0 + IN1)
-3. If R or L ON wait for board to leave (IN0 + IN1 OFF)
-    1. Delay (jam_delay)
-4. Wait for R+L On (IN0 + IN1 ON)
-5. Turn Clamp On (OUT1 ON)
-6. Sleep for 0.05 secs
-7. Check if Clamps are open (IN7 + IN8 ON) if they are then FAULT:
-    1. Turn Fault On (OUT5 ON)
-    2. While user hasn't accepted fault:
-        1. Pulse light (OUT6 ON)
-        2. Sleep for 0.5 secs
-8. Turn Lift On (OUT2 ON)
-9. Wait for Lift On (IN3 ON)
-10. Turn Board Stops Off (OUT0 OFF)
-
-Second push (Drop Plank):
-1. Turn Lift Off (OUT2 OFF)
-2. Wait for Lift Down (IN2 ON)
-3. Turn Clamp Off (OUT1 OFF)
-4. Wait Clamp Open (IN6 ON)
-
-## ROTATE Button
-
-The ROTATE Button simply toggles the rotate state (OUT3).
 
 # Config Options
 
@@ -177,12 +115,10 @@ The values in `config.ini` are described below:
 | board_width | Width of the board i.e. 70, 96, 120 | :heavy_check_mark: |
 | board_length | Length of the board (determines how many boxes to use) | :heavy_check_mark: |
 | [REJECT SETTINGS] | Contains settings reject level | |
-| reject_level | What percent of bark is considered a reject | :heavy_check_mark: |
+| edge_reject_level | What percent of bark is considered a reject COL A + C | :heavy_check_mark: |
+| mid_reject_level | What percent of bark is considered a reject COL B | :heavy_check_mark: |
 | [THRESH SETTINGS] | Contains settings for threshing of image | |
 | cam1_thresh | Thresh value applied to cam1 image | :heavy_check_mark: |
 | cam2_thresh | Thresh value applied to cam2 image | :heavy_check_mark: |
-| [BOX POSITIONING] | Contains values for box positions | |
-| side`{X}`_vert | Vertical positioning of side `X` boxes | :heavy_check_mark: |
-| side`{1}`\_cam`{2}`\_box`{3}`\_`{4}` | Determines horizontal position of box | :heavy_check_mark: |
 | [AIO] | Settings for AIO | |
 | aio_wait | Length of time to "pulse" AIO (in seconds) | :x: |

@@ -1,8 +1,6 @@
 '''This module handles the programs state'''
 
 RUN_MODE = False
-SETUP_PLANK = False
-DROP_PLANK = True
 FAULT = False
 STOP_PROGRAM = False
 LIVE_MODE = False
@@ -12,20 +10,10 @@ THRESH_MODE = False
 CLEAR_RESULTS = False
 TOTAL_INSPECTED = 0
 TOTAL_PASSED = 0
-ROTATE_STATE = 0
-SIDE_STATE = 1
 
 def set_run_mode(value):
     global RUN_MODE
     RUN_MODE = value
-
-def setup_plank(value):
-    global SETUP_PLANK
-    SETUP_PLANK = value
-
-def drop_plank(value):
-    global DROP_PLANK
-    DROP_PLANK = value
 
 def set_fault(value):
     global FAULT
@@ -87,11 +75,3 @@ def increase_total_inspected():
 def increase_total_passed():
     global TOTAL_PASSED
     TOTAL_PASSED += 1
-
-def toggle_rotate_state():
-    global ROTATE_STATE
-    
-    if ROTATE_STATE == 1:
-        ROTATE_STATE = 0
-    else:
-        ROTATE_STATE = 1
