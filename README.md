@@ -111,7 +111,7 @@ The values in `config.ini` are described below:
 | start_delay | Runs at the start of every loop before the board stops go on | :x: |
 | wait_grab | Runs just before each image grab | :x: |
 | after_grab | Runs after each image grab | :x: |
-| jam_delay | Delay on the first loop to make sure board clears | :x: |
+| jam_delay | Delay on the first loop to make sure board clears (not in use) | :x: |
 | [CAMERA] | Contains information that modifies the camera | |
 | cam_width | Width of the camera image | :x: |
 | cam_height | Height of the camera image | :x: |
