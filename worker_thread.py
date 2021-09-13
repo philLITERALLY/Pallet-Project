@@ -95,7 +95,7 @@ def runProgram(window):
                 side1failState.append('COL A')
                 reject1Flag = True
             elif side1ColABark > handle_config.EDGE_FLIP_LEVEL:
-                side1failState.append('COL A')
+                side1failState.append('FLIP COL A')
                 flipFlag = True
 
             if side1ColBBark > handle_config.MID_REJECT_LEVEL:
@@ -106,7 +106,7 @@ def runProgram(window):
                 side1failState.append('COL C')
                 reject1Flag = True
             elif side1ColCBark > handle_config.EDGE_FLIP_LEVEL:
-                side1failState.append('COL C')
+                side1failState.append('FLIP COL C')
                 flipFlag = True
 
             if len(side1failState) > 0:
@@ -130,7 +130,7 @@ def runProgram(window):
                 side2failState.append('COL A')
                 reject2Flag = True
             elif side2ColABark > handle_config.EDGE_FLIP_LEVEL:
-                side2failState.append('COL A')
+                side2failState.append('FLIP COL A')
                 flipFlag = True
 
             if side2ColBBark > handle_config.MID_REJECT_LEVEL:
@@ -141,7 +141,7 @@ def runProgram(window):
                 side2failState.append('COL C')
                 reject2Flag = True
             elif side2ColCBark > handle_config.EDGE_FLIP_LEVEL:
-                side2failState.append('COL C')
+                side2failState.append('FLIP COL C')
                 flipFlag = True
 
             if len(side2failState) > 0:

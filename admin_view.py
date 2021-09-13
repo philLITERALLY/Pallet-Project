@@ -50,7 +50,7 @@ def main(camera1, camera2, window):
         side1failState.append('COL A')
         reject1Flag = True
     elif side1ColABark > handle_config.EDGE_FLIP_LEVEL:
-        side1failState.append('COL A')
+        side1failState.append('FLIP COL A')
 
     if side1ColBBark > handle_config.MID_REJECT_LEVEL:
         side1failState.append('COL B')
@@ -60,7 +60,7 @@ def main(camera1, camera2, window):
         side1failState.append('COL C')
         reject1Flag = True
     elif side1ColCBark > handle_config.EDGE_FLIP_LEVEL:
-        side1failState.append('COL C')
+        side1failState.append('FLIP COL C')
 
     if len(side1failState) > 0:
         colour = 'orange'
@@ -75,7 +75,7 @@ def main(camera1, camera2, window):
         side2failState.append('COL A')
         reject2Flag = True
     elif side2ColABark > handle_config.EDGE_FLIP_LEVEL:
-        side2failState.append('COL A')
+        side2failState.append('FLIP COL A')
 
     if side2ColBBark > handle_config.MID_REJECT_LEVEL:
         side2failState.append('COL B')
@@ -85,7 +85,7 @@ def main(camera1, camera2, window):
         side2failState.append('COL C')
         reject2Flag = True
     elif side2ColCBark > handle_config.EDGE_FLIP_LEVEL:
-        side2failState.append('COL C')
+        side2failState.append('FLIP COL C')
 
     if len(side2failState) > 0:
         colour = 'orange'
