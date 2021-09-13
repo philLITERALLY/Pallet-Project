@@ -41,6 +41,7 @@ def admin(event, window):
         # make sure admin modes are off
         program_state.set_live(False)
         program_state.set_thresh(False)
+        program_state.set_column(False)
         program_state.set_transform(False)
 
     # When the shut down button is pressed
