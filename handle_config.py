@@ -28,7 +28,7 @@ def init():
     global BOARD_WIDTH, BOARD_LENGTH
 
     # Rejection settings
-    global EDGE_REJECT_LEVEL, MID_REJECT_LEVEL
+    global EDGE_FLIP_LEVEL, EDGE_REJECT_LEVEL, MID_REJECT_LEVEL
 
     # Thresh settings
     global CAM1_THRESH, CAM2_THRESH
@@ -57,6 +57,7 @@ def init():
     BOARD_LENGTH = config.getint('BOARD SETTINGS', 'BOARD_LENGTH')
 
     # Get Rejection Settings
+    EDGE_FLIP_LEVEL = config.getint('REJECT SETTINGS', 'EDGE_FLIP_LEVEL')
     EDGE_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'EDGE_REJECT_LEVEL')
     MID_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'MID_REJECT_LEVEL')
 

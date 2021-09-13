@@ -42,15 +42,15 @@ def runProgram(window):
     side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
     side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
     side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
-    rejectFlag, flipFlag, badEdge1 = False, False, False
 
     while not program_state.STOP_PROGRAM:
         if program_state.RUN_MODE:                                             # if running
 
+            reject1Flag, reject2Flag, flipFlag = False, False, False
             reset_view.main(window)                                            # clear images and plank stats
 
             aio.setOutput(8, 1, window)                                        # turn running light on (OUT8 ON)
-            aio.setOutput(1, 1, window)                                        # flag ready state (OUT1 ON)
+            aio.setOutput(0, 1, window)                                        # flag ready state (OUT0 ON)
 
             time.sleep(handle_config.START_DELAY)                              # wait before starting the next loop
 
@@ -63,7 +63,7 @@ def runProgram(window):
                 if not boardIn:
                     continue
 
-            aio.setOutput(1, 0, window)                                        # stop ready state (OUT1 OFF)
+            aio.setOutput(0, 0, window)                                        # stop ready state (OUT0 OFF)
 
             if not firstRun:                                                   # use previous capture for current plank
                 side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC
@@ -93,16 +93,27 @@ def runProgram(window):
             side1failState = []
             if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
                 side1failState.append('COL A')
-                badEdge1 = True
+                reject1Flag = True
+            elif side1ColABark > handle_config.EDGE_FLIP_LEVEL:
+                side1failState.append('COL A')
+                flipFlag = True
+
             if side1ColBBark > handle_config.MID_REJECT_LEVEL:
                 side1failState.append('COL B')
-                rejectFlag = True
+                reject1Flag = True
+
             if side1ColCBark > handle_config.EDGE_REJECT_LEVEL:
                 side1failState.append('COL C')
-                badEdge1 = True
+                reject1Flag = True
+            elif side1ColCBark > handle_config.EDGE_FLIP_LEVEL:
+                side1failState.append('COL C')
+                flipFlag = True
 
             if len(side1failState) > 0:
-                window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=('red'))
+                colour = 'orange'
+                if reject1Flag:
+                    colour = 'red'
+                window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=(colour))
             else:
                 window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
@@ -117,40 +128,48 @@ def runProgram(window):
             side2failState = []
             if side2ColABark > handle_config.EDGE_REJECT_LEVEL:
                 side2failState.append('COL A')
+                reject2Flag = True
+            elif side2ColABark > handle_config.EDGE_FLIP_LEVEL:
+                side2failState.append('COL A')
                 flipFlag = True
+
             if side2ColBBark > handle_config.MID_REJECT_LEVEL:
                 side2failState.append('COL B')
-                rejectFlag = True
+                reject2Flag = True
+
             if side2ColCBark > handle_config.EDGE_REJECT_LEVEL:
+                side2failState.append('COL C')
+                reject2Flag = True
+            elif side2ColCBark > handle_config.EDGE_FLIP_LEVEL:
                 side2failState.append('COL C')
                 flipFlag = True
 
             if len(side2failState) > 0:
-                window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=('red'))
+                colour = 'orange'
+                if reject2Flag:
+                    colour = 'red'
+                window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=(colour))
             else:
                 window.find_element('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))
 
-            aio.setOutput(1, 1, window)        # flag ready state (OUT1 ON)
+            aio.setOutput(0, 1, window)        # flag ready state (OUT0 ON)
 
-            if rejectFlag:                     # if board is a reject
-                print('REJECT PULSE')
-                rejectFlag = False             # clear reject flag
+            if reject1Flag or reject2Flag:     # if board is a reject
                 aio.pulseOutput(3, 1, window)  # pulse reject (OUT3 ON)
+                handle_count.plankFail(window) # update stats
 
-            elif badEdge1 and flipFlag:        # if edges are bad on both side
-                print('BAD EDGES BOTH SIDES')
-                badEdge1 = False               # clear bad edge flag
-                flipFlag = False               # clear flip flag
-                aio.pulseOutput(3, 1, window)  # pulse reject (OUT3 ON)
-
-            elif flipFlag:                     # if we need to flip
-                print('FLIP PULSE')
-                flipFlag = False               # clear flip flag
-                aio.pulseOutput(3, 1, window)  # pulse flip (OUT2 ON)
+            elif flipFlag:                     # if edges are borderline on both side
+                side1Total = side1ColABark + side1ColCBark
+                side2Total = side2ColABark + side2ColCBark
+                if side2Total > side1Total:        # if side 2 has the most bark we need to flip
+                    aio.pulseOutput(2, 1, window)  # pulse flip (OUT2 ON)
+                else:                              # else we leave board as is
+                    aio.pulseOutput(1, 1, window)  # pulse good (OUT1 ON)
+                handle_count.plankPass(window)     # update stats
 
             else:                              # else we have a good board
-                print('GOOD PULSE')
                 aio.pulseOutput(1, 1, window)  # pulse good (OUT1 ON)
+                handle_count.plankPass(window) # update stats
 
             time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
 

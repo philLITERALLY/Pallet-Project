@@ -6,6 +6,8 @@ import program_state    # module to handle program state
 import handle_config    # module to handle config settings
 
 def main(camera1, camera2, window):
+    reject1Flag, reject2Flag = False, False
+
     frame1 = camera1.read()
     frame2 = camera2.read()
 
@@ -46,25 +48,49 @@ def main(camera1, camera2, window):
     side1failState = []
     if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
         side1failState.append('COL A')
+        reject1Flag = True
+    elif side1ColABark > handle_config.EDGE_FLIP_LEVEL:
+        side1failState.append('COL A')
+
     if side1ColBBark > handle_config.MID_REJECT_LEVEL:
         side1failState.append('COL B')
+        reject1Flag = True
+
     if side1ColCBark > handle_config.EDGE_REJECT_LEVEL:
+        side1failState.append('COL C')
+        reject1Flag = True
+    elif side1ColCBark > handle_config.EDGE_FLIP_LEVEL:
         side1failState.append('COL C')
 
     if len(side1failState) > 0:
-        window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=('red'))
+        colour = 'orange'
+        if reject1Flag:
+            colour = 'red'
+        window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=(colour))
     else:
         window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
     side2failState = []
-    if side2ColABark >handle_config. EDGE_REJECT_LEVEL:
+    if side2ColABark > handle_config.EDGE_REJECT_LEVEL:
         side2failState.append('COL A')
+        reject2Flag = True
+    elif side2ColABark > handle_config.EDGE_FLIP_LEVEL:
+        side2failState.append('COL A')
+
     if side2ColBBark > handle_config.MID_REJECT_LEVEL:
         side2failState.append('COL B')
+        reject2Flag = True
+
     if side2ColCBark > handle_config.EDGE_REJECT_LEVEL:
+        side2failState.append('COL C')
+        reject2Flag = True
+    elif side2ColCBark > handle_config.EDGE_FLIP_LEVEL:
         side2failState.append('COL C')
 
     if len(side2failState) > 0:
-        window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=('red'))
+        colour = 'orange'
+        if reject2Flag:
+            colour = 'red'
+        window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=(colour))
     else:
         window.find_element('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))

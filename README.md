@@ -121,6 +121,7 @@ The values in `config.ini` are described below:
 | board_width | Width of the board i.e. 70, 96, 120 | :heavy_check_mark: |
 | board_length | Length of the board (determines how many boxes to use) | :heavy_check_mark: |
 | [REJECT SETTINGS] | Contains settings reject level | |
+| edge_flip_level | What percent of bark is considered a flip COL A + C | :heavy_check_mark: |
 | edge_reject_level | What percent of bark is considered a reject COL A + C | :heavy_check_mark: |
 | mid_reject_level | What percent of bark is considered a reject COL B | :heavy_check_mark: |
 | [THRESH SETTINGS] | Contains settings for threshing of image | |
