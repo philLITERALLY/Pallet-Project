@@ -58,25 +58,24 @@ Whenever a user then hits `STOP` we reset all the AIO values.
 6. Read Camera 2
 7. "Handle" Camera 1
 8. "Handle" Camera 2
-10. THEN
-    1. Test Side 1 for bark IF:
-        - A or C above fail threshold
-            1. Set BAD EDGE 1 flag
-        - B above fail threshold
-            1. Set REJECT flag
-    2. (FUTURE) Test SIDE 1 for form IF
-        - FAIL
-            1. Set REJECT flag
-    3. Test Side 2 for bark IF
-        - A or C above fail threshold
-            1. Set FLIP flag
-        - B above fail threshold
-            1. Set REJECT flag
-    2. (FUTURE) Test Side 2 for form IF
-        - FAIL
-            1. Set REJECT flag
-11. Set OUT0 ON (Next Board)
-12. IF:
+9. Test Side 1 for bark IF:
+    - A or C above fail threshold
+        1. Set BAD EDGE 1 flag
+    - B above fail threshold
+        1. Set REJECT flag
+10. (FUTURE) Test SIDE 1 for form IF
+    - FAIL
+        1. Set REJECT flag
+11. Test Side 2 for bark IF
+    - A or C above fail threshold
+        1. Set FLIP flag
+    - B above fail threshold
+        1. Set REJECT flag
+12. (FUTURE) Test Side 2 for form IF
+    - FAIL
+        1. Set REJECT flag
+13. Set OUT0 ON (Next Board)
+14. IF:
     1. REJECT flag set
         - Clear flag
         - 100ms pulse OUT3 (Reject)
@@ -88,11 +87,11 @@ Whenever a user then hits `STOP` we reset all the AIO values.
         - 100ms pulse OUT2 (Flip)
     4. Neither flag set
         - 100ms pulse OUT1 (Good)
-13. LOOP
+15. LOOP
 
 ## Outcome Chart
 
-![Outcome Chart](/images/Outcomes.png)
+![Outcome Chart](/assets/Outcomes.png)
 
 # SETUP Funcionality
 
