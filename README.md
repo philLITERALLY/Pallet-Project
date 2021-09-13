@@ -36,10 +36,10 @@
 | 2 | Flip | Green/Red |
 | 3 | Reject | Red/Blue |
 | 4 | ?? | Red/Brown |
-| 5 | ?? | Red/Black |
+| 5 | Fault | Red/Black |
 | 6 | Not working | - |
 | 7 | ?? | White |
-| 8 | ?? | Green |
+| 8 | Running | Green |
 
 # Running Mode
 
@@ -49,17 +49,18 @@ Whenever a user then hits `STOP` we reset all the AIO values.
 
 ## Process
 
-1. Wait for pulse on IN0
-2. Set OUT0 OFF
-3. Read Camera 1
-4. Read Camera 2
-5. "Handle" Camera 1 (If first run only calculate 2nd position)
-6. "Handle" Camera 2 (If first run only calculate 2nd position)
-
-7. If REJECT 2 Flag (previous board)
+1. Start running light (OUT8 ON)
+2. Flag ready state (OUT0 ON)
+3. Wait for pulse on IN0
+4. Set OUT0 OFF
+5. Read Camera 1
+6. Read Camera 2
+7. "Handle" Camera 1 (If first run only calculate 2nd position)
+8. "Handle" Camera 2 (If first run only calculate 2nd position)
+9. If REJECT 2 Flag (previous board)
     1. Set REJECT 1 flag
     2. Clear REJECT 2 flag
-8. ELSE
+10. ELSE
     1. Test Board 1 for bark IF
         - A or C above fail threshold
             1. Set FLIP flag
@@ -75,8 +76,8 @@ Whenever a user then hits `STOP` we reset all the AIO values.
     2. (FUTURE) Test Board 2 for form IF
         - FAIL
             1. Set REJECT 2 flag
-9. Set OUT0 ON (Next Board)
-10. IF:
+11. Set OUT0 ON (Next Board)
+12. IF:
     1. REJECT flag 1 set
         - Clear flag
         - 100ms pulse OUT3 (Reject)
@@ -85,7 +86,7 @@ Whenever a user then hits `STOP` we reset all the AIO values.
         - 100ms pulse OUT2 (Flip)
     3. Neither flag set
         * 100ms pulse OUT1 (Good)
-11. LOOP
+13. LOOP
 
 # SETUP Funcionality
 

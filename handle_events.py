@@ -19,6 +19,9 @@ def admin(event, window):
         
     # When the setup button is pressed
     if event == '-SETUP-':
+        # stop run mode
+        program_state.set_run_mode(False)
+
         # change to admin view
         window.find_element('-VIEW-LAYOUT-').Update(visible=False)
         window.find_element('-ADMIN-LAYOUT-').Update(visible=True)

@@ -246,7 +246,7 @@ def main(origImg, camera, ignoreFlags):
         side1 = resizeImg(threshedSide1Img)
         side2 = resizeImg(threshedSide2Img)
 
-    if camera == 2:
+    if camera == 1:
         return cv2.imencode('.png', side1)[1].tobytes(), \
             cv2.imencode('.png', side2)[1].tobytes(), \
             side1columnAPerc, side1columnBPerc, side1columnCPerc, \

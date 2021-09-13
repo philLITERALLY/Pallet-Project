@@ -42,17 +42,16 @@ def runProgram(window):
     side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
     side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
     side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
+    reject1Flag, reject2Flag = False, False
+    flipFlag = False
 
     while not program_state.STOP_PROGRAM:
         if program_state.RUN_MODE:                                             # if running
 
             reset_view.main(window)                                            # clear images and plank stats
 
-            aio.setOutput(8, 1, window)                                        # turn running light on
-
-            # FOR TESTS
-            aio.setOutput(1, 1, window)
-            # FOR TESTS
+            aio.setOutput(8, 1, window)                                        # turn running light on (OUT8 ON)
+            aio.setOutput(1, 1, window)                                        # flag ready state (OUT1 ON)
 
             time.sleep(handle_config.START_DELAY)                              # wait before starting the next loop
 
@@ -61,13 +60,11 @@ def runProgram(window):
                 if not boardIn:
                     continue
             else:
-                boardIn = aio.waitInputState(0, True, window)                  # wait for board in place
+                boardIn = aio.waitInputState(0, True, window)                  # wait for board (IN1 Pulse)
                 if not boardIn:
                     continue
 
-            # FOR TESTS
-            aio.setOutput(1, 0, window)
-            # FOR TESTS
+            aio.setOutput(1, 0, window)                                        # stop ready state (OUT1 OFF)
 
             if not firstRun:                                                   # use previous capture for current plank
                 side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC
@@ -81,12 +78,6 @@ def runProgram(window):
             else:
                 nextSide1Cam1, side2Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = image_handling.main(frame1, 1, True)
                 nextSide1Cam2, side2Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
-
-            
-            # FOR TESTS
-            aio.setOutput(1, 1, window)
-            # aio.pulseOutput(1, 1, window)                                      # request flip
-            # FOR TESTS
 
             if firstRun:
                 firstRun = False                                               # change "first run" state
@@ -134,35 +125,21 @@ def runProgram(window):
             else:
                 window.find_element('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))
 
-            # if side 1 fails
-            if len(side1failState) > 0:
-                # and side 2 col b is less than reject level
-                if side2ColBBark < handle_config.MID_REJECT_LEVEL:
-                    print('GOOD 1')
-                    handle_count.plankPass(window)                                     # update stats
-                    aio.pulseOutput(2, 1, window)                                      # pulse good
+            aio.setOutput(1, 1, window)        # flag ready state (OUT1 ON)
 
-                else:
-                    print('REJECT 1')
-                    handle_count.plankFail(window)                                     # update stats
-                    aio.pulseOutput(4, 1, window)                                      # pulse reject
-            else:
-                # if side 2 col b is more than reject level
-                if side2ColBBark > handle_config.MID_REJECT_LEVEL:
-                    print('REJECT 2')
-                    handle_count.plankFail(window)                                     # update stats
-                    aio.pulseOutput(4, 1, window)                                      # pulse reject
+            if reject1Flag:                    # if board is a reject
+                print('REJECT PULSE')
+                reject1Flag = False            # clear reject flag
+                aio.pulseOutput(3, 1, window)  # pulse reject (OUT3 ON)
 
-                # else if col a and/or col c is more than reject level
-                elif len(side2failState) > 0:
-                    print('FLIP 2')
-                    handle_count.plankPass(window)                                     # update stats
-                    aio.pulseOutput(3, 1, window)                                      # pulse flip
+            elif flipFlag:                     # if we need to flip
+                print('REJECT PULSE')
+                reject1Flag = False            # clear flip flag
+                aio.pulseOutput(3, 1, window)  # pulse flip (OUT2 ON)
 
-                else:
-                    print('GOOD 2')
-                    handle_count.plankPass(window)                                     # update stats
-                    aio.pulseOutput(2, 1, window)                                      # pulse good
+            else:                              # else we have a good board
+                print('GOOD PULSE')
+                aio.pulseOutput(1, 1, window)  # pulse good (OUT1 ON)
 
             time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
 
