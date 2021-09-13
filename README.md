@@ -6,6 +6,7 @@
 
 [Running Mode](https://github.com/philLITERALLY/Pallet-Project#running-mode)
 * [Process](https://github.com/philLITERALLY/Pallet-Project#process)
+* [Outcome Chart](https://github.com/philLITERALLY/Pallet-Project#outcome-chart)
 
 [SETUP Funcionality](https://github.com/philLITERALLY/Pallet-Project#setup-funcionality)
 
@@ -55,38 +56,43 @@ Whenever a user then hits `STOP` we reset all the AIO values.
 4. Set OUT0 OFF
 5. Read Camera 1
 6. Read Camera 2
-7. "Handle" Camera 1 (If first run only calculate 2nd position)
-8. "Handle" Camera 2 (If first run only calculate 2nd position)
-9. If REJECT 2 Flag (previous board)
-    1. Set REJECT 1 flag
-    2. Clear REJECT 2 flag
-10. ELSE
-    1. Test Board 1 for bark IF
+7. "Handle" Camera 1
+8. "Handle" Camera 2
+10. THEN
+    1. Test Side 1 for bark IF:
+        - A or C above fail threshold
+            1. Set BAD EDGE 1 flag
+        - B above fail threshold
+            1. Set REJECT flag
+    2. (FUTURE) Test SIDE 1 for form IF
+        - FAIL
+            1. Set REJECT flag
+    3. Test Side 2 for bark IF
         - A or C above fail threshold
             1. Set FLIP flag
         - B above fail threshold
-            1. Set REJECT 1 flag
-    2. (FUTURE) Test Board 1 for form IF
+            1. Set REJECT flag
+    2. (FUTURE) Test Side 2 for form IF
         - FAIL
-            1. Set REJECT 1 flag
-
-    1. Test Board 2 for bark IF
-        - B above fail threshold
-            1. Set REJECT 2 flag
-    2. (FUTURE) Test Board 2 for form IF
-        - FAIL
-            1. Set REJECT 2 flag
+            1. Set REJECT flag
 11. Set OUT0 ON (Next Board)
 12. IF:
-    1. REJECT flag 1 set
+    1. REJECT flag set
         - Clear flag
         - 100ms pulse OUT3 (Reject)
-    2. FLIP flag set
+    2. BAD EDGE 1 and FLIP flag set
+        - Clear flag
+        - 100ms pulse OUT3 (Reject)
+    3. Just FLIP flag set
         - Clear flag
         - 100ms pulse OUT2 (Flip)
-    3. Neither flag set
-        * 100ms pulse OUT1 (Good)
+    4. Neither flag set
+        - 100ms pulse OUT1 (Good)
 13. LOOP
+
+## Outcome Chart
+
+![Outcome Chart](/images/Outcomes.png)
 
 # SETUP Funcionality
 

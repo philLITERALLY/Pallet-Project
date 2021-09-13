@@ -42,8 +42,7 @@ def runProgram(window):
     side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
     side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
     side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
-    reject1Flag, reject2Flag = False, False
-    flipFlag = False
+    rejectFlag, flipFlag, badEdge1 = False, False, False
 
     while not program_state.STOP_PROGRAM:
         if program_state.RUN_MODE:                                             # if running
@@ -78,7 +77,7 @@ def runProgram(window):
             else:
                 nextSide1Cam1, side2Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = image_handling.main(frame1, 1, True)
                 nextSide1Cam2, side2Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
-
+          
             if firstRun:
                 firstRun = False                                               # change "first run" state
                 continue
@@ -94,10 +93,13 @@ def runProgram(window):
             side1failState = []
             if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
                 side1failState.append('COL A')
+                badEdge1 = True
             if side1ColBBark > handle_config.MID_REJECT_LEVEL:
                 side1failState.append('COL B')
+                rejectFlag = True
             if side1ColCBark > handle_config.EDGE_REJECT_LEVEL:
                 side1failState.append('COL C')
+                badEdge1 = True
 
             if len(side1failState) > 0:
                 window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=('red'))
@@ -115,10 +117,13 @@ def runProgram(window):
             side2failState = []
             if side2ColABark > handle_config.EDGE_REJECT_LEVEL:
                 side2failState.append('COL A')
+                flipFlag = True
             if side2ColBBark > handle_config.MID_REJECT_LEVEL:
                 side2failState.append('COL B')
+                rejectFlag = True
             if side2ColCBark > handle_config.EDGE_REJECT_LEVEL:
                 side2failState.append('COL C')
+                flipFlag = True
 
             if len(side2failState) > 0:
                 window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=('red'))
@@ -127,14 +132,20 @@ def runProgram(window):
 
             aio.setOutput(1, 1, window)        # flag ready state (OUT1 ON)
 
-            if reject1Flag:                    # if board is a reject
+            if rejectFlag:                     # if board is a reject
                 print('REJECT PULSE')
-                reject1Flag = False            # clear reject flag
+                rejectFlag = False             # clear reject flag
+                aio.pulseOutput(3, 1, window)  # pulse reject (OUT3 ON)
+
+            elif badEdge1 and flipFlag:        # if edges are bad on both side
+                print('BAD EDGES BOTH SIDES')
+                badEdge1 = False               # clear bad edge flag
+                flipFlag = False               # clear flip flag
                 aio.pulseOutput(3, 1, window)  # pulse reject (OUT3 ON)
 
             elif flipFlag:                     # if we need to flip
-                print('REJECT PULSE')
-                reject1Flag = False            # clear flip flag
+                print('FLIP PULSE')
+                flipFlag = False               # clear flip flag
                 aio.pulseOutput(3, 1, window)  # pulse flip (OUT2 ON)
 
             else:                              # else we have a good board
