@@ -11,20 +11,20 @@ def main(camera1, camera2, window):
     frame1 = camera1.read()
     frame2 = camera2.read()
 
-    if program_state.LIVE_MODE:
-        side1Cam1, side2Cam1, \
-            side1Cam1columnA, side1Cam1columnB, side1Cam1columnC, \
-            side2Cam1columnA, side2Cam1columnB, side2Cam1columnC = image_handling.main(frame1, 1, True)            # process camera 1 no mods
-        side1Cam2, side2Cam2, \
-            side1Cam2columnA, side1Cam2columnB, side1Cam2columnC, \
-            side2Cam2columnA, side2Cam2columnB, side2Cam2columnC = image_handling.main(frame2, 2, True)            # process camera 2 no mods
-    else:
-        side1Cam1, side2Cam1, \
-            side1Cam1columnA, side1Cam1columnB, side1Cam1columnC, \
-            side2Cam1columnA, side2Cam1columnB, side2Cam1columnC = image_handling.main(frame1, 1, False)            # process camera 1 mods
-        side1Cam2, side2Cam2, \
-            side1Cam2columnA, side1Cam2columnB, side1Cam2columnC, \
-            side2Cam2columnA, side2Cam2columnB, side2Cam2columnC = image_handling.main(frame2, 2, False)            # process camera 2 mods
+    # if program_state.LIVE_MODE:
+    #     side1Cam1, side2Cam1, \
+    #         side1Cam1columnA, side1Cam1columnB, side1Cam1columnC, \
+    #         side2Cam1columnA, side2Cam1columnB, side2Cam1columnC = image_handling.main(frame1, 1, True)            # process camera 1 no mods
+    #     side1Cam2, side2Cam2, \
+    #         side1Cam2columnA, side1Cam2columnB, side1Cam2columnC, \
+    #         side2Cam2columnA, side2Cam2columnB, side2Cam2columnC = image_handling.main(frame2, 2, True)            # process camera 2 no mods
+    # else:
+    side1Cam1, side2Cam1, \
+        side1Cam1columnA, side1Cam1columnB, side1Cam1columnC, \
+        side2Cam1columnA, side2Cam1columnB, side2Cam1columnC = image_handling.main(frame1, 1, program_state.LIVE_MODE) # process camera 1 mods
+    side1Cam2, side2Cam2, \
+        side1Cam2columnA, side1Cam2columnB, side1Cam2columnC, \
+        side2Cam2columnA, side2Cam2columnB, side2Cam2columnC = image_handling.main(frame2, 2, program_state.LIVE_MODE) # process camera 2 mods
 
     window.find_element('-SIDE-1-CAM-1-').update(data=side1Cam1)                              # update img for side 1 camera 1
     window.find_element('-SIDE-1-CAM-2-').update(data=side1Cam2)                              # update img for side 1 camera 2

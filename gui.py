@@ -21,17 +21,13 @@ def main(window):
             program_state.stop_program()
             break
         
-        side = 1
-        if 'SIDE2' in event:
-            side = 2
-
         if event == '-GRAB-':
-            cam1 = worker_thread.camera1.read()
-            cam2 = worker_thread.camera2.read()
+            frame1 = worker_thread.camera1.read()
+            frame2 = worker_thread.camera2.read()
 
             text_input = values['-FILENAME-IN-']
-            cv2.imwrite('images/stored/' + text_input + '_cam1.jpg', cam1)
-            cv2.imwrite('images/stored/' + text_input + '_cam2.jpg', cam2)
+            cv2.imwrite('images/stored/' + text_input + '_cam1.png', frame1)
+            cv2.imwrite('images/stored/' + text_input + '_cam2.png', frame2)
 
         # When the camera button is pressed switch the cameras
         if event == '-CAMERA-':

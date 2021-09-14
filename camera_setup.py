@@ -16,7 +16,7 @@ class VideoCapture:
   def __init__(self, camera):
     self.needImg = False
     self.camera = camera
-    self.cap = cv2.VideoCapture(camera, cv2.CAP_DSHOW)
+    self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
     
     self.cap.set(3, handle_config.CAM_WIDTH)                # CAM WIDTH
     self.cap.set(4, handle_config.CAM_HEIGHT)               # CAM HEIGHT
@@ -24,10 +24,11 @@ class VideoCapture:
     time.sleep(5)
     self.cap.set(15, handle_config.CAM_EXPOSURE)                 # CAM EXPOSURE
 
-    for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
-        _, self.frame = self.cap.read()
 
-    info_logger.camera_settings(camera, self.cap)
+    for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
+      _, self.frame = self.cap.read()
+
+    info_logger.camera_settings(self.camera, self.cap)
 
     self.run = True
     self.t = threading.Thread(target=self._reader)
@@ -40,6 +41,24 @@ class VideoCapture:
       ret, frame = self.cap.read()
       if not ret:                   # capture frame error
         print('RET error: ', self.camera)
+
+        print('Releasing Camera...')
+        self.cap.release()
+        print('Setting up Camera...')
+        self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
+
+        self.cap.set(3, handle_config.CAM_WIDTH)                # CAM WIDTH
+        self.cap.set(4, handle_config.CAM_HEIGHT)               # CAM HEIGHT
+        # self.cap.set(5, handle_config.CAM_FPS)
+        time.sleep(5)
+        self.cap.set(15, handle_config.CAM_EXPOSURE)                 # CAM EXPOSURE
+
+        for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
+          _, self.frame = self.cap.read()
+
+        info_logger.camera_settings(self.camera, self.cap)
+        print('Camera Reset...?')
+
         continue
       if np.sum(frame) == 0:        # frame empty for some reason
         print('Empty Frame error: ', self.camera)
