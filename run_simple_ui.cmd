@@ -1,1 +1,1 @@
-"C:/Python/Python38/python.exe" C:/Pallet-Project/main.py
+"C:/Python/Python38/python.exe" D:/Pallet-Project/main.py
