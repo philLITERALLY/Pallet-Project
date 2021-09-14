@@ -39,10 +39,10 @@ class VideoCapture:
     while self.run:
       ret, frame = self.cap.read()
       if not ret:                   # capture frame error
-        print('RET error')
+        print('RET error: ', self.camera)
         continue
       if np.sum(frame) == 0:        # frame empty for some reason
-        print('Empty Frame error')
+        print('Empty Frame error: ', self.camera)
         continue
 
       dim = (3840, 2160)
