@@ -6,6 +6,7 @@ import queue
 import threading
 import time
 import numpy as np
+from datetime import datetime
 
 # My Modules
 import info_logger
@@ -16,6 +17,7 @@ class VideoCapture:
   def __init__(self, camera):
     self.needImg = False
     self.camera = camera
+    print('Start Cam: ', self.camera, datetime.now().time())
     self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
     
     self.cap.set(3, handle_config.CAM_WIDTH)                # CAM WIDTH
@@ -40,7 +42,7 @@ class VideoCapture:
     while self.run:
       ret, frame = self.cap.read()
       if not ret:                   # capture frame error
-        print('RET error: ', self.camera)
+        print('RET error: ', self.camera, datetime.now().time())
 
         print('Releasing Camera...')
         self.cap.release()
@@ -61,7 +63,25 @@ class VideoCapture:
 
         continue
       if np.sum(frame) == 0:        # frame empty for some reason
-        print('Empty Frame error: ', self.camera)
+        print('Empty Frame error: ', self.camera, datetime.now().time())
+
+        print('Releasing Camera...')
+        self.cap.release()
+        print('Setting up Camera...')
+        self.cap = cv2.VideoCapture(self.camera, cv2.CAP_DSHOW)
+
+        self.cap.set(3, handle_config.CAM_WIDTH)                # CAM WIDTH
+        self.cap.set(4, handle_config.CAM_HEIGHT)               # CAM HEIGHT
+        # self.cap.set(5, handle_config.CAM_FPS)
+        time.sleep(5)
+        self.cap.set(15, handle_config.CAM_EXPOSURE)                 # CAM EXPOSURE
+
+        for x in range(10):                 # WARM UP CAM BY GRABBING 10 IMAGES...
+          _, self.frame = self.cap.read()
+
+        info_logger.camera_settings(self.camera, self.cap)
+        print('Camera Reset...?')
+
         continue
 
       dim = (3840, 2160)
