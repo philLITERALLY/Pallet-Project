@@ -13,10 +13,11 @@ import image_handling   # handles image
 import handle_count     # handles count of stats
 import admin_view       # handles UI when in admin mode
 import reset_view       # clears the UI
+import board_logic      # checks if board is pass or fail
 
 global camera1, camera2
 
-manualTesting = False
+manualTesting = True
 
 if manualTesting:
     camera1 = camera_setup.StaticImage(0)   # setup static image one
@@ -88,27 +89,30 @@ def runProgram(window):
             side1ColABark = round((side1Cam1BarkA + side1Cam2BarkA) / 2, 2)
             side1ColBBark = round((side1Cam1BarkB + side1Cam2BarkB) / 2, 2)
             side1ColCBark = round((side1Cam1BarkC + side1Cam2BarkC) / 2, 2)
-            window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColABark) + '  ||  B: ' + str(side1ColBBark) + '  ||  C: ' + str(side1ColCBark)) # update count of bark count for side 1
 
             side1failState = []
-            if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
+            side1ColAFlip, side1ColAReject, side1ColAPerc = board_logic.main(side1ColABark, 1, 'A')
+            if side1ColAReject:
                 side1failState.append('COL A')
                 reject1Flag = True
-            elif side1ColABark > handle_config.EDGE_FLIP_LEVEL:
+            elif side1ColAFlip:
                 side1failState.append('FLIP COL A')
                 flipFlag = True
 
-            if side1ColBBark > handle_config.MID_REJECT_LEVEL:
+            _, side1ColBReject, sideColBPerc = board_logic.main(side1ColBBark, 1, 'B')
+            if side1ColBReject:
                 side1failState.append('COL B')
                 reject1Flag = True
 
-            if side1ColCBark > handle_config.EDGE_REJECT_LEVEL:
+            side1ColCFlip, side1ColCReject, sideColCPerc = board_logic.main(side1ColCBark, 1, 'C')
+            if side1ColCReject:
                 side1failState.append('COL C')
                 reject1Flag = True
-            elif side1ColCBark > handle_config.EDGE_FLIP_LEVEL:
+            elif side1ColCFlip:
                 side1failState.append('FLIP COL C')
                 flipFlag = True
 
+            window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(sideColBPerc) + '  ||  C: ' + str(sideColCPerc)) # update count of bark count for side 1
             if len(side1failState) > 0:
                 colour = 'orange'
                 if reject1Flag:
@@ -123,27 +127,30 @@ def runProgram(window):
             side2ColABark = round((side2Cam1BarkA + side2Cam2BarkA) / 2, 2)
             side2ColBBark = round((side2Cam1BarkB + side2Cam2BarkB) / 2, 2)
             side2ColCBark = round((side2Cam1BarkC + side2Cam2BarkC) / 2, 2)
-            window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColABark) + '  ||  B: ' + str(side2ColBBark) + '  ||  C: ' + str(side2ColCBark)) # update count of bark count for side 2
 
             side2failState = []
-            if side2ColABark > handle_config.EDGE_REJECT_LEVEL:
+            side2ColAFlip, side2ColAReject, side2ColAPerc = board_logic.main(side2ColABark, 2, 'A')
+            if side2ColAReject:
                 side2failState.append('COL A')
                 reject2Flag = True
-            elif side2ColABark > handle_config.EDGE_FLIP_LEVEL:
+            elif side2ColAFlip:
                 side2failState.append('FLIP COL A')
                 flipFlag = True
 
-            if side2ColBBark > handle_config.MID_REJECT_LEVEL:
+            _, side2ColBReject, side2ColBPerc = board_logic.main(side2ColBBark, 2, 'B')
+            if side2ColBReject:
                 side2failState.append('COL B')
                 reject2Flag = True
 
-            if side2ColCBark > handle_config.EDGE_REJECT_LEVEL:
+            side2ColCFlip, side2ColCReject, side2ColCPerc = board_logic.main(side2ColCBark, 2, 'C')
+            if side2ColCReject:
                 side2failState.append('COL C')
                 reject2Flag = True
-            elif side2ColCBark > handle_config.EDGE_FLIP_LEVEL:
+            elif side2ColCFlip:
                 side2failState.append('FLIP COL C')
                 flipFlag = True
 
+            window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc)) # update count of bark count for side 2
             if len(side2failState) > 0:
                 colour = 'orange'
                 if reject2Flag:

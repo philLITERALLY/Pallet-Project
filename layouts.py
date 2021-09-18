@@ -60,16 +60,6 @@ stats_layout = [
 
 reject_layout = [
     [sg.Image(size=(bg_col_width, 10))], # to help center items
-    [sg.Text('REJECT COL A + C || REJECT COLUMN B')],
-    [
-        sg.Button('-', key='-EDGE-REJECT--', size=(4, 2)),
-        sg.Text(str(handle_config.EDGE_REJECT_LEVEL) + '%', key='-EDGE-REJECT-LEVEL-'),
-        sg.Button('+', key='-EDGE-REJECT+-', size=(4, 2)),
-        sg.Button('-', key='-MID-REJECT--', size=(4, 2)),
-        sg.Text(str(handle_config.MID_REJECT_LEVEL) + '%', key='-MID-REJECT-LEVEL-'),
-        sg.Button('+', key='-MID-REJECT+-', size=(4, 2))
-    ],
-    [sg.Image(size=(bg_col_width, 10))], # to help center items
     [
         sg.Button('START', key='-START-', size=(15, 2)),
         sg.Button('STOP', key='-STOP-', size=(15, 2))
@@ -103,29 +93,54 @@ admin_mode = [
 
 admin_box1 = [
     [sg.Image(size=(col_width, 1))], # to help center items
-    [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
-    [sg.Image(size=(col_width, 10))], # extra padding
     [
         sg.Column([
+            [sg.Button('CALIBRATE', key='-CALIBRATE-', size=(15, 2))],
+            [sg.Image(size=(col_width, 5))], # extra padding
+            [sg.Text('FLIP COL A + C')],
+            [
+                sg.Button('-', key='-EDGE-FLIP--', size=(4, 2)),
+                sg.Text(str(handle_config.EDGE_FLIP_LEVEL) + '%', key='-EDGE-FLIP-LEVEL-'),
+                sg.Button('+', key='-EDGE-FLIP+-', size=(4, 2))
+            ]
+        ], key='-CALIBRATE-LAYOUT-', visible=False, element_justification='c'),
+        sg.Column([
+            [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
+            [sg.Image(size=(col_width, 10))], # extra padding
             [
                 sg.Button('-', key='-CAM1-THRESH--', size=(4, 2)),
                 sg.Text(' ' + str(handle_config.CAM1_THRESH) + ' ', key='-CAM1-THRESH-', size=(4, 1), justification='c'),
                 sg.Button('+', key='-CAM1-THRESH+-', size=(4, 2))
             ]
-        ], key='-CAM1-THRESH-LAYOUT-', visible=False),
+        ], key='-CAM1-THRESH-LAYOUT-', visible=False, element_justification='c'),
     ],
 ]
 
 admin_box2 = [
-    [sg.Image(size=(col_width, 1))], # to help center items
-    [sg.Text('SELECT BOX', key='-ADMIN-BOX2-TEXT-')],
-    [sg.Image(size=(col_width, 10))], # extra padding
     [
-        sg.Column([[
-            sg.Button('-', key='-CAM2-THRESH--', size=(4, 2)),
+        sg.Column([
+            [sg.Text('REJECT COL A + C')],
+            [
+                sg.Button('-', key='-EDGE-REJECT--', size=(4, 2)),
+                sg.Text(str(handle_config.EDGE_REJECT_LEVEL) + '%', key='-EDGE-REJECT-LEVEL-'),
+                sg.Button('+', key='-EDGE-REJECT+-', size=(4, 2)),
+            ],
+            [sg.Text('REJECT COLUMN B')],
+            [
+                sg.Button('-', key='-MID-REJECT--', size=(4, 2)),
+                sg.Text(str(handle_config.MID_REJECT_LEVEL) + '%', key='-MID-REJECT-LEVEL-'),
+                sg.Button('+', key='-MID-REJECT+-', size=(4, 2))
+            ],
+        ], key='-REJECT-LAYOUT-', visible=False, element_justification='c'),
+        sg.Column([
+            [sg.Text('SELECT BOX', key='-ADMIN-BOX2-TEXT-')],
+            [sg.Image(size=(col_width, 10))], # extra padding
+            [
+                sg.Button('-', key='-CAM2-THRESH--', size=(4, 2)),
                 sg.Text(' ' + str(handle_config.CAM2_THRESH) + ' ', key='-CAM2-THRESH-', size=(4, 1), justification='c'),
-            sg.Button('+', key='-CAM2-THRESH+-', size=(4, 2))
-        ]], key='-CAM2-THRESH-LAYOUT-', visible=False),
+                sg.Button('+', key='-CAM2-THRESH+-', size=(4, 2))
+            ]
+        ], key='-CAM2-THRESH-LAYOUT-', visible=False, element_justification='c'),
     ],
 ]
 

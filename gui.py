@@ -8,7 +8,7 @@ import program_state    # Programs State
 import handle_events    # handles the UI button events
 import handle_config    # module to handle config settings
 import worker_thread    # main thread that handles workflow
-import aio              # handles the aio
+import image_handling   # handles the image
 import cv2
 
 def main(window):
@@ -104,6 +104,38 @@ def main(window):
             )
             program_state.set_run_mode(False)       # stop running
             program_state.set_fault(False)          # stop fault
+
+        # When calibrate button is pressed
+        if event == '-CALIBRATE-':
+            frame1 = worker_thread.camera1.read()
+            frame2 = worker_thread.camera2.read()
+
+            _, _, \
+                cam1Side1columnA, cam1Side1columnB, cam1Side1columnC, \
+                cam1Side2columnA, cam1Side2columnB, cam1Side2columnC = image_handling.main(frame1, 1, True)
+            _, _, \
+                cam2Side1columnA, cam2Side1columnB, cam2Side1columnC, \
+                cam2Side2columnA, cam2Side2columnB, cam2Side2columnC = image_handling.main(frame2, 2, True)
+
+            # Side 1 Bark Calculate
+            side1ColABark = round((cam1Side1columnA + cam2Side1columnA) / 2, 2)
+            side1ColBBark = round((cam1Side1columnB + cam2Side1columnB) / 2, 2)
+            side1ColCBark = round((cam1Side1columnC + cam2Side1columnC) / 2, 2)
+
+            # Side 2 Bark Calculate
+            side2ColABark = round((cam1Side2columnA + cam2Side2columnA) / 2, 2)
+            side2ColBBark = round((cam1Side2columnB + cam2Side2columnB) / 2, 2)
+            side2ColCBark = round((cam1Side2columnC + cam2Side2columnC) / 2, 2)
+
+            # Cam 1 Side 1
+            handle_config.setValue('REJECT SETTINGS', 'SIDE1_COLA_PERC', side1ColABark)
+            handle_config.setValue('REJECT SETTINGS', 'SIDE1_COLB_PERC', side1ColBBark)
+            handle_config.setValue('REJECT SETTINGS', 'SIDE1_COLC_PERC', side1ColCBark)
+
+            # Cam 1 Side 2
+            handle_config.setValue('REJECT SETTINGS', 'SIDE2_COLA_PERC', side2ColABark)
+            handle_config.setValue('REJECT SETTINGS', 'SIDE2_COLB_PERC', side2ColBBark)
+            handle_config.setValue('REJECT SETTINGS', 'SIDE2_COLC_PERC', side2ColCBark)
 
     # if user exits the window, then close the window and exit the GUI func
     window.close()

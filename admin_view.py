@@ -4,6 +4,7 @@
 import image_handling   # handles image
 import program_state    # module to handle program state
 import handle_config    # module to handle config settings
+import board_logic      # checks if board is pass or fail
 
 def main(camera1, camera2, window):
     reject1Flag, reject2Flag = False, False
@@ -41,27 +42,28 @@ def main(camera1, camera2, window):
     side2ColABark = round((side2Cam1columnA + side2Cam2columnA) / 2, 2)
     side2ColBBark = round((side2Cam1columnB + side2Cam2columnB) / 2, 2)
     side2ColCBark = round((side2Cam1columnC + side2Cam2columnC) / 2, 2)
-    
-    window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColABark) + '  ||  B: ' + str(side1ColBBark) + '  ||  C: ' + str(side1ColCBark))
-    window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColABark) + '  ||  B: ' + str(side2ColBBark) + '  ||  C: ' + str(side2ColCBark))
 
     side1failState = []
-    if side1ColABark > handle_config.EDGE_REJECT_LEVEL:
+    side1ColAFlip, side1ColAReject, side1ColAPerc = board_logic.main(side1ColABark, 1, 'A')
+    if side1ColAReject:
         side1failState.append('COL A')
         reject1Flag = True
-    elif side1ColABark > handle_config.EDGE_FLIP_LEVEL:
+    elif side1ColAFlip:
         side1failState.append('FLIP COL A')
 
-    if side1ColBBark > handle_config.MID_REJECT_LEVEL:
+    _, side1ColBReject, side1ColBPerc = board_logic.main(side1ColBBark, 1, 'B')
+    if side1ColBReject:
         side1failState.append('COL B')
         reject1Flag = True
 
-    if side1ColCBark > handle_config.EDGE_REJECT_LEVEL:
+    side1ColCFlip, side1ColCReject, side1ColCPerc = board_logic.main(side1ColCBark, 1, 'C')
+    if side1ColCReject:
         side1failState.append('COL C')
         reject1Flag = True
-    elif side1ColCBark > handle_config.EDGE_FLIP_LEVEL:
+    elif side1ColCFlip:
         side1failState.append('FLIP COL C')
 
+    window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(side1ColBPerc) + '  ||  C: ' + str(side1ColCPerc))
     if len(side1failState) > 0:
         colour = 'orange'
         if reject1Flag:
@@ -71,22 +73,26 @@ def main(camera1, camera2, window):
         window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
     side2failState = []
-    if side2ColABark > handle_config.EDGE_REJECT_LEVEL:
+    side2ColAFlip, side2ColAReject, side2ColAPerc = board_logic.main(side2ColABark, 2, 'A')
+    if side2ColAReject:
         side2failState.append('COL A')
         reject2Flag = True
-    elif side2ColABark > handle_config.EDGE_FLIP_LEVEL:
+    elif side2ColAFlip:
         side2failState.append('FLIP COL A')
 
-    if side2ColBBark > handle_config.MID_REJECT_LEVEL:
+    _, side2ColBReject, side2ColBPerc = board_logic.main(side2ColBBark, 2, 'B')
+    if side2ColBReject:
         side2failState.append('COL B')
         reject2Flag = True
 
-    if side2ColCBark > handle_config.EDGE_REJECT_LEVEL:
+    side2ColCFlip, side2ColCReject, side2ColCPerc = board_logic.main(side2ColCBark, 2, 'C')
+    if side2ColCReject:
         side2failState.append('COL C')
         reject2Flag = True
-    elif side2ColCBark > handle_config.EDGE_FLIP_LEVEL:
+    elif side2ColCFlip:
         side2failState.append('FLIP COL C')
 
+    window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc))
     if len(side2failState) > 0:
         colour = 'orange'
         if reject2Flag:

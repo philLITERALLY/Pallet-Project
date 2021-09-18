@@ -11,11 +11,15 @@ def admin(event, window):
     window.find_element('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-COLUMN-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-BARK-MODE-').Update(button_color=sg.theme_button_color())
+    window.find_element('-CALIBRATE-LAYOUT-').Update(visible=False)
+    window.find_element('-REJECT-LAYOUT-').Update(visible=False)
     window.find_element('-CAM1-THRESH-LAYOUT-').Update(visible=False)
     window.find_element('-CAM2-THRESH-LAYOUT-').Update(visible=False)
     window.find_element('-IO-LAYOUT-').Update(visible=False)
     window.find_element('-ADMIN-BOX1-TEXT-').Update('CAM 1')
     window.find_element('-ADMIN-BOX2-TEXT-').Update('CAM 2')
+    window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=True)
+    window.find_element('-ADMIN-BOX2-TEXT-').Update(visible=True)
         
     # When the setup button is pressed
     if event == '-SETUP-':
@@ -32,6 +36,10 @@ def admin(event, window):
         # turn transform button on
         window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
+        window.find_element('-REJECT-LAYOUT-').Update(visible=True)
+        window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=False)
+        window.find_element('-ADMIN-BOX2-TEXT-').Update(visible=False)
         
     # When the cancel button is pressed
     if event == '-CANCEL-':
@@ -55,6 +63,10 @@ def admin(event, window):
         # turn live button on
         window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
+        window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
+        window.find_element('-REJECT-LAYOUT-').Update(visible=True)
+        window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=False)
+        window.find_element('-ADMIN-BOX2-TEXT-').Update(visible=False)
 
     # When transform mode button is pressed
     if event == '-TRANSFORM-MODE-':
