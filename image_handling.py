@@ -139,8 +139,7 @@ def threshImg(origImg, camera):
 def barkCalc(origImg):
     totalPixels = origImg.size
     whitePixels = cv2.countNonZero(origImg)
-    blackPixels = totalPixels - whitePixels
-    return round(blackPixels / totalPixels * 100, 2)
+    return round(whitePixels / totalPixels * 100, 2)
 
 # gather bark percentages for the three columns
 def analyseImg(origImg, threshImg):

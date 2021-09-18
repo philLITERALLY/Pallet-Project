@@ -109,6 +109,7 @@ class StaticImage:
 
     def read(self):
       if self.camera == 0:
+        # self.image = cv2.imread("images/stored/2008_5_cam1.jpg")
         if self.number == 0:
           self.image = cv2.imread("images/workflow test/cam1/b1.png")
           self.number = 1
@@ -122,6 +123,7 @@ class StaticImage:
           self.image = cv2.imread("images/workflow test/cam1/b4.png")
           self.number = 0
       else:
+        # self.image = cv2.imread("images/stored/2008_5_cam2.jpg")
         if self.number == 0:
           self.image = cv2.imread("images/workflow test/cam2/b1.png")
           self.number = 1

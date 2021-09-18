@@ -112,7 +112,7 @@ def runProgram(window):
                 side1failState.append('FLIP COL C')
                 flipFlag = True
 
-            window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(sideColBPerc) + '  ||  C: ' + str(sideColCPerc)) # update count of bark count for side 1
+            window.find_element('-%-BARK-1-').update('\nSIDE 1 (% WHITE)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(sideColBPerc) + '  ||  C: ' + str(sideColCPerc)) # update count of bark count for side 1
             if len(side1failState) > 0:
                 colour = 'orange'
                 if reject1Flag:
@@ -150,7 +150,7 @@ def runProgram(window):
                 side2failState.append('FLIP COL C')
                 flipFlag = True
 
-            window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc)) # update count of bark count for side 2
+            window.find_element('-%-BARK-2-').update('\nSIDE 2 (% WHITE)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc)) # update count of bark count for side 2
             if len(side2failState) > 0:
                 colour = 'orange'
                 if reject2Flag:
@@ -212,10 +212,10 @@ def runProgram(window):
                 aio.setOutput(8, 0, window)                                       # when stopped turn 8 off
 
 def main(window):
-    try:
-        runProgram(window)
-    except Exception as e:
-        print('Exception: ', e)
+    # try:
+    runProgram(window)
+    # except Exception as e:
+    #     print('Exception: ', e)
 
     camera1.release()
     camera2.release()

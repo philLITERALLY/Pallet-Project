@@ -63,7 +63,7 @@ def main(camera1, camera2, window):
     elif side1ColCFlip:
         side1failState.append('FLIP COL C')
 
-    window.find_element('-%-BARK-1-').update('\nSIDE 1 (% BARK)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(side1ColBPerc) + '  ||  C: ' + str(side1ColCPerc))
+    window.find_element('-%-BARK-1-').update('\nSIDE 1 (% WHITE)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(side1ColBPerc) + '  ||  C: ' + str(side1ColCPerc))
     if len(side1failState) > 0:
         colour = 'orange'
         if reject1Flag:
@@ -92,7 +92,7 @@ def main(camera1, camera2, window):
     elif side2ColCFlip:
         side2failState.append('FLIP COL C')
 
-    window.find_element('-%-BARK-2-').update('\nSIDE 2 (% BARK)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc))
+    window.find_element('-%-BARK-2-').update('\nSIDE 2 (% WHITE)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc))
     if len(side2failState) > 0:
         colour = 'orange'
         if reject2Flag:

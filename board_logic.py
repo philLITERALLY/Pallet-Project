@@ -8,15 +8,18 @@ def main(percent, side, col):
 
     calibPerc = getattr(handle_config, 'SIDE' + str(side) + '_COL' + col + '_PERC')
     
+    if percent == 0:
+        return False, True, 0
+
     currentPerc = round(calibPerc / percent * 100, 2)
 
     if col == 'A' or col == 'C':
-        if currentPerc > handle_config.EDGE_REJECT_LEVEL:
+        if currentPerc < handle_config.EDGE_REJECT_LEVEL:
             reject = True
-        elif currentPerc > handle_config.EDGE_FLIP_LEVEL:
+        elif currentPerc < handle_config.EDGE_FLIP_LEVEL:
             flip = True
     else:
-        if currentPerc > handle_config.MID_REJECT_LEVEL:
+        if currentPerc < handle_config.MID_REJECT_LEVEL:
             reject = True
 
     return flip, reject, currentPerc
