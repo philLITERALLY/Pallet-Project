@@ -11,7 +11,7 @@ def main(percent, side, col):
     if percent == 0:
         return False, True, 0
 
-    currentPerc = round(calibPerc / percent * 100, 2)
+    currentPerc = round(percent / calibPerc * 100, 2)
 
     if col == 'A' or col == 'C':
         if currentPerc < handle_config.EDGE_REJECT_LEVEL:

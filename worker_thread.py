@@ -17,7 +17,7 @@ import board_logic      # checks if board is pass or fail
 
 global camera1, camera2
 
-manualTesting = True
+manualTesting = False
 
 if manualTesting:
     camera1 = camera_setup.StaticImage(0)   # setup static image one
@@ -212,10 +212,10 @@ def runProgram(window):
                 aio.setOutput(8, 0, window)                                       # when stopped turn 8 off
 
 def main(window):
-    # try:
-    runProgram(window)
-    # except Exception as e:
-    #     print('Exception: ', e)
+    try:
+        runProgram(window)
+    except Exception as e:
+        print('Exception: ', e)
 
     camera1.release()
     camera2.release()
