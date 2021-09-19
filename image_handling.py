@@ -108,8 +108,8 @@ def rotateImg(origImg, camera):
 def cropToLength(origImg, camera):
     height, width, _ = origImg.shape
 
-    cam1Length = 1460
-    cam2Length = 1310
+    cam1Length = 1863
+    cam2Length = 1581
 
     if camera == 1:
         crop = width - int(cam1Length / 1200 * handle_config.BOARD_LENGTH)

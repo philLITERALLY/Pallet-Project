@@ -68,6 +68,18 @@ def main(window):
             window.find_element('-START-').Update(button_color=sg.theme_button_color())
             program_state.set_run_mode(False)
 
+        # When the increase flip value is pressed
+        if event == '-EDGE-FLIP+-':
+            handle_config.setValue('REJECT SETTINGS', 'EDGE_FLIP_LEVEL', handle_config.EDGE_FLIP_LEVEL + 1)
+            flipStr = str(handle_config.EDGE_FLIP_LEVEL) + '%'
+            window.find_element('-EDGE-FLIP-LEVEL-').update(flipStr)
+
+        # When the decrease flip value is pressed
+        if event == '-EDGE-FLIP--':
+            handle_config.setValue('REJECT SETTINGS', 'EDGE_FLIP_LEVEL', handle_config.EDGE_FLIP_LEVEL - 1)
+            flipStr = str(handle_config.EDGE_FLIP_LEVEL) + '%'
+            window.find_element('-EDGE-FLIP-LEVEL-').update(flipStr)
+
         # When the increase reject value is pressed
         if event == '-EDGE-REJECT+-':
             handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL + 1)
