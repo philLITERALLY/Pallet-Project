@@ -109,33 +109,43 @@ class StaticImage:
 
     def read(self):
       if self.camera == 0:
-        # self.image = cv2.imread("images/stored/2008_5_cam1.jpg")
         if self.number == 0:
-          self.image = cv2.imread("images/workflow test/cam1/b1.png")
+          self.image = cv2.imread("images/stored/newcams290921_cam1.png")
           self.number = 1
-        elif self.number == 1:
-          self.image = cv2.imread("images/workflow test/cam1/b2.png")
-          self.number = 2
-        elif self.number == 2:
-          self.image = cv2.imread("images/workflow test/cam1/b3.png")
-          self.number = 3
         else:
-          self.image = cv2.imread("images/workflow test/cam1/b4.png")
+          self.image = cv2.imread("images/stored/newcams290921_2_cam1.png")
           self.number = 0
+        # if self.number == 0:
+        #   self.image = cv2.imread("images/workflow test/cam1/b1.png")
+        #   self.number = 1
+        # elif self.number == 1:
+        #   self.image = cv2.imread("images/workflow test/cam1/b2.png")
+        #   self.number = 2
+        # elif self.number == 2:
+        #   self.image = cv2.imread("images/workflow test/cam1/b3.png")
+        #   self.number = 3
+        # else:
+        #   self.image = cv2.imread("images/workflow test/cam1/b4.png")
+        #   self.number = 0
       else:
-        # self.image = cv2.imread("images/stored/2008_5_cam2.jpg")
         if self.number == 0:
-          self.image = cv2.imread("images/workflow test/cam2/b1.png")
+          self.image = cv2.imread("images/stored/newcams290921_cam2.png")
           self.number = 1
-        elif self.number == 1:
-          self.image = cv2.imread("images/workflow test/cam2/b2.png")
-          self.number = 2
-        elif self.number == 2:
-          self.image = cv2.imread("images/workflow test/cam2/b3.png")
-          self.number = 3
         else:
-          self.image = cv2.imread("images/workflow test/cam2/b4.png")
+          self.image = cv2.imread("images/stored/newcams290921_2_cam2.png")
           self.number = 0
+        # if self.number == 0:
+        #   self.image = cv2.imread("images/workflow test/cam2/b1.png")
+        #   self.number = 1
+        # elif self.number == 1:
+        #   self.image = cv2.imread("images/workflow test/cam2/b2.png")
+        #   self.number = 2
+        # elif self.number == 2:
+        #   self.image = cv2.imread("images/workflow test/cam2/b3.png")
+        #   self.number = 3
+        # else:
+        #   self.image = cv2.imread("images/workflow test/cam2/b4.png")
+        #   self.number = 0
 
       return self.image
 

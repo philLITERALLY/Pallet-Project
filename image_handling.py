@@ -8,30 +8,31 @@ import PIL.Image
 import layouts          # UI Layouts
 import program_state    # Programs State
 import handle_config    # Programs Configuration
+handle_config.init()
 
 def transformCoords(origImg, camera, side):
     _, width, _ = origImg.shape # img size
 
     if camera == 1 and side == 1:
-        coord1 = 210
+        coord1 = 200
         coord2 = width - 10
         coord3 = 0
-        coord4 = width - 20
+        coord4 = width - 5
     elif camera == 1 and side == 2:
         coord1 = 0
         coord2 = width - 310
-        coord3 = 110
+        coord3 = 130
         coord4 = width
     elif camera == 2 and side == 1:
         coord1 = 280
-        coord2 = width - 20
-        coord3 = 35
+        coord2 = width
+        coord3 = 0
         coord4 = width - 70
     elif camera == 2 and side == 2:
-        coord1 = 20
-        coord2 = width - 300
-        coord3 = 90
-        coord4 = width - 20
+        coord1 = 0
+        coord2 = width - 270
+        coord3 = 70
+        coord4 = width
     
     return coord1, coord2, coord3, coord4
 
@@ -39,27 +40,27 @@ def cropToWidth(origImg, camera):
     height, _, _ = origImg.shape
 
     if camera == 1:
-        left1Bound = 1410
-        right1Bound = 1980
-        left2Bound = 2155
-        right2Bound = 2815
+        left1Bound = 1210
+        right1Bound = 1890
+        left2Bound = 2125
+        right2Bound = 2905
     else:
-        left1Bound = 1290
-        right1Bound = 1910
-        left2Bound = 2055
-        right2Bound = 2705
+        left1Bound = 950
+        right1Bound = 1710
+        left2Bound = 1955
+        right2Bound = 2715
 
-    # calculate mid points
+    # # calculate mid points
     # side1Mid = int(left1Bound + (right1Bound - left1Bound) / 2)
     # side2Mid = int(left2Bound + (right2Bound - left2Bound) / 2)
 
-    # draw side 1 boundaries
-    # cv2.line(origImg, (left1Bound, 0), (left1Bound, height), (255,0,0), 5) # Top-Left to Bottom-Left
+    # # draw side 1 boundaries
+    # cv2.line(origImg, (left1Bound, 0), (left1Bound, height), (255,255,255), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (side1Mid, 0), (side1Mid, height), (0,255,0), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (right1Bound, 0), (right1Bound, height), (0,0,255), 5) # Top-Left to Bottom-Left
 
-    # draw side 2 boundaries
-    # cv2.line(origImg, (left2Bound, 0), (left2Bound, height), (255,0,0), 5) # Top-Left to Bottom-Left
+    # # draw side 2 boundaries
+    # cv2.line(origImg, (left2Bound, 0), (left2Bound, height), (255,255,255), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (side2Mid, 0), (side2Mid, height), (0,255,0), 5) # Top-Left to Bottom-Left
     # cv2.line(origImg, (right2Bound, 0), (right2Bound, height), (0,0,255), 5) # Top-Left to Bottom-Left
 
@@ -74,7 +75,7 @@ def plotCircles(origImg, camera, side):
 
     coord1, coord2, coord3, coord4 = transformCoords(origImg, camera, side)
     
-    cv2.circle(origImg, (coord1, 0), 5, (0, 0, 255), 2)   # Top-Left
+    cv2.circle(origImg, (coord1, 0), 5, (255, 255, 255), 2)   # Top-Left
     cv2.circle(origImg, (coord2, 0), 5, (0, 0, 255), 2)  # Top-Right
     cv2.circle(origImg, (coord3, height), 5, (0, 0, 255), 2)  # Bottom-Left
     cv2.circle(origImg, (coord4, height), 5, (0, 0, 255), 2) # Bottom-Right
@@ -108,8 +109,8 @@ def rotateImg(origImg, camera):
 def cropToLength(origImg, camera):
     height, width, _ = origImg.shape
 
-    cam1Length = 1863
-    cam2Length = 1581
+    cam1Length = 1923
+    cam2Length = 1881
 
     if camera == 1:
         crop = width - int(cam1Length / 1200 * handle_config.BOARD_LENGTH)
@@ -207,6 +208,8 @@ def resizeImg(origImg):
     return origImg
 
 def main(origImg, camera, ignoreFlags):
+    side1columnAPerc, side1columnBPerc, side1columnCPerc, \
+            side2columnAPerc, side2columnBPerc, side2columnCPerc = None, None, None, None, None, None
     # crop image to plank width
     side1, side2 = cropToWidth(origImg, camera)
 
@@ -240,7 +243,7 @@ def main(origImg, camera, ignoreFlags):
     side1 = resizeImg(side1)
     side2 = resizeImg(side2)
 
-    # # if thresh mode show thresh image
+    # if thresh mode show thresh image
     if not ignoreFlags and program_state.THRESH_MODE:
         side1 = resizeImg(threshedSide1Img)
         side2 = resizeImg(threshedSide2Img)

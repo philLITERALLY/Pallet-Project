@@ -5,6 +5,7 @@ from PySimpleGUI.PySimpleGUI import Column
 
 # my modules
 import handle_config  # Programs Configuration
+handle_config.init()
 
 default_vert_padding = 3
 default_horz_padding = 8
