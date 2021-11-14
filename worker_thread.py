@@ -36,9 +36,7 @@ def waitKey():
 
 
 def runProgram(window):
-    firstRun = True
-    nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC = None, None, None, None
-    nextSide1Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC = None, None, None, None
+    side1= True
     side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = None, None, None, None
     side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
     side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
@@ -59,28 +57,28 @@ def runProgram(window):
                 boardIn = waitKey()                                             # wait for board in place
                 if not boardIn:
                     continue
+            elif side1:
+                boardIn = aio.waitInputState(0, True, window)                  # wait for board (IN0 Pulse)
+                if not boardIn:
+                    continue
             else:
-                boardIn = aio.waitInputState(0, True, window)                  # wait for board (IN1 Pulse)
+                boardIn = aio.waitInputState(1, True, window)                  # wait for board (IN1 Pulse)
                 if not boardIn:
                     continue
 
             aio.setOutput(0, 0, window)                                        # stop ready state (OUT0 OFF)
 
-            if not firstRun:                                                   # use previous capture for current plank
-                side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC
-                side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = nextSide1Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC
-
             frame1 = camera1.read()                                                    # grab camera 1
             frame2 = camera2.read()                                                    # grab camera 2
-            if firstRun:
-                nextSide1Cam1, _, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC, _, _, _ = image_handling.main(frame1, 1, True)
-                nextSide1Cam2, _, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC, _, _, _ = image_handling.main(frame2, 2, True)
+            if side1:
+                side1Cam1, _, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC, _, _, _ = image_handling.main(frame1, 1, True)
+                side1Cam2, _, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC, _, _, _ = image_handling.main(frame2, 2, True)
             else:
-                nextSide1Cam1, side2Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = image_handling.main(frame1, 1, True)
-                nextSide1Cam2, side2Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
+                _, side2Cam1, _, _, _, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = image_handling.main(frame1, 1, True)
+                _, side2Cam2, _, _, _, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
           
-            if firstRun:
-                firstRun = False                                               # change "first run" state
+            if side1:
+                side1 = False                                               # change "side1" state to capture second seide
                 continue
             
             window.find_element('-SIDE-1-CAM-1-').update(data=side1Cam1)                    # update img for side 1 camera 1
@@ -182,9 +180,7 @@ def runProgram(window):
 
         else:
 
-            firstRun = True                               # reset "first run" state
-            nextSide1Cam1, nextSide1Cam1BarkA, nextSide1Cam1BarkB, nextSide1Cam1BarkC = None, None, None, None
-            nextSide1Cam2, nextSide1Cam2BarkA, nextSide1Cam2BarkB, nextSide1Cam2BarkC = None, None, None, None
+            side1 = True                               # reset "side1" state
             side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = None, None, None, None
             side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
             side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
