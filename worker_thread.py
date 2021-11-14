@@ -17,7 +17,7 @@ import board_logic      # checks if board is pass or fail
 
 global camera1, camera2
 
-manualTesting = True
+manualTesting = False
 
 if manualTesting:
     camera1 = camera_setup.StaticImage(0)   # setup static image one
@@ -46,7 +46,6 @@ def runProgram(window):
         if program_state.RUN_MODE:                                             # if running
 
             reject1Flag, reject2Flag, flipFlag = False, False, False
-            reset_view.main(window)                                            # clear images and plank stats
 
             aio.setOutput(8, 1, window)                                        # turn running light on (OUT8 ON)
             aio.setOutput(0, 1, window)                                        # flag ready state (OUT0 ON)
@@ -58,11 +57,11 @@ def runProgram(window):
                 if not boardIn:
                     continue
             elif side1:
-                boardIn = aio.waitInputState(0, True, window)                  # wait for board (IN0 Pulse)
+                boardIn = aio.waitInputState(1, True, window)                  # wait for board (IN0 Pulse)
                 if not boardIn:
                     continue
             else:
-                boardIn = aio.waitInputState(1, True, window)                  # wait for board (IN1 Pulse)
+                boardIn = aio.waitInputState(2, True, window)                  # wait for board (IN1 Pulse)
                 if not boardIn:
                     continue
 
@@ -78,46 +77,48 @@ def runProgram(window):
                 _, side2Cam2, _, _, _, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
           
             if side1:
+                reset_view.main(window)                                            # clear images and plank stats
+            
+                window.find_element('-SIDE-1-CAM-1-').update(data=side1Cam1)                    # update img for side 1 camera 1
+                window.find_element('-SIDE-1-CAM-2-').update(data=side1Cam2)                    # update img for side 1 camera 2
+
+                side1ColABark = round((side1Cam1BarkA + side1Cam2BarkA) / 2, 2)
+                side1ColBBark = round((side1Cam1BarkB + side1Cam2BarkB) / 2, 2)
+                side1ColCBark = round((side1Cam1BarkC + side1Cam2BarkC) / 2, 2)
+
+                side1failState = []
+                side1ColAFlip, side1ColAReject, side1ColAPerc = board_logic.main(side1ColABark, 1, 'A')
+                if side1ColAReject:
+                    side1failState.append('COL A')
+                    reject1Flag = True
+                elif side1ColAFlip:
+                    side1failState.append('FLIP COL A')
+                    flipFlag = True
+
+                _, side1ColBReject, sideColBPerc = board_logic.main(side1ColBBark, 1, 'B')
+                if side1ColBReject:
+                    side1failState.append('COL B')
+                    reject1Flag = True
+
+                side1ColCFlip, side1ColCReject, sideColCPerc = board_logic.main(side1ColCBark, 1, 'C')
+                if side1ColCReject:
+                    side1failState.append('COL C')
+                    reject1Flag = True
+                elif side1ColCFlip:
+                    side1failState.append('FLIP COL C')
+                    flipFlag = True
+
+                window.find_element('-%-BARK-1-').update('\nSIDE 1 (% WHITE)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(sideColBPerc) + '  ||  C: ' + str(sideColCPerc)) # update count of bark count for side 1
+                if len(side1failState) > 0:
+                    colour = 'orange'
+                    if reject1Flag:
+                        colour = 'red'
+                    window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=(colour))
+                else:
+                    window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
+
                 side1 = False                                               # change "side1" state to capture second seide
                 continue
-            
-            window.find_element('-SIDE-1-CAM-1-').update(data=side1Cam1)                    # update img for side 1 camera 1
-            window.find_element('-SIDE-1-CAM-2-').update(data=side1Cam2)                    # update img for side 1 camera 2
-            
-            side1ColABark = round((side1Cam1BarkA + side1Cam2BarkA) / 2, 2)
-            side1ColBBark = round((side1Cam1BarkB + side1Cam2BarkB) / 2, 2)
-            side1ColCBark = round((side1Cam1BarkC + side1Cam2BarkC) / 2, 2)
-
-            side1failState = []
-            side1ColAFlip, side1ColAReject, side1ColAPerc = board_logic.main(side1ColABark, 1, 'A')
-            if side1ColAReject:
-                side1failState.append('COL A')
-                reject1Flag = True
-            elif side1ColAFlip:
-                side1failState.append('FLIP COL A')
-                flipFlag = True
-
-            _, side1ColBReject, sideColBPerc = board_logic.main(side1ColBBark, 1, 'B')
-            if side1ColBReject:
-                side1failState.append('COL B')
-                reject1Flag = True
-
-            side1ColCFlip, side1ColCReject, sideColCPerc = board_logic.main(side1ColCBark, 1, 'C')
-            if side1ColCReject:
-                side1failState.append('COL C')
-                reject1Flag = True
-            elif side1ColCFlip:
-                side1failState.append('FLIP COL C')
-                flipFlag = True
-
-            window.find_element('-%-BARK-1-').update('\nSIDE 1 (% WHITE)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(sideColBPerc) + '  ||  C: ' + str(sideColCPerc)) # update count of bark count for side 1
-            if len(side1failState) > 0:
-                colour = 'orange'
-                if reject1Flag:
-                    colour = 'red'
-                window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=(colour))
-            else:
-                window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
 
             window.find_element('-SIDE-2-CAM-1-').update(data=side2Cam1)                    # update img for side 2 camera 1
             window.find_element('-SIDE-2-CAM-2-').update(data=side2Cam2)                    # update img for side 2 camera 2
@@ -176,6 +177,7 @@ def runProgram(window):
                 aio.pulseOutput(1, 1, window)  # pulse good (OUT1 ON)
                 handle_count.plankPass(window) # update stats
 
+            side1 = True
             time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
 
         else:
