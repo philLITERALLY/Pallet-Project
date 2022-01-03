@@ -101,11 +101,11 @@ admin_box1 = [
             [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
             [sg.Image(size=(col_width, 10))], # extra padding
             [
-                sg.Button('-', key='-CAM1-THRESH--', size=(4, 2)),
-                sg.Text(' ' + str(handle_config.CAM1_THRESH) + ' ', key='-CAM1-THRESH-', size=(4, 1), justification='c'),
-                sg.Button('+', key='-CAM1-THRESH+-', size=(4, 2))
+                sg.Button('-', key='-CAM-THRESH--', size=(4, 2)),
+                sg.Text(' ' + str(handle_config.CAM_THRESH) + ' ', key='-CAM-THRESH-', size=(4, 1), justification='c'),
+                sg.Button('+', key='-CAM-THRESH+-', size=(4, 2))
             ]
-        ], key='-CAM1-THRESH-LAYOUT-', visible=False, element_justification='c'),
+        ], key='-CAM-THRESH-LAYOUT-', visible=False, element_justification='c'),
     ],
 ]
 
@@ -125,15 +125,6 @@ admin_box2 = [
                 sg.Button('+', key='-REJECT+-', size=(4, 2))
             ],
         ], key='-REJECT-LAYOUT-', visible=False, element_justification='c'),
-        sg.Column([
-            [sg.Text('SELECT BOX', key='-ADMIN-BOX2-TEXT-')],
-            [sg.Image(size=(col_width, 10))], # extra padding
-            [
-                sg.Button('-', key='-CAM2-THRESH--', size=(4, 2)),
-                sg.Text(' ' + str(handle_config.CAM2_THRESH) + ' ', key='-CAM2-THRESH-', size=(4, 1), justification='c'),
-                sg.Button('+', key='-CAM2-THRESH+-', size=(4, 2))
-            ]
-        ], key='-CAM2-THRESH-LAYOUT-', visible=False, element_justification='c'),
     ],
 ]
 
@@ -143,7 +134,6 @@ boxes_layout = [
         sg.Column([
             [
                 sg.Button('GRAB', key='-GRAB-', size=(10, 2)),
-                sg.Button('CAMERA FLIP', key='-CAMERA-', size=(18, 2)),
             ],
             [sg.Text('FILENAME (W/O FILE TYPE): ', key='-FILENAME-TXT-')],
             [sg.InputText(key='-FILENAME-IN-')],
@@ -158,16 +148,14 @@ admin = True
 
 main_layout = [
     [
-        sg.Image(key='-SIDE-1-CAM-1-', pad=(0, 0), size=(half_width, row_size)),
-        sg.Image(key='-SIDE-1-CAM-2-', pad=(0, 0), size=(half_width, row_size)),
+        sg.Image(key='-SIDE-1-', pad=(0, 0), size=(full_width, row_size)),
     ],
     [
         sg.Text('\nSIDE 1: XX.XX% WHITE', key='-%-BARK-1-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
         sg.Text('\nXXX', key='-SIDE1-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
     ],
     [
-        sg.Image(key='-SIDE-2-CAM-1-', pad=(0, 0), size=(half_width, row_size)),
-        sg.Image(key='-SIDE-2-CAM-2-', pad=(0, 0), size=(half_width, row_size)),
+        sg.Image(key='-SIDE-2-', pad=(0, 0), size=(full_width, row_size)),
     ],
     [
         sg.Column([[

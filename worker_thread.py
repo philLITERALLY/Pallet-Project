@@ -13,16 +13,14 @@ import handle_count     # handles count of stats
 import reset_view       # clears the UI
 import board_logic      # checks if board is pass or fail
 
-global camera1, camera2
+global camera
 
 manualTesting = True
 
 if manualTesting:
-    camera1 = camera_setup.StaticImage(0)   # setup static image one
-    camera2 = camera_setup.StaticImage(1)   # setup static image two
+    camera = camera_setup.StaticImage(0)   # setup static image
 else:
-    camera1 = camera_setup.VideoCapture(0)  # setup camera one
-    camera2 = camera_setup.VideoCapture(1)  # setup camera two
+    camera = camera_setup.VideoCapture(0)  # setup camera
 
 def waitKey():
     while True:
@@ -54,7 +52,7 @@ def runProgram(window):
 
             reset_view.main(window)                                            # clear images and plank stats
 
-            side1White, _ = board_logic.main(camera1, camera2, 1, window, True)
+            side1White, _ = board_logic.main(camera, 1, window, True)
 
             aio.pulseOutput(1, 1, window)                                        # pulse flip side 1 (OUT1 ON)
 
@@ -68,7 +66,7 @@ def runProgram(window):
                 if not boardInRH or not boardInLH:
                     continue
 
-            _, side2White = board_logic.main(camera1, camera2, 2, window, True)
+            _, side2White = board_logic.main(camera, 2, window, True)
 
             if side1White < handle_config.REJECT_LEVEL and side2White < handle_config.REJECT_LEVEL: # if neither side > 50% white then set reject
                 aio.setOutput(7, 1, window)                                                         # set reject flag (OUT7 ON)
@@ -89,8 +87,8 @@ def runProgram(window):
             window.find_element('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
             if program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.THRESH_MODE:
-                _, _ = board_logic.main(camera1, camera2, 1, window, program_state.LIVE_MODE)
-                _, _ = board_logic.main(camera1, camera2, 2, window, program_state.LIVE_MODE)
+                _, _ = board_logic.main(camera, 1, window, program_state.LIVE_MODE)
+                _, _ = board_logic.main(camera, 2, window, program_state.LIVE_MODE)
             else:
                 reset_view.main(window)
                 
@@ -106,10 +104,9 @@ def runProgram(window):
                 aio.setOutput(8, 0, window)                                       # when stopped turn 8 off
 
 def main(window):
-    try:
-        runProgram(window)
-    except Exception as e:
-        print('Exception: ', e)
+    # try:
+    runProgram(window)
+    # except Exception as e:
+        # print('Exception: ', e)
 
-    camera1.release()
-    camera2.release()
+    camera.release()

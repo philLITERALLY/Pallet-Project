@@ -32,7 +32,7 @@ def init():
     global SIDE1_PERC, SIDE2_PERC
 
     # Thresh settings
-    global CAM1_THRESH, CAM2_THRESH
+    global CAM_THRESH
 
     # AIO Settings
     global AIO_WAIT
@@ -64,8 +64,7 @@ def init():
     SIDE2_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2_PERC')
 
     # Get Thresh Settings
-    CAM1_THRESH = config.getint('THRESH SETTINGS', 'CAM1_THRESH')
-    CAM2_THRESH = config.getint('THRESH SETTINGS', 'CAM2_THRESH')
+    CAM_THRESH = config.getint('THRESH SETTINGS', 'CAM_THRESH')
 
     # Get AIO Settings
     AIO_WAIT = config.getfloat('AIO', 'AIO_WAIT')

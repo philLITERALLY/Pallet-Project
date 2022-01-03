@@ -22,18 +22,9 @@ def main(window):
             break
         
         if event == '-GRAB-':
-            frame1 = worker_thread.camera1.read()
-            frame2 = worker_thread.camera2.read()
-
+            frame = worker_thread.camera.read()
             text_input = values['-FILENAME-IN-']
-            cv2.imwrite('images/stored/' + text_input + '_cam1.png', frame1)
-            cv2.imwrite('images/stored/' + text_input + '_cam2.png', frame2)
-
-        # When the camera button is pressed switch the cameras
-        if event == '-CAMERA-':
-            tempCam1 = worker_thread.camera1
-            worker_thread.camera1 = worker_thread.camera2
-            worker_thread.camera2 = tempCam1
+            cv2.imwrite('images/stored/' + text_input + '.png', frame)
 
         # admin events
         if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-BARK-MODE-'):
@@ -44,11 +35,11 @@ def main(window):
             handle_events.board(event, window)
 
         # transform events
-        if event in ('-CAM1-TOP--', '-CAM1-TOP+-', '-CAM1-BOT--', '-CAM1-BOT+-', '-CAM2-TOP--', '-CAM2-TOP+-', '-CAM2-BOT--', '-CAM2-BOT+-'):
+        if event in ('-CAM-TOP--', '-CAM-TOP+-', '-CAM-BOT--', '-CAM-BOT+-'):
             handle_events.transform(event, window)
 
         # thresh events
-        if event in ('-CAM1-THRESH--', '-CAM1-THRESH+-', '-CAM2-THRESH--', '-CAM2-THRESH+-'):
+        if event in ('-CAM-THRESH--', '-CAM-THRESH+-'):
             handle_events.thresh(event, window)
 
         # When the reset button is pressed
@@ -108,8 +99,8 @@ def main(window):
         # When calibrate button is pressed
         if event == '-CALIBRATE-':
 
-            side1White, _ = board_logic.main(worker_thread.camera1, worker_thread.camera2, 1, window, True)
-            _, side2White = board_logic.main(worker_thread.camera1, worker_thread.camera2, 2, window, True)
+            side1White, _ = board_logic.main(worker_thread.camera, 1, window, True)
+            _, side2White = board_logic.main(worker_thread.camera, 2, window, True)
 
             # Update variables
             handle_config.setValue('REJECT SETTINGS', 'SIDE1_PERC', side1White)
