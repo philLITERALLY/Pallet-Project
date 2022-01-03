@@ -26,6 +26,8 @@ def init():
 
     # Board settings
     global BOARD_WIDTH, BOARD_LENGTH
+    global SIDE1_TOP, SIDE1_LEFT, SIDE1_HEIGHT, SIDE1_WIDTH
+    global SIDE2_TOP, SIDE2_LEFT, SIDE2_HEIGHT, SIDE2_WIDTH
 
     # Rejection settings
     global BORDERLINE_LEVEL, REJECT_LEVEL
@@ -56,6 +58,14 @@ def init():
     # Get Board Settings
     BOARD_WIDTH = config.getint('BOARD SETTINGS', 'BOARD_WIDTH')
     BOARD_LENGTH = config.getint('BOARD SETTINGS', 'BOARD_LENGTH')
+    SIDE1_TOP = config.getint('BOARD SETTINGS', 'SIDE1_TOP')
+    SIDE1_LEFT = config.getint('BOARD SETTINGS', 'SIDE1_LEFT')
+    SIDE1_HEIGHT = config.getint('BOARD SETTINGS', 'SIDE1_HEIGHT')
+    SIDE1_WIDTH = config.getint('BOARD SETTINGS', 'SIDE1_WIDTH')
+    SIDE2_TOP = config.getint('BOARD SETTINGS', 'SIDE2_TOP')
+    SIDE2_LEFT = config.getint('BOARD SETTINGS', 'SIDE2_LEFT')
+    SIDE2_HEIGHT = config.getint('BOARD SETTINGS', 'SIDE2_HEIGHT')
+    SIDE2_WIDTH = config.getint('BOARD SETTINGS', 'SIDE2_WIDTH')
 
     # Get Rejection Settings
     BORDERLINE_LEVEL = config.getint('REJECT SETTINGS', 'BORDERLINE_LEVEL')

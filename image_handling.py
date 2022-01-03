@@ -11,31 +11,15 @@ import handle_config    # Programs Configuration
 handle_config.init()
 
 def cropToWidth(origImg):
-    height, width, _ = origImg.shape
+    side1 = origImg[
+        handle_config.SIDE1_TOP : handle_config.SIDE1_TOP + handle_config.SIDE1_HEIGHT,
+        handle_config.SIDE1_LEFT : handle_config.SIDE1_LEFT + handle_config.SIDE1_WIDTH
+    ].copy()
 
-    leftBound = 450
-    rightBound = 3240
-    mid = int(leftBound + (rightBound - leftBound) / 2)
-    
-    # draw boundaries
-    # cv2.line(origImg, (leftBound, 0), (leftBound, height), (255,0,0), 5) # Left Bound
-    # cv2.line(origImg, (mid, 0), (mid, height), (0,255,0), 5) # Mid Line
-    # cv2.line(origImg, (rightBound, 0), (rightBound, height), (0,0,255), 5) # Right Bound
-
-    side1Top = 800
-    side1Bot = 1000
-
-    # cv2.line(origImg, (0, side1Top), (width, side1Top), (255,0,0), 5) # Side 1 Top Bound
-    # cv2.line(origImg, (0, side1Bot), (width, side1Bot), (0,0,255), 5) # Side 1 Bot Bound
-
-    side2Top = 1200
-    side2Bot = 1400
-
-    # cv2.line(origImg, (0, side2Top), (width, side2Top), (255,0,0), 5) # Side 1 Top Bound
-    # cv2.line(origImg, (0, side2Bot), (width, side2Bot), (0,0,255), 5) # Side 1 Bot Bound
-
-    side1 = origImg[side1Top:side1Bot, leftBound:rightBound].copy()
-    side2 = origImg[side2Top:side2Bot, leftBound:rightBound].copy()
+    side2 = origImg[
+        handle_config.SIDE2_TOP : handle_config.SIDE2_TOP + handle_config.SIDE2_HEIGHT, 
+        handle_config.SIDE2_LEFT : handle_config.SIDE2_LEFT + handle_config.SIDE2_WIDTH
+    ].copy()
 
     return side1, side2
 
