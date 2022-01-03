@@ -83,7 +83,6 @@ admin_mode = [
         sg.Button('TRANSFORM', key='-TRANSFORM-MODE-', size=(15, 2)),
     ],
     [
-        sg.Button('COLUMNS', key='-COLUMN-MODE-', size=(15, 2)),
         sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
     ],
     [
@@ -97,13 +96,6 @@ admin_box1 = [
     [
         sg.Column([
             [sg.Button('CALIBRATE', key='-CALIBRATE-', size=(15, 2))],
-            [sg.Image(size=(col_width, 5))], # extra padding
-            [sg.Text('FLIP COL A + C')],
-            [
-                sg.Button('-', key='-EDGE-FLIP--', size=(4, 2)),
-                sg.Text(str(handle_config.EDGE_FLIP_LEVEL) + '%', key='-EDGE-FLIP-LEVEL-'),
-                sg.Button('+', key='-EDGE-FLIP+-', size=(4, 2))
-            ]
         ], key='-CALIBRATE-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([
             [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
@@ -120,17 +112,17 @@ admin_box1 = [
 admin_box2 = [
     [
         sg.Column([
-            [sg.Text('REJECT COL A + C')],
+            [sg.Text('BORDERLINE < %')],
             [
-                sg.Button('-', key='-EDGE-REJECT--', size=(4, 2)),
-                sg.Text(str(handle_config.EDGE_REJECT_LEVEL) + '%', key='-EDGE-REJECT-LEVEL-'),
-                sg.Button('+', key='-EDGE-REJECT+-', size=(4, 2)),
+                sg.Button('-', key='-BORDERLINE--', size=(4, 2)),
+                sg.Text(str(handle_config.BORDERLINE_LEVEL) + '%', key='-BORDERLINE-LEVEL-'),
+                sg.Button('+', key='-BORDERLINE+-', size=(4, 2)),
             ],
-            [sg.Text('REJECT COLUMN B')],
+            [sg.Text('REJECT < %')],
             [
-                sg.Button('-', key='-MID-REJECT--', size=(4, 2)),
-                sg.Text(str(handle_config.MID_REJECT_LEVEL) + '%', key='-MID-REJECT-LEVEL-'),
-                sg.Button('+', key='-MID-REJECT+-', size=(4, 2))
+                sg.Button('-', key='-REJECT--', size=(4, 2)),
+                sg.Text(str(handle_config.REJECT_LEVEL) + '%', key='-REJECT-LEVEL-'),
+                sg.Button('+', key='-REJECT+-', size=(4, 2))
             ],
         ], key='-REJECT-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([
@@ -170,7 +162,7 @@ main_layout = [
         sg.Image(key='-SIDE-1-CAM-2-', pad=(0, 0), size=(half_width, row_size)),
     ],
     [
-        sg.Text('\nSIDE 1 (% WHITE)  ||  A: XXX  ||  B: XXX  ||  C: XXX', key='-%-BARK-1-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
+        sg.Text('\nSIDE 1: XX.XX% WHITE', key='-%-BARK-1-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
         sg.Text('\nXXX', key='-SIDE1-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
     ],
     [
@@ -179,7 +171,7 @@ main_layout = [
     ],
     [
         sg.Column([[
-            sg.Text('\nSIDE 2 (% WHITE)  ||  A: XXX  ||  B: XXX  ||  C: XXX', key='-%-BARK-2-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
+            sg.Text('\nSIDE 2: XX.XX% WHITE', key='-%-BARK-2-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
             sg.Text('\nXXX', key='-SIDE2-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
         ]], key='-SIDE2-STATS-')
     ],

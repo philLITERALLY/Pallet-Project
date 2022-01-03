@@ -28,9 +28,8 @@ def init():
     global BOARD_WIDTH, BOARD_LENGTH
 
     # Rejection settings
-    global EDGE_FLIP_LEVEL, EDGE_REJECT_LEVEL, MID_REJECT_LEVEL
-    global SIDE1_COLA_PERC, SIDE1_COLB_PERC, SIDE1_COLC_PERC
-    global SIDE2_COLA_PERC, SIDE2_COLB_PERC, SIDE2_COLC_PERC
+    global BORDERLINE_LEVEL, REJECT_LEVEL
+    global SIDE1_PERC, SIDE2_PERC
 
     # Thresh settings
     global CAM1_THRESH, CAM2_THRESH
@@ -59,15 +58,10 @@ def init():
     BOARD_LENGTH = config.getint('BOARD SETTINGS', 'BOARD_LENGTH')
 
     # Get Rejection Settings
-    EDGE_FLIP_LEVEL = config.getint('REJECT SETTINGS', 'EDGE_FLIP_LEVEL')
-    EDGE_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'EDGE_REJECT_LEVEL')
-    MID_REJECT_LEVEL = config.getint('REJECT SETTINGS', 'MID_REJECT_LEVEL')
-    SIDE1_COLA_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1_COLA_PERC')
-    SIDE1_COLB_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1_COLB_PERC')
-    SIDE1_COLC_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1_COLC_PERC')
-    SIDE2_COLA_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2_COLA_PERC')
-    SIDE2_COLB_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2_COLB_PERC')
-    SIDE2_COLC_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2_COLC_PERC')
+    BORDERLINE_LEVEL = config.getint('REJECT SETTINGS', 'BORDERLINE_LEVEL')
+    REJECT_LEVEL = config.getint('REJECT SETTINGS', 'REJECT_LEVEL')
+    SIDE1_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1_PERC')
+    SIDE2_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2_PERC')
 
     # Get Thresh Settings
     CAM1_THRESH = config.getint('THRESH SETTINGS', 'CAM1_THRESH')

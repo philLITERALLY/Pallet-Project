@@ -65,7 +65,7 @@ def waitInputState(inPort, state, window):
     updateInState(window)
 
     while currentInState != state:                      # while state of input doesn't equal given state keep checking
-        if not (program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.COLUMN_MODE or program_state.THRESH_MODE) and not program_state.RUN_MODE:                  # if user requests program stop break out of the check
+        if not (program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.THRESH_MODE) and not program_state.RUN_MODE:                  # if user requests program stop break out of the check
             return False
         
         time.sleep(0.01)                                # sleep before checking inputs again

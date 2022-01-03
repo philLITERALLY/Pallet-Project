@@ -136,44 +136,11 @@ def threshImg(origImg, camera):
 
     return threshImg
 
-# calculate percentage of black pixels in given img
-def barkCalc(origImg):
+# calculate percentage of white pixels in given img
+def whiteCalc(origImg):
     totalPixels = origImg.size
     whitePixels = cv2.countNonZero(origImg)
     return round(whitePixels / totalPixels * 100, 2)
-
-# gather bark percentages for the three columns
-def analyseImg(origImg, threshImg):
-    height, width, _ = origImg.shape
-
-    midWidth = int(width / 2)
-
-    quarter = int(height / 4)
-    threeQuarter = quarter * 3
-
-    columnA = threshImg[0:quarter, 0:width].copy()
-    columnB = threshImg[quarter:threeQuarter, 0:width].copy()
-    columnC = threshImg[threeQuarter:height, 0:width].copy()
-
-    columnAPerc = barkCalc(columnA)
-    columnBPerc = barkCalc(columnB)
-    columnCPerc = barkCalc(columnC)
-    
-    # if not thresh or transform mode show columns
-    if not program_state.THRESH_MODE and not program_state.SHOW_TRANSFORM:
-        cv2.line(origImg, (0, quarter), (width, quarter), (0, 0, 255), 5) # 25% line
-        cv2.line(origImg, (0, threeQuarter), (width, threeQuarter), (0, 0, 255), 5) # 75% line
-
-        _, textHeight = cv2.getTextSize("A", cv2.FONT_HERSHEY_SIMPLEX, 3, 3)
-        quarterTxt = int(quarter / 2) + textHeight
-        midText = quarter * 2 + textHeight
-        threeQuarterTxt = threeQuarter + quarterTxt
-
-        cv2.putText(origImg, "A", (midWidth, quarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
-        cv2.putText(origImg, "B", (midWidth, midText), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
-        cv2.putText(origImg, "C", (midWidth, threeQuarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
-
-    return origImg, columnAPerc, columnBPerc, columnCPerc
 
 # resize img to fit ui
 def resizeImg(origImg):    
@@ -208,8 +175,7 @@ def resizeImg(origImg):
     return origImg
 
 def main(origImg, camera, ignoreFlags):
-    side1columnAPerc, side1columnBPerc, side1columnCPerc, \
-            side2columnAPerc, side2columnBPerc, side2columnCPerc = None, None, None, None, None, None
+    
     # crop image to plank width
     side1, side2 = cropToWidth(origImg, camera)
 
@@ -236,8 +202,8 @@ def main(origImg, camera, ignoreFlags):
     threshedSide1Img = threshImg(side1, camera)
     threshedSide2Img = threshImg(side2, camera)
 
-    side1, side1columnAPerc, side1columnBPerc, side1columnCPerc = analyseImg(side1, threshedSide1Img)
-    side2, side2columnAPerc, side2columnBPerc, side2columnCPerc = analyseImg(side2, threshedSide2Img)
+    side1White = whiteCalc(threshedSide1Img)
+    side2White = whiteCalc(threshedSide2Img)
 
     # resize image
     side1 = resizeImg(side1)
@@ -251,10 +217,8 @@ def main(origImg, camera, ignoreFlags):
     if camera == 1:
         return cv2.imencode('.png', side1)[1].tobytes(), \
             cv2.imencode('.png', side2)[1].tobytes(), \
-            side1columnAPerc, side1columnBPerc, side1columnCPerc, \
-            side2columnAPerc, side2columnBPerc, side2columnCPerc
+            side1White, side2White
     else: 
         return cv2.imencode('.png', side2)[1].tobytes(), \
             cv2.imencode('.png', side1)[1].tobytes(), \
-            side2columnAPerc, side2columnBPerc, side2columnCPerc, \
-            side1columnAPerc, side1columnBPerc, side1columnCPerc
+            side2White, side1White

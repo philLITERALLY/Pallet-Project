@@ -9,15 +9,13 @@ import handle_config    # module to handle config settings
 import program_state    # programs State
 import camera_setup     # camera setup function
 import aio              # handles the aio
-import image_handling   # handles image
 import handle_count     # handles count of stats
-import admin_view       # handles UI when in admin mode
 import reset_view       # clears the UI
 import board_logic      # checks if board is pass or fail
 
 global camera1, camera2
 
-manualTesting = False
+manualTesting = True
 
 if manualTesting:
     camera1 = camera_setup.StaticImage(0)   # setup static image one
@@ -34,21 +32,13 @@ def waitKey():
         if not program_state.RUN_MODE:
             return False
 
-
 def runProgram(window):
-    side1= True
-    side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = None, None, None, None
-    side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
-    side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
-    side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
-
     while not program_state.STOP_PROGRAM:
         if program_state.RUN_MODE:                                             # if running
 
-            reject1Flag, reject2Flag, flipFlag = False, False, False
-
-            aio.setOutput(8, 1, window)                                        # turn running light on (OUT8 ON)
+            aio.setOutput(5, 1, window)                                        # turn running light on (OUT5 ON)
             aio.setOutput(0, 1, window)                                        # flag ready state (OUT0 ON)
+            aio.setOutput(2, 1, window)                                        # lift up side 2 (OUT2 ON)
 
             time.sleep(handle_config.START_DELAY)                              # wait before starting the next loop
 
@@ -56,145 +46,51 @@ def runProgram(window):
                 boardIn = waitKey()                                             # wait for board in place
                 if not boardIn:
                     continue
-            elif side1:
-                boardIn = aio.waitInputState(1, True, window)                  # wait for board (IN0 Pulse)
+            else:
+                boardInRH = aio.waitInputState(0, True, window)                  # wait for board side 1 RH
+                boardInLH = aio.waitInputState(1, True, window)                  # wait for board side 1 LH
+                if not boardInRH or not boardInLH:
+                    continue
+
+            reset_view.main(window)                                            # clear images and plank stats
+
+            side1White, _ = board_logic.main(camera1, camera2, 1, window, True)
+
+            aio.pulseOutput(1, 1, window)                                        # pulse flip side 1 (OUT1 ON)
+
+            if manualTesting:
+                boardIn = waitKey()                                              # wait for board in place
                 if not boardIn:
                     continue
             else:
-                boardIn = aio.waitInputState(2, True, window)                  # wait for board (IN1 Pulse)
-                if not boardIn:
+                boardInRH = aio.waitInputState(2, True, window)                  # wait for board side 2 RH
+                boardInLH = aio.waitInputState(3, True, window)                  # wait for board side 2 LH
+                if not boardInRH or not boardInLH:
                     continue
 
-            aio.setOutput(0, 0, window)                                        # stop ready state (OUT0 OFF)
+            _, side2White = board_logic.main(camera1, camera2, 2, window, True)
 
-            frame1 = camera1.read()                                                    # grab camera 1
-            frame2 = camera2.read()                                                    # grab camera 2
-            if side1:
-                side1Cam1, _, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC, _, _, _ = image_handling.main(frame1, 1, True)
-                side1Cam2, _, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC, _, _, _ = image_handling.main(frame2, 2, True)
-            else:
-                _, side2Cam1, _, _, _, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = image_handling.main(frame1, 1, True)
-                _, side2Cam2, _, _, _, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = image_handling.main(frame2, 2, True)
-          
-            if side1:
-                reset_view.main(window)                                            # clear images and plank stats
-            
-                window.find_element('-SIDE-1-CAM-1-').update(data=side1Cam1)                    # update img for side 1 camera 1
-                window.find_element('-SIDE-1-CAM-2-').update(data=side1Cam2)                    # update img for side 1 camera 2
+            if side1White < handle_config.REJECT_LEVEL and side2White < handle_config.REJECT_LEVEL: # if neither side > 50% white then set reject
+                aio.setOutput(7, 1, window)                                                         # set reject flag (OUT7 ON)
+                handle_count.plankFail(window)                                                      # update stats
 
-                side1ColABark = round((side1Cam1BarkA + side1Cam2BarkA) / 2, 2)
-                side1ColBBark = round((side1Cam1BarkB + side1Cam2BarkB) / 2, 2)
-                side1ColCBark = round((side1Cam1BarkC + side1Cam2BarkC) / 2, 2)
-
-                side1failState = []
-                side1ColAFlip, side1ColAReject, side1ColAPerc = board_logic.main(side1ColABark, 1, 'A')
-                if side1ColAReject:
-                    side1failState.append('COL A')
-                    reject1Flag = True
-                elif side1ColAFlip:
-                    side1failState.append('FLIP COL A')
-                    flipFlag = True
-
-                _, side1ColBReject, sideColBPerc = board_logic.main(side1ColBBark, 1, 'B')
-                if side1ColBReject:
-                    side1failState.append('COL B')
-                    reject1Flag = True
-
-                side1ColCFlip, side1ColCReject, sideColCPerc = board_logic.main(side1ColCBark, 1, 'C')
-                if side1ColCReject:
-                    side1failState.append('COL C')
-                    reject1Flag = True
-                elif side1ColCFlip:
-                    side1failState.append('FLIP COL C')
-                    flipFlag = True
-
-                window.find_element('-%-BARK-1-').update('\nSIDE 1 (% WHITE)  ||  A: ' + str(side1ColAPerc) + '  ||  B: ' + str(sideColBPerc) + '  ||  C: ' + str(sideColCPerc)) # update count of bark count for side 1
-                if len(side1failState) > 0:
-                    colour = 'orange'
-                    if reject1Flag:
-                        colour = 'red'
-                    window.find_element('-SIDE1-STATUS-').update('\n' + ' || '.join(side1failState), background_color=(colour))
-                else:
-                    window.find_element('-SIDE1-STATUS-').update('\nPASS', background_color=('green'))
-
-                side1 = False                                               # change "side1" state to capture second seide
-                continue
-
-            window.find_element('-SIDE-2-CAM-1-').update(data=side2Cam1)                    # update img for side 2 camera 1
-            window.find_element('-SIDE-2-CAM-2-').update(data=side2Cam2)                    # update img for side 2 camera 2
-
-            side2ColABark = round((side2Cam1BarkA + side2Cam2BarkA) / 2, 2)
-            side2ColBBark = round((side2Cam1BarkB + side2Cam2BarkB) / 2, 2)
-            side2ColCBark = round((side2Cam1BarkC + side2Cam2BarkC) / 2, 2)
-
-            side2failState = []
-            side2ColAFlip, side2ColAReject, side2ColAPerc = board_logic.main(side2ColABark, 2, 'A')
-            if side2ColAReject:
-                side2failState.append('COL A')
-                reject2Flag = True
-            elif side2ColAFlip:
-                side2failState.append('FLIP COL A')
-                flipFlag = True
-
-            _, side2ColBReject, side2ColBPerc = board_logic.main(side2ColBBark, 2, 'B')
-            if side2ColBReject:
-                side2failState.append('COL B')
-                reject2Flag = True
-
-            side2ColCFlip, side2ColCReject, side2ColCPerc = board_logic.main(side2ColCBark, 2, 'C')
-            if side2ColCReject:
-                side2failState.append('COL C')
-                reject2Flag = True
-            elif side2ColCFlip:
-                side2failState.append('FLIP COL C')
-                flipFlag = True
-
-            window.find_element('-%-BARK-2-').update('\nSIDE 2 (% WHITE)  ||  A: ' + str(side2ColAPerc) + '  ||  B: ' + str(side2ColBPerc) + '  ||  C: ' + str(side2ColCPerc)) # update count of bark count for side 2
-            if len(side2failState) > 0:
-                colour = 'orange'
-                if reject2Flag:
-                    colour = 'red'
-                window.find_element('-SIDE2-STATUS-').update('\n' + ' || '.join(side2failState), background_color=(colour))
-            else:
-                window.find_element('-SIDE2-STATUS-').update('\nPASS', background_color=('green'))
-
-            aio.setOutput(0, 1, window)        # flag ready state (OUT0 ON)
-
-            if reject1Flag or reject2Flag:     # if board is a reject
-                aio.pulseOutput(3, 1, window)  # pulse reject (OUT3 ON)
-                handle_count.plankFail(window) # update stats
-
-            elif flipFlag:                     # if edges are borderline on both side
-                side1Total = side1ColABark + side1ColCBark
-                side2Total = side2ColABark + side2ColCBark
-                if side2Total > side1Total:        # if side 2 has the most bark we need to flip
-                    aio.pulseOutput(2, 1, window)  # pulse flip (OUT2 ON)
-                else:                              # else we leave board as is
-                    aio.pulseOutput(1, 1, window)  # pulse good (OUT1 ON)
+            elif side2White < side1White:          # if side 1 is better
+                aio.pulseOutput(3, 1, window)      # pulse flip side 2 (OUT3 ON)
                 handle_count.plankPass(window)     # update stats
 
-            else:                              # else we have a good board
-                aio.pulseOutput(1, 1, window)  # pulse good (OUT1 ON)
-                handle_count.plankPass(window) # update stats
+            else:                                  # if side 2 is better
+                aio.pulseOutput(2, 0, window)      # pulse lift up side 2 (OUT2 OFF)
+                handle_count.plankPass(window)     # update stats
 
-            side1 = True
             time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
 
         else:
 
-            side1 = True                               # reset "side1" state
-            side1Cam1, side1Cam1BarkA, side1Cam1BarkB, side1Cam1BarkC = None, None, None, None
-            side1Cam2, side1Cam2BarkA, side1Cam2BarkB, side1Cam2BarkC = None, None, None, None
-            side2Cam1, side2Cam1BarkA, side2Cam1BarkB, side2Cam1BarkC = None, None, None, None
-            side2Cam2, side2Cam2BarkA, side2Cam2BarkB, side2Cam2BarkC = None, None, None, None
-
             window.find_element('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
-            if program_state.LIVE_MODE or \
-                program_state.SHOW_TRANSFORM or \
-                program_state.COLUMN_MODE or \
-                program_state.THRESH_MODE:
-                admin_view.main(camera1, camera2, window)
+            if program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.THRESH_MODE:
+                _, _ = board_logic.main(camera1, camera2, 1, window, program_state.LIVE_MODE)
+                _, _ = board_logic.main(camera1, camera2, 2, window, program_state.LIVE_MODE)
             else:
                 reset_view.main(window)
                 

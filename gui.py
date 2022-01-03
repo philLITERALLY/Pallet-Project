@@ -8,7 +8,7 @@ import program_state    # Programs State
 import handle_events    # handles the UI button events
 import handle_config    # module to handle config settings
 import worker_thread    # main thread that handles workflow
-import image_handling   # handles the image
+import board_logic      # checks if board is pass or fail
 import cv2
 
 def main(window):
@@ -36,7 +36,7 @@ def main(window):
             worker_thread.camera2 = tempCam1
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-COLUMN-MODE-', '-BARK-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-BARK-MODE-'):
             handle_events.admin(event, window)
 
         # board events
@@ -68,41 +68,29 @@ def main(window):
             window.find_element('-START-').Update(button_color=sg.theme_button_color())
             program_state.set_run_mode(False)
 
-        # When the increase flip value is pressed
-        if event == '-EDGE-FLIP+-':
-            handle_config.setValue('REJECT SETTINGS', 'EDGE_FLIP_LEVEL', handle_config.EDGE_FLIP_LEVEL + 1)
-            flipStr = str(handle_config.EDGE_FLIP_LEVEL) + '%'
-            window.find_element('-EDGE-FLIP-LEVEL-').update(flipStr)
-
-        # When the decrease flip value is pressed
-        if event == '-EDGE-FLIP--':
-            handle_config.setValue('REJECT SETTINGS', 'EDGE_FLIP_LEVEL', handle_config.EDGE_FLIP_LEVEL - 1)
-            flipStr = str(handle_config.EDGE_FLIP_LEVEL) + '%'
-            window.find_element('-EDGE-FLIP-LEVEL-').update(flipStr)
-
         # When the increase reject value is pressed
-        if event == '-EDGE-REJECT+-':
-            handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL + 1)
-            rejectStr = str(handle_config.EDGE_REJECT_LEVEL) + '%'
-            window.find_element('-EDGE-REJECT-LEVEL-').update(rejectStr)
+        if event == '-BORDERLINE+-':
+            handle_config.setValue('REJECT SETTINGS', 'BORDERLINE_LEVEL', handle_config.BORDERLINE_LEVEL + 1)
+            rejectStr = str(handle_config.BORDERLINE_LEVEL) + '%'
+            window.find_element('-BORDERLINE-LEVEL-').update(rejectStr)
             
         # When the decrease reject value is pressed
-        if event == '-EDGE-REJECT--':
-            handle_config.setValue('REJECT SETTINGS', 'EDGE_REJECT_LEVEL', handle_config.EDGE_REJECT_LEVEL - 1)
-            rejectStr = str(handle_config.EDGE_REJECT_LEVEL) + '%'
-            window.find_element('-EDGE-REJECT-LEVEL-').update(rejectStr)
+        if event == '-BORDERLINE--':
+            handle_config.setValue('REJECT SETTINGS', 'BORDERLINE_LEVEL', handle_config.BORDERLINE_LEVEL - 1)
+            rejectStr = str(handle_config.BORDERLINE_LEVEL) + '%'
+            window.find_element('-BORDERLINE-LEVEL-').update(rejectStr)
 
         # When the increase reject value is pressed
-        if event == '-MID-REJECT+-':
-            handle_config.setValue('REJECT SETTINGS', 'MID_REJECT_LEVEL', handle_config.MID_REJECT_LEVEL + 1)
-            rejectStr = str(handle_config.MID_REJECT_LEVEL) + '%'
-            window.find_element('-MID-REJECT-LEVEL-').update(rejectStr)
+        if event == '-REJECT+-':
+            handle_config.setValue('REJECT SETTINGS', 'REJECT_LEVEL', handle_config.REJECT_LEVEL + 1)
+            rejectStr = str(handle_config.REJECT_LEVEL) + '%'
+            window.find_element('-REJECT-LEVEL-').update(rejectStr)
             
         # When the decrease reject value is pressed
-        if event == '-MID-REJECT--':
-            handle_config.setValue('REJECT SETTINGS', 'MID_REJECT_LEVEL', handle_config.MID_REJECT_LEVEL - 1)
-            rejectStr = str(handle_config.MID_REJECT_LEVEL) + '%'
-            window.find_element('-MID-REJECT-LEVEL-').update(rejectStr)
+        if event == '-REJECT--':
+            handle_config.setValue('REJECT SETTINGS', 'REJECT_LEVEL', handle_config.REJECT_LEVEL - 1)
+            rejectStr = str(handle_config.REJECT_LEVEL) + '%'
+            window.find_element('-REJECT-LEVEL-').update(rejectStr)
 
         # When fault is flagged
         if event == '-FAULT-':
@@ -119,35 +107,13 @@ def main(window):
 
         # When calibrate button is pressed
         if event == '-CALIBRATE-':
-            frame1 = worker_thread.camera1.read()
-            frame2 = worker_thread.camera2.read()
 
-            _, _, \
-                cam1Side1columnA, cam1Side1columnB, cam1Side1columnC, \
-                cam1Side2columnA, cam1Side2columnB, cam1Side2columnC = image_handling.main(frame1, 1, True)
-            _, _, \
-                cam2Side1columnA, cam2Side1columnB, cam2Side1columnC, \
-                cam2Side2columnA, cam2Side2columnB, cam2Side2columnC = image_handling.main(frame2, 2, True)
+            side1White, _ = board_logic.main(worker_thread.camera1, worker_thread.camera2, 1, window, True)
+            _, side2White = board_logic.main(worker_thread.camera1, worker_thread.camera2, 2, window, True)
 
-            # Side 1 Bark Calculate
-            side1ColABark = round((cam1Side1columnA + cam2Side1columnA) / 2, 2)
-            side1ColBBark = round((cam1Side1columnB + cam2Side1columnB) / 2, 2)
-            side1ColCBark = round((cam1Side1columnC + cam2Side1columnC) / 2, 2)
-
-            # Side 2 Bark Calculate
-            side2ColABark = round((cam1Side2columnA + cam2Side2columnA) / 2, 2)
-            side2ColBBark = round((cam1Side2columnB + cam2Side2columnB) / 2, 2)
-            side2ColCBark = round((cam1Side2columnC + cam2Side2columnC) / 2, 2)
-
-            # Cam 1 Side 1
-            handle_config.setValue('REJECT SETTINGS', 'SIDE1_COLA_PERC', side1ColABark)
-            handle_config.setValue('REJECT SETTINGS', 'SIDE1_COLB_PERC', side1ColBBark)
-            handle_config.setValue('REJECT SETTINGS', 'SIDE1_COLC_PERC', side1ColCBark)
-
-            # Cam 1 Side 2
-            handle_config.setValue('REJECT SETTINGS', 'SIDE2_COLA_PERC', side2ColABark)
-            handle_config.setValue('REJECT SETTINGS', 'SIDE2_COLB_PERC', side2ColBBark)
-            handle_config.setValue('REJECT SETTINGS', 'SIDE2_COLC_PERC', side2ColCBark)
+            # Update variables
+            handle_config.setValue('REJECT SETTINGS', 'SIDE1_PERC', side1White)
+            handle_config.setValue('REJECT SETTINGS', 'SIDE2_PERC', side2White)
 
     # if user exits the window, then close the window and exit the GUI func
     window.close()

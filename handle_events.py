@@ -9,7 +9,6 @@ import handle_config    # Programs Configuration
 def admin(event, window):
     window.find_element('-LIVE-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
-    window.find_element('-COLUMN-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-BARK-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-CALIBRATE-LAYOUT-').Update(visible=False)
     window.find_element('-REJECT-LAYOUT-').Update(visible=False)
@@ -49,7 +48,6 @@ def admin(event, window):
         # make sure admin modes are off
         program_state.set_live(False)
         program_state.set_thresh(False)
-        program_state.set_column(False)
         program_state.set_transform(False)
 
     # When the shut down button is pressed
@@ -74,14 +72,6 @@ def admin(event, window):
 
         # turn transform button on
         window.find_element('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
-        window.find_element('-IO-LAYOUT-').Update(visible=True)
-
-    # When column mode button is pressed
-    if event == '-COLUMN-MODE-':
-        program_state.set_column(True)     # turn on column view mode
-
-        # turn transform button on
-        window.find_element('-COLUMN-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
 
     # When bark thresh mode button is pressed

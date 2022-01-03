@@ -5,7 +5,6 @@ FAULT = False
 STOP_PROGRAM = False
 LIVE_MODE = False
 SHOW_TRANSFORM = False
-COLUMN_MODE = False
 THRESH_MODE = False
 CLEAR_RESULTS = False
 TOTAL_INSPECTED = 0
@@ -24,44 +23,31 @@ def stop_program():
     STOP_PROGRAM = True
 
 def set_live(value):
-    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE, THRESH_MODE
+    global LIVE_MODE, SHOW_TRANSFORM, THRESH_MODE
     LIVE_MODE = value
 
     # if turning on this mode then disable others
     if value:
         SHOW_TRANSFORM = False
-        COLUMN_MODE = False
         THRESH_MODE = False
 
 def set_transform(value):
-    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE,  THRESH_MODE
+    global LIVE_MODE, SHOW_TRANSFORM, THRESH_MODE
     SHOW_TRANSFORM = value
 
     # if turning on this mode then disable others
     if value:
         LIVE_MODE = False
-        COLUMN_MODE = False
-        THRESH_MODE = False
-
-def set_column(value):
-    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE, THRESH_MODE
-    COLUMN_MODE = value
-
-    # if turning on this mode then disable others
-    if value:
-        LIVE_MODE = False
-        SHOW_TRANSFORM = False
         THRESH_MODE = False
 
 def set_thresh(value):
-    global LIVE_MODE, SHOW_TRANSFORM, COLUMN_MODE, THRESH_MODE
+    global LIVE_MODE, SHOW_TRANSFORM, THRESH_MODE
     THRESH_MODE = value
 
     # if turning on this mode then disable others
     if value:
         LIVE_MODE = False
         SHOW_TRANSFORM = False
-        COLUMN_MODE = False
 
 def clear_results():
     global TOTAL_INSPECTED, TOTAL_PASSED
