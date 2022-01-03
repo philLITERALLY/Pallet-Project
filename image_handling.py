@@ -10,22 +10,6 @@ import program_state    # Programs State
 import handle_config    # Programs Configuration
 handle_config.init()
 
-def transformCoords(origImg, side):
-    _, width, _ = origImg.shape # img size
-
-    if side == 1:
-        coord1 = 200
-        coord2 = width - 10
-        coord3 = 0
-        coord4 = width - 5
-    else:
-        coord1 = 0
-        coord2 = width - 310
-        coord3 = 130
-        coord4 = width
-    
-    return coord1, coord2, coord3, coord4
-
 def cropToWidth(origImg):
     height, width, _ = origImg.shape
 
@@ -33,22 +17,22 @@ def cropToWidth(origImg):
     rightBound = 3240
     mid = int(leftBound + (rightBound - leftBound) / 2)
     
-    # # draw boundaries
-    cv2.line(origImg, (leftBound, 0), (leftBound, height), (255,0,0), 5) # Left Bound
-    cv2.line(origImg, (mid, 0), (mid, height), (0,255,0), 5) # Mid Line
-    cv2.line(origImg, (rightBound, 0), (rightBound, height), (0,0,255), 5) # Right Bound
+    # draw boundaries
+    # cv2.line(origImg, (leftBound, 0), (leftBound, height), (255,0,0), 5) # Left Bound
+    # cv2.line(origImg, (mid, 0), (mid, height), (0,255,0), 5) # Mid Line
+    # cv2.line(origImg, (rightBound, 0), (rightBound, height), (0,0,255), 5) # Right Bound
 
     side1Top = 800
     side1Bot = 1000
 
-    cv2.line(origImg, (0, side1Top), (width, side1Top), (255,0,0), 5) # Side 1 Top Bound
-    cv2.line(origImg, (0, side1Bot), (width, side1Bot), (0,0,255), 5) # Side 1 Bot Bound
+    # cv2.line(origImg, (0, side1Top), (width, side1Top), (255,0,0), 5) # Side 1 Top Bound
+    # cv2.line(origImg, (0, side1Bot), (width, side1Bot), (0,0,255), 5) # Side 1 Bot Bound
 
     side2Top = 1200
     side2Bot = 1400
 
-    cv2.line(origImg, (0, side2Top), (width, side2Top), (255,0,0), 5) # Side 1 Top Bound
-    cv2.line(origImg, (0, side2Bot), (width, side2Bot), (0,0,255), 5) # Side 1 Bot Bound
+    # cv2.line(origImg, (0, side2Top), (width, side2Top), (255,0,0), 5) # Side 1 Top Bound
+    # cv2.line(origImg, (0, side2Bot), (width, side2Bot), (0,0,255), 5) # Side 1 Bot Bound
 
     side1 = origImg[side1Top:side1Bot, leftBound:rightBound].copy()
     side2 = origImg[side2Top:side2Bot, leftBound:rightBound].copy()
@@ -78,28 +62,15 @@ def resizeImg(origImg):
     ratio = height / width
     
     # adjust width to image ratio
-    newWidth = int(layouts.row_size / ratio)
-    newHeight = int(newWidth * ratio)
+    newWidth = int(layouts.full_width)
+    newHeight = int(layouts.full_width * ratio)
 
-    # if image too big use other variable
-    if newWidth > layouts.img_width:
-        newHeight = int(layouts.img_width * ratio)
-        newWidth = int(newHeight / ratio)
+    # resize image to fit window
+    origImg = cv2.resize(origImg, (newWidth, newHeight), PIL.Image.ANTIALIAS)
 
-        # resize image to fit window
-        origImg = cv2.resize(origImg, (newWidth, newHeight), PIL.Image.ANTIALIAS)
-
-        # pad to fill height
-        padding = int((layouts.row_size - newHeight) / 2)
-        origImg = cv2.copyMakeBorder(origImg, padding, padding, 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
-
-    else:
-        # resize image to fit window
-        origImg = cv2.resize(origImg, (newWidth, newHeight), PIL.Image.ANTIALIAS)
-
-        # pad to fill width
-        padding = int((layouts.img_width - newWidth) / 2)
-        origImg = cv2.copyMakeBorder(origImg, 0, 0, 30, 30, cv2.BORDER_CONSTANT, value=(0, 0, 0))
+    # pad to fill height
+    padding = int((layouts.row_size - newHeight) / 2)
+    origImg = cv2.copyMakeBorder(origImg, padding, padding, 0, 0, cv2.BORDER_CONSTANT, value=(0, 0, 0))
 
     return origImg
 

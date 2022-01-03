@@ -8,7 +8,6 @@ import handle_config    # Programs Configuration
 
 def admin(event, window):
     window.find_element('-LIVE-MODE-').Update(button_color=sg.theme_button_color())
-    window.find_element('-TRANSFORM-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-BARK-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-CALIBRATE-LAYOUT-').Update(visible=False)
     window.find_element('-REJECT-LAYOUT-').Update(visible=False)
@@ -29,10 +28,10 @@ def admin(event, window):
         # default state to live mode
         program_state.set_live(True)
 
-        # turn transform button on
+        # turn live button on
         window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
-        window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
+        # window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
         window.find_element('-REJECT-LAYOUT-').Update(visible=True)
         window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=False)
         
@@ -44,7 +43,6 @@ def admin(event, window):
         # make sure admin modes are off
         program_state.set_live(False)
         program_state.set_thresh(False)
-        program_state.set_transform(False)
 
     # When the shut down button is pressed
     if event == '-SHUT-DOWN-':
@@ -57,17 +55,9 @@ def admin(event, window):
         # turn live button on
         window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
-        window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
+        # window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
         window.find_element('-REJECT-LAYOUT-').Update(visible=True)
         window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=False)
-
-    # When transform mode button is pressed
-    if event == '-TRANSFORM-MODE-':
-        program_state.set_transform(True)     # turn on transform view mode
-
-        # turn transform button on
-        window.find_element('-TRANSFORM-MODE-').Update(button_color=('black', 'yellow'))
-        window.find_element('-IO-LAYOUT-').Update(visible=True)
 
     # When bark thresh mode button is pressed
     if event == '-BARK-MODE-':

@@ -27,16 +27,12 @@ def main(window):
             cv2.imwrite('images/stored/' + text_input + '.png', frame)
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-TRANSFORM-MODE-', '-BARK-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-BARK-MODE-'):
             handle_events.admin(event, window)
 
         # board events
         if event in ('-WIDTH-70-', '-WIDTH-96-', '-WIDTH-120-', '-LENGTH--', '-LENGTH+-'):
             handle_events.board(event, window)
-
-        # transform events
-        if event in ('-CAM-TOP--', '-CAM-TOP+-', '-CAM-BOT--', '-CAM-BOT+-'):
-            handle_events.transform(event, window)
 
         # thresh events
         if event in ('-CAM-THRESH--', '-CAM-THRESH+-'):

@@ -80,10 +80,11 @@ admin_mode = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [
         sg.Button('LIVE VIEW', key='-LIVE-MODE-', size=(15, 2)),
-        sg.Button('TRANSFORM', key='-TRANSFORM-MODE-', size=(15, 2)),
+        sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
     ],
     [
-        sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
+        sg.Button('SIDE 1', key='-SIDE-1-MODE-', size=(15, 2)),
+        sg.Button('SIDE 2', key='-SIDE-2-MODE-', size=(15, 2))
     ],
     [
         sg.Button('CANCEL', key='-CANCEL-', size=(15, 2)),

@@ -86,7 +86,7 @@ def runProgram(window):
 
             window.find_element('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
-            if program_state.LIVE_MODE or program_state.SHOW_TRANSFORM or program_state.THRESH_MODE:
+            if program_state.LIVE_MODE or program_state.THRESH_MODE:
                 _, _ = board_logic.main(camera, 1, window, program_state.LIVE_MODE)
                 _, _ = board_logic.main(camera, 2, window, program_state.LIVE_MODE)
             else:
