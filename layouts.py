@@ -83,8 +83,7 @@ admin_mode = [
         sg.Button('BARK', key='-BARK-MODE-', size=(15, 2))
     ],
     [
-        sg.Button('SIDE 1', key='-SIDE-1-MODE-', size=(15, 2)),
-        sg.Button('SIDE 2', key='-SIDE-2-MODE-', size=(15, 2))
+        sg.Button('POSITION', key='-POSITION-MODE-', size=(15, 2))
     ],
     [
         sg.Button('CANCEL', key='-CANCEL-', size=(15, 2)),
@@ -99,7 +98,7 @@ admin_box1 = [
             [sg.Button('CALIBRATE', key='-CALIBRATE-', size=(15, 2))],
         ], key='-CALIBRATE-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([
-            [sg.Text('ALL BOXES', key='-ADMIN-BOX1-TEXT-')],
+            [sg.Text('THRESH', key='-ADMIN-BOX1-TEXT-')],
             [sg.Image(size=(col_width, 10))], # extra padding
             [
                 sg.Button('-', key='-CAM-THRESH--', size=(4, 2)),
@@ -107,10 +106,22 @@ admin_box1 = [
                 sg.Button('+', key='-CAM-THRESH+-', size=(4, 2))
             ]
         ], key='-CAM-THRESH-LAYOUT-', visible=False, element_justification='c'),
+        sg.Column([
+            [sg.Text('SIDE 1', key='-SIDE1-POSITION-TEXT-')],
+            [
+                sg.Button('<', key='-SIDE1-LEFT-', size=(4, 2)),
+                sg.Column([
+                    [sg.Button('^', key='-SIDE1-UP-', size=(4, 2))],
+                    [sg.Button('v', key='-SIDE1-DOWN-', size=(4, 2))]
+                ], element_justification='c'),
+                sg.Button('>', key='-SIDE1-RIGHT-', size=(4, 2))
+            ],
+        ], key='-SIDE1-POSITION-LAYOUT-', visible=False, element_justification='c'),
     ],
 ]
 
 admin_box2 = [
+    [sg.Image(size=(col_width, 1))], # to help center items
     [
         sg.Column([
             [sg.Text('BORDERLINE < %')],
@@ -126,6 +137,17 @@ admin_box2 = [
                 sg.Button('+', key='-REJECT+-', size=(4, 2))
             ],
         ], key='-REJECT-LAYOUT-', visible=False, element_justification='c'),
+        sg.Column([
+            [sg.Text('SIDE 2', key='-SIDE2-POSITION-TEXT-')],
+            [
+                sg.Button('<', key='-SIDE2-LEFT-', size=(4, 2)),
+                sg.Column([
+                    [sg.Button('^', key='-SIDE2-UP-', size=(4, 2))],
+                    [sg.Button('v', key='-SIDE2-DOWN-', size=(4, 2))]
+                ], element_justification='c'),
+                sg.Button('>', key='-SIDE2-RIGHT-', size=(4, 2))
+            ],
+        ], key='-SIDE2-POSITION-LAYOUT-', visible=False, element_justification='c'),
     ],
 ]
 

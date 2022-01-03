@@ -9,9 +9,12 @@ import handle_config    # Programs Configuration
 def admin(event, window):
     window.find_element('-LIVE-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-BARK-MODE-').Update(button_color=sg.theme_button_color())
+    window.find_element('-POSITION-MODE-').Update(button_color=sg.theme_button_color())
     window.find_element('-CALIBRATE-LAYOUT-').Update(visible=False)
     window.find_element('-REJECT-LAYOUT-').Update(visible=False)
     window.find_element('-CAM-THRESH-LAYOUT-').Update(visible=False)
+    window.find_element('-SIDE1-POSITION-LAYOUT-').Update(visible=False)
+    window.find_element('-SIDE2-POSITION-LAYOUT-').Update(visible=False)
     window.find_element('-IO-LAYOUT-').Update(visible=False)
     window.find_element('-ADMIN-BOX1-TEXT-').Update('THRESH')
     window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=True)
@@ -68,6 +71,16 @@ def admin(event, window):
         window.find_element('-CAM-THRESH-LAYOUT-').Update(visible=True)
         window.find_element('-IO-LAYOUT-').Update(visible=True)
 
+    # When position mode button is pressed
+    if event == '-POSITION-MODE-':
+        program_state.set_live(True)     # turn on live view mode
+
+        # turn side 1 button on
+        window.find_element('-POSITION-MODE-').Update(button_color=('black', 'yellow'))
+        window.find_element('-SIDE1-POSITION-LAYOUT-').Update(visible=True)
+        window.find_element('-SIDE2-POSITION-LAYOUT-').Update(visible=True)
+        window.find_element('-IO-LAYOUT-').Update(visible=True)
+
 def board(event, window):
     if event == '-WIDTH-70-': # 70
         handle_config.setValue('BOARD SETTINGS', 'BOARD_WIDTH', -52)
@@ -108,3 +121,28 @@ def thresh(event, window):
         handle_config.setValue('THRESH SETTINGS', 'CAM_THRESH', handle_config.CAM_THRESH + 5)
     
     window.find_element('-CAM-THRESH-').update(str(handle_config.CAM_THRESH))
+
+def position(event):
+    if event == '-SIDE1-LEFT-':
+        admin_settings.set_side1_box_lr(-5)
+
+    if event == '-SIDE1-RIGHT-':
+        admin_settings.set_side1_box_lr(5)
+
+    if event == '-SIDE1-UP-':
+        admin_settings.set_side1_box_ud(-5)
+
+    if event == '-SIDE1-DOWN-':
+        admin_settings.set_side1_box_ud(5)
+
+    if event == '-SIDE2-LEFT-':
+        admin_settings.set_side2_box_lr(-5)
+
+    if event == '-SIDE2-RIGHT-':
+        admin_settings.set_side2_box_lr(5)
+
+    if event == '-SIDE2-UP-':
+        admin_settings.set_side2_box_ud(-5)
+
+    if event == '-SIDE2-DOWN-':
+        admin_settings.set_side2_box_ud(5)

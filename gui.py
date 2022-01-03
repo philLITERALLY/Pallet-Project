@@ -27,8 +27,12 @@ def main(window):
             cv2.imwrite('images/stored/' + text_input + '.png', frame)
 
         # admin events
-        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-BARK-MODE-'):
+        if event in ('-SETUP-', '-CANCEL-', '-SHUT-DOWN-', '-LIVE-MODE-', '-BARK-MODE-', '-POSITION-MODE-'):
             handle_events.admin(event, window)
+
+        # board position events
+        if event in ('-SIDE1-LEFT-', '-SIDE1-RIGHT-', '-SIDE1-UP-', '-SIDE1-DOWN-', '-SIDE2-LEFT-', '-SIDE2-RIGHT-', '-SIDE2-UP-', '-SIDE2-DOWN-'):
+            handle_events.position(event)
 
         # board events
         if event in ('-WIDTH-70-', '-WIDTH-96-', '-WIDTH-120-', '-LENGTH--', '-LENGTH+-'):
