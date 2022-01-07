@@ -104,9 +104,9 @@ def runProgram(window):
                 aio.setOutput(8, 0, window)                                       # when stopped turn 8 off
 
 def main(window):
-    # try:
-    runProgram(window)
-    # except Exception as e:
-        # print('Exception: ', e)
+    try:
+        runProgram(window)
+    except Exception as e:
+        print('Exception: ', e)
 
     camera.release()
