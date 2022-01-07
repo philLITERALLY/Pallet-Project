@@ -15,7 +15,7 @@ import board_logic      # checks if board is pass or fail
 
 global camera
 
-manualTesting = True
+manualTesting = False
 
 if manualTesting:
     camera = camera_setup.StaticImage(0)   # setup static image
