@@ -3,14 +3,24 @@
 import image_handling
 import handle_config
 
+def calibrate(camera):
+    frame = camera.read()
+    _, _, side1CamWhite, side2CamWhite = image_handling.main(frame, True)
+
+    # Update variables
+    handle_config.setValue('REJECT SETTINGS', 'SIDE1_PERC', side1CamWhite)
+    handle_config.setValue('REJECT SETTINGS', 'SIDE2_PERC', side2CamWhite)
+
 def main(camera, side, window, ignoreflags):
     
     frame = camera.read()
 
     if side == 1:
         cam, _, camWhite, _ = image_handling.main(frame, ignoreflags)
+        camWhite = round(camWhite / handle_config.SIDE1_PERC * 100, 2)
     else:
         _, cam, _, camWhite = image_handling.main(frame, ignoreflags)
+        camWhite = round(camWhite / handle_config.SIDE2_PERC * 100, 2)
 
     window.find_element("-SIDE-{0}-".format(side)).update(data=cam)  # update img for side
 

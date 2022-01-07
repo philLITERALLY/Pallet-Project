@@ -34,7 +34,7 @@ def admin(event, window):
         # turn live button on
         window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
-        # window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
+        window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
         window.find_element('-REJECT-LAYOUT-').Update(visible=True)
         window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=False)
         
@@ -58,7 +58,7 @@ def admin(event, window):
         # turn live button on
         window.find_element('-LIVE-MODE-').Update(button_color=('black', 'yellow'))
         window.find_element('-IO-LAYOUT-').Update(visible=True)
-        # window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
+        window.find_element('-CALIBRATE-LAYOUT-').Update(visible=True)
         window.find_element('-REJECT-LAYOUT-').Update(visible=True)
         window.find_element('-ADMIN-BOX1-TEXT-').Update(visible=False)
 

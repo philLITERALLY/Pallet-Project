@@ -72,7 +72,7 @@ def runProgram(window):
                 aio.setOutput(7, 1, window)                                                         # set reject flag (OUT7 ON)
                 handle_count.plankFail(window)                                                      # update stats
 
-            elif side2White < side1White:          # if side 1 is better
+            elif side2White + 10 < side1White:          # if side 1 10% is better
                 aio.pulseOutput(3, 1, window)      # pulse flip side 2 (OUT3 ON)
                 handle_count.plankPass(window)     # update stats
 

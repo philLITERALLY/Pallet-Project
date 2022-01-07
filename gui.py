@@ -98,13 +98,7 @@ def main(window):
 
         # When calibrate button is pressed
         if event == '-CALIBRATE-':
-
-            side1White, _ = board_logic.main(worker_thread.camera, 1, window, True)
-            _, side2White = board_logic.main(worker_thread.camera, 2, window, True)
-
-            # Update variables
-            handle_config.setValue('REJECT SETTINGS', 'SIDE1_PERC', side1White)
-            handle_config.setValue('REJECT SETTINGS', 'SIDE2_PERC', side2White)
+            board_logic.calibrate(worker_thread.camera)
 
     # if user exits the window, then close the window and exit the GUI func
     window.close()
