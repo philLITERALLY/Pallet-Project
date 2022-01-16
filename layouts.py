@@ -96,6 +96,13 @@ admin_box1 = [
     [
         sg.Column([
             [sg.Button('CALIBRATE', key='-CALIBRATE-', size=(15, 2))],
+            [sg.Image(size=(col_width, 10))], # padding
+            [sg.Text('EDGE VARIANCE %')],
+            [
+                sg.Button('-', key='-EDGE--', size=(4, 2)),
+                sg.Text(str(handle_config.EDGE_VARIANCE) + '%', key='-EDGE-VARIANCE-LEVEL-'),
+                sg.Button('+', key='-EDGE+-', size=(4, 2)),
+            ],
         ], key='-CALIBRATE-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([
             [sg.Text('THRESH', key='-ADMIN-BOX1-TEXT-')],
@@ -124,17 +131,17 @@ admin_box2 = [
     [sg.Image(size=(col_width, 1))], # to help center items
     [
         sg.Column([
-            [sg.Text('BORDERLINE < %')],
-            [
-                sg.Button('-', key='-BORDERLINE--', size=(4, 2)),
-                sg.Text(str(handle_config.BORDERLINE_LEVEL) + '%', key='-BORDERLINE-LEVEL-'),
-                sg.Button('+', key='-BORDERLINE+-', size=(4, 2)),
-            ],
             [sg.Text('REJECT < %')],
             [
                 sg.Button('-', key='-REJECT--', size=(4, 2)),
                 sg.Text(str(handle_config.REJECT_LEVEL) + '%', key='-REJECT-LEVEL-'),
                 sg.Button('+', key='-REJECT+-', size=(4, 2))
+            ],
+            [sg.Text('BORDERLINE < %')],
+            [
+                sg.Button('-', key='-BORDERLINE--', size=(4, 2)),
+                sg.Text(str(handle_config.BORDERLINE_LEVEL) + '%', key='-BORDERLINE-LEVEL-'),
+                sg.Button('+', key='-BORDERLINE+-', size=(4, 2)),
             ],
         ], key='-REJECT-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([
@@ -174,7 +181,7 @@ main_layout = [
         sg.Image(key='-SIDE-1-', pad=(0, 0), size=(full_width, row_size)),
     ],
     [
-        sg.Text('\nSIDE 1: XX.XX% WHITE', key='-%-BARK-1-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
+        sg.Text('SIDE 1\nMID: XX.XX% || EDGES: XX.XX%', key='-%-BARK-1-', size=(60, 2), justification='center', pad=((0, 0), (0, 0))),
         sg.Text('\nXXX', key='-SIDE1-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
     ],
     [
@@ -182,7 +189,7 @@ main_layout = [
     ],
     [
         sg.Column([[
-            sg.Text('\nSIDE 2: XX.XX% WHITE', key='-%-BARK-2-', size=(60, 3), justification='center', pad=((0, 200), (0, 0))),
+            sg.Text('SIDE 2\nMID: XX.XX% || EDGES: XX.XX%', key='-%-BARK-2-', size=(60, 2), justification='center', pad=((0, 0), (0, 0))),
             sg.Text('\nXXX', key='-SIDE2-STATUS-', size=(30, 3), justification='center', background_color=('blue'))
         ]], key='-SIDE2-STATS-')
     ],

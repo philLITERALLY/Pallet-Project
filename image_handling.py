@@ -39,6 +39,40 @@ def whiteCalc(origImg):
     whitePixels = cv2.countNonZero(origImg)
     return round(whitePixels / totalPixels * 100, 2)
 
+# gather bark percentages for the three columns
+def analyseImg(origImg, threshImg):
+    height, width, _ = origImg.shape
+
+    totalPerc = whiteCalc(threshImg)
+
+    midWidth = int(width / 2)
+    quarter = int(height / 4)
+    threeQuarter = quarter * 3
+
+    columnA = threshImg[0:quarter, 0:width].copy()
+    columnB = threshImg[quarter:threeQuarter, 0:width].copy()
+    columnC = threshImg[threeQuarter:height, 0:width].copy()
+
+    columnAPerc = whiteCalc(columnA)
+    columnBPerc = whiteCalc(columnB)
+    columnCPerc = whiteCalc(columnC)
+
+    # if not thresh mode show columns
+    if not program_state.THRESH_MODE:
+        cv2.line(origImg, (0, quarter), (width, quarter), (0, 0, 255), 5) # 25% line
+        cv2.line(origImg, (0, threeQuarter), (width, threeQuarter), (0, 0, 255), 5) # 75% line
+
+        _, textHeight = cv2.getTextSize("A", cv2.FONT_HERSHEY_SIMPLEX, 3, 3)
+        quarterTxt = int(quarter / 2) + textHeight
+        midText = quarter * 2 + textHeight
+        threeQuarterTxt = threeQuarter + quarterTxt
+
+        cv2.putText(origImg, "A", (midWidth, quarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+        cv2.putText(origImg, "B", (midWidth, midText), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+        cv2.putText(origImg, "C", (midWidth, threeQuarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+
+    return totalPerc, columnAPerc, columnBPerc, columnCPerc
+
 # resize img to fit ui
 def resizeImg(origImg):    
     # heigh, width and ratio of cropped and rotated img
@@ -67,8 +101,8 @@ def main(origImg, ignoreFlags):
     threshedSide1Img = threshImg(side1)
     threshedSide2Img = threshImg(side2)
 
-    side1White = whiteCalc(threshedSide1Img)
-    side2White = whiteCalc(threshedSide2Img)
+    side1White, side1A, side1B, side1C = analyseImg(side1, threshedSide1Img)
+    side2White, side2A, side2B, side2C = analyseImg(side2, threshedSide2Img)
 
     # resize image
     side1 = resizeImg(side1)
@@ -81,4 +115,5 @@ def main(origImg, ignoreFlags):
     
     return cv2.imencode('.png', side1)[1].tobytes(), \
         cv2.imencode('.png', side2)[1].tobytes(), \
-        side1White, side2White
+        side1White, side1A, side1B, side1C, \
+        side2White, side2A, side2B, side2C

@@ -52,7 +52,7 @@ def runProgram(window):
 
             reset_view.main(window)                                            # clear images and plank stats
 
-            side1White, _ = board_logic.main(camera, 1, window, True)
+            side1Mid, side1Edges = board_logic.main(camera, 1, window, True)
 
             aio.pulseOutput(1, 1, window)                                        # pulse flip side 1 (OUT1 ON)
 
@@ -66,15 +66,15 @@ def runProgram(window):
                 if not boardInRH or not boardInLH:
                     continue
 
-            _, side2White = board_logic.main(camera, 2, window, True)
+            side2Mid, side2Edges = board_logic.main(camera, 2, window, True)
 
-            if side1White < handle_config.REJECT_LEVEL and side2White < handle_config.REJECT_LEVEL: # if neither side > 50% white then set reject
+            if side1Mid < handle_config.REJECT_LEVEL and side2Mid < handle_config.REJECT_LEVEL:     # if neither side > 90% white then set reject
                 aio.setOutput(7, 1, window)                                                         # set reject flag (OUT7 ON)
                 handle_count.plankFail(window)                                                      # update stats
 
-            elif side2White + 10 < side1White:          # if side 1 10% is better
-                aio.pulseOutput(3, 1, window)      # pulse flip side 2 (OUT3 ON)
-                handle_count.plankPass(window)     # update stats
+            elif side2Edges + handle_config.EDGE_VARIANCE < side1Edges:                             # if side 1 10% is better
+                aio.pulseOutput(3, 1, window)                                                       # pulse flip side 2 (OUT3 ON)
+                handle_count.plankPass(window)                                                      # update stats
 
             else:                                  # if side 2 is better
                 aio.pulseOutput(2, 0, window)      # pulse lift up side 2 (OUT2 OFF)
@@ -87,8 +87,8 @@ def runProgram(window):
             window.find_element('-START-').Update(button_color=sg.theme_button_color()) # turn start button off
 
             if program_state.LIVE_MODE or program_state.THRESH_MODE:
-                _, _ = board_logic.main(camera, 1, window, program_state.LIVE_MODE)
-                _, _ = board_logic.main(camera, 2, window, program_state.LIVE_MODE)
+                side1Mid, side1Edges = board_logic.main(camera, 1, window, program_state.LIVE_MODE)
+                side2Mid, side2Edges = board_logic.main(camera, 2, window, program_state.LIVE_MODE)
             else:
                 reset_view.main(window)
                 

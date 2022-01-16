@@ -59,13 +59,25 @@ def main(window):
             window.find_element('-START-').Update(button_color=sg.theme_button_color())
             program_state.set_run_mode(False)
 
-        # When the increase reject value is pressed
+        # When the increase edge variance value is pressed
+        if event == '-EDGE+-':
+            handle_config.setValue('REJECT SETTINGS', 'EDGE_VARIANCE', handle_config.EDGE_VARIANCE + 1)
+            rejectStr = str(handle_config.EDGE_VARIANCE) + '%'
+            window.find_element('-EDGE-VARIANCE-LEVEL-').update(rejectStr)
+
+        # When the decrease edge variance value is pressed
+        if event == '-EDGE--':
+            handle_config.setValue('REJECT SETTINGS', 'EDGE_VARIANCE', handle_config.EDGE_VARIANCE - 1)
+            rejectStr = str(handle_config.EDGE_VARIANCE) + '%'
+            window.find_element('-EDGE-VARIANCE-LEVEL-').update(rejectStr)
+
+        # When the increase borderline value is pressed
         if event == '-BORDERLINE+-':
             handle_config.setValue('REJECT SETTINGS', 'BORDERLINE_LEVEL', handle_config.BORDERLINE_LEVEL + 1)
             rejectStr = str(handle_config.BORDERLINE_LEVEL) + '%'
             window.find_element('-BORDERLINE-LEVEL-').update(rejectStr)
             
-        # When the decrease reject value is pressed
+        # When the decrease borderline value is pressed
         if event == '-BORDERLINE--':
             handle_config.setValue('REJECT SETTINGS', 'BORDERLINE_LEVEL', handle_config.BORDERLINE_LEVEL - 1)
             rejectStr = str(handle_config.BORDERLINE_LEVEL) + '%'

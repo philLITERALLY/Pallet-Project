@@ -30,8 +30,9 @@ def init():
     global SIDE2_TOP, SIDE2_LEFT, SIDE2_HEIGHT, SIDE2_WIDTH
 
     # Rejection settings
-    global BORDERLINE_LEVEL, REJECT_LEVEL
-    global SIDE1_PERC, SIDE2_PERC
+    global BORDERLINE_LEVEL, REJECT_LEVEL, EDGE_VARIANCE
+    global SIDE1_PERC, SIDE1A_PERC, SIDE1B_PERC, SIDE1C_PERC
+    global SIDE2_PERC, SIDE2A_PERC, SIDE2B_PERC, SIDE2C_PERC
 
     # Thresh settings
     global CAM_THRESH
@@ -70,8 +71,15 @@ def init():
     # Get Rejection Settings
     BORDERLINE_LEVEL = config.getint('REJECT SETTINGS', 'BORDERLINE_LEVEL')
     REJECT_LEVEL = config.getint('REJECT SETTINGS', 'REJECT_LEVEL')
+    EDGE_VARIANCE = config.getint('REJECT SETTINGS', 'EDGE_VARIANCE')
     SIDE1_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1_PERC')
+    SIDE1A_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1A_PERC')
+    SIDE1B_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1B_PERC')
+    SIDE1C_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1C_PERC')
     SIDE2_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2_PERC')
+    SIDE2A_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2A_PERC')
+    SIDE2B_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2B_PERC')
+    SIDE2C_PERC = config.getfloat('REJECT SETTINGS', 'SIDE2C_PERC')
 
     # Get Thresh Settings
     CAM_THRESH = config.getint('THRESH SETTINGS', 'CAM_THRESH')
