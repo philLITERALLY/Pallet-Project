@@ -97,11 +97,11 @@ admin_box1 = [
         sg.Column([
             [sg.Button('CALIBRATE', key='-CALIBRATE-', size=(15, 2))],
             [sg.Image(size=(col_width, 10))], # padding
-            [sg.Text('EDGE VARIANCE %')],
+            [sg.Text('MID COL SIZE %')],
             [
-                sg.Button('-', key='-EDGE--', size=(4, 2)),
-                sg.Text(str(handle_config.EDGE_VARIANCE) + '%', key='-EDGE-VARIANCE-LEVEL-'),
-                sg.Button('+', key='-EDGE+-', size=(4, 2)),
+                sg.Button('-', key='-MID-SIZE--', size=(4, 2)),
+                sg.Text(str(handle_config.MID_SIZE) + '%', key='-MID-SIZE-'),
+                sg.Button('+', key='-MID-SIZE+-', size=(4, 2)),
             ],
         ], key='-CALIBRATE-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([
@@ -137,11 +137,11 @@ admin_box2 = [
                 sg.Text(str(handle_config.REJECT_LEVEL) + '%', key='-REJECT-LEVEL-'),
                 sg.Button('+', key='-REJECT+-', size=(4, 2))
             ],
-            [sg.Text('BORDERLINE < %')],
+            [sg.Text('EDGE VARIANCE %')],
             [
-                sg.Button('-', key='-BORDERLINE--', size=(4, 2)),
-                sg.Text(str(handle_config.BORDERLINE_LEVEL) + '%', key='-BORDERLINE-LEVEL-'),
-                sg.Button('+', key='-BORDERLINE+-', size=(4, 2)),
+                sg.Button('-', key='-EDGE--', size=(4, 2)),
+                sg.Text(str(handle_config.EDGE_VARIANCE) + '%', key='-EDGE-VARIANCE-LEVEL-'),
+                sg.Button('+', key='-EDGE+-', size=(4, 2)),
             ],
         ], key='-REJECT-LAYOUT-', visible=False, element_justification='c'),
         sg.Column([

@@ -30,7 +30,7 @@ def init():
     global SIDE2_TOP, SIDE2_LEFT, SIDE2_HEIGHT, SIDE2_WIDTH
 
     # Rejection settings
-    global BORDERLINE_LEVEL, REJECT_LEVEL, EDGE_VARIANCE
+    global REJECT_LEVEL, EDGE_VARIANCE, MID_SIZE
     global SIDE1_PERC, SIDE1A_PERC, SIDE1B_PERC, SIDE1C_PERC
     global SIDE2_PERC, SIDE2A_PERC, SIDE2B_PERC, SIDE2C_PERC
 
@@ -69,9 +69,11 @@ def init():
     SIDE2_WIDTH = config.getint('BOARD SETTINGS', 'SIDE2_WIDTH')
 
     # Get Rejection Settings
-    BORDERLINE_LEVEL = config.getint('REJECT SETTINGS', 'BORDERLINE_LEVEL')
     REJECT_LEVEL = config.getint('REJECT SETTINGS', 'REJECT_LEVEL')
     EDGE_VARIANCE = config.getint('REJECT SETTINGS', 'EDGE_VARIANCE')
+    MID_SIZE = config.getint('REJECT SETTINGS', 'MID_SIZE')
+
+    # Get Percentage Ratios
     SIDE1_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1_PERC')
     SIDE1A_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1A_PERC')
     SIDE1B_PERC = config.getfloat('REJECT SETTINGS', 'SIDE1B_PERC')

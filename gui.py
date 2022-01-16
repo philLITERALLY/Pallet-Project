@@ -62,26 +62,26 @@ def main(window):
         # When the increase edge variance value is pressed
         if event == '-EDGE+-':
             handle_config.setValue('REJECT SETTINGS', 'EDGE_VARIANCE', handle_config.EDGE_VARIANCE + 1)
-            rejectStr = str(handle_config.EDGE_VARIANCE) + '%'
-            window.find_element('-EDGE-VARIANCE-LEVEL-').update(rejectStr)
+            edgeStr = str(handle_config.EDGE_VARIANCE) + '%'
+            window.find_element('-EDGE-VARIANCE-LEVEL-').update(edgeStr)
 
         # When the decrease edge variance value is pressed
         if event == '-EDGE--':
             handle_config.setValue('REJECT SETTINGS', 'EDGE_VARIANCE', handle_config.EDGE_VARIANCE - 1)
-            rejectStr = str(handle_config.EDGE_VARIANCE) + '%'
-            window.find_element('-EDGE-VARIANCE-LEVEL-').update(rejectStr)
+            edgeStr = str(handle_config.EDGE_VARIANCE) + '%'
+            window.find_element('-EDGE-VARIANCE-LEVEL-').update(edgeStr)
 
-        # When the increase borderline value is pressed
-        if event == '-BORDERLINE+-':
-            handle_config.setValue('REJECT SETTINGS', 'BORDERLINE_LEVEL', handle_config.BORDERLINE_LEVEL + 1)
-            rejectStr = str(handle_config.BORDERLINE_LEVEL) + '%'
-            window.find_element('-BORDERLINE-LEVEL-').update(rejectStr)
+        # When the increase mid size value is pressed
+        if event == '-MID-SIZE+-':
+            handle_config.setValue('REJECT SETTINGS', 'MID_SIZE', handle_config.MID_SIZE + 1)
+            midSizeStr = str(handle_config.MID_SIZE) + '%'
+            window.find_element('-MID-SIZE-').update(midSizeStr)
             
-        # When the decrease borderline value is pressed
-        if event == '-BORDERLINE--':
-            handle_config.setValue('REJECT SETTINGS', 'BORDERLINE_LEVEL', handle_config.BORDERLINE_LEVEL - 1)
-            rejectStr = str(handle_config.BORDERLINE_LEVEL) + '%'
-            window.find_element('-BORDERLINE-LEVEL-').update(rejectStr)
+        # When the decrease mid size value is pressed
+        if event == '-MID-SIZE--':
+            handle_config.setValue('REJECT SETTINGS', 'MID_SIZE', handle_config.MID_SIZE - 1)
+            midSizeStr = str(handle_config.MID_SIZE) + '%'
+            window.find_element('-MID-SIZE-').update(midSizeStr)
 
         # When the increase reject value is pressed
         if event == '-REJECT+-':

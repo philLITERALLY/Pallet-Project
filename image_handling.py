@@ -46,12 +46,13 @@ def analyseImg(origImg, threshImg):
     totalPerc = whiteCalc(threshImg)
 
     midWidth = int(width / 2)
-    quarter = int(height / 4)
-    threeQuarter = quarter * 3
+    midHeight = int(height / 100 * handle_config.MID_SIZE)
+    firstCol = int((height - midHeight) / 2)
+    thirdCol = firstCol + midHeight
 
-    columnA = threshImg[0:quarter, 0:width].copy()
-    columnB = threshImg[quarter:threeQuarter, 0:width].copy()
-    columnC = threshImg[threeQuarter:height, 0:width].copy()
+    columnA = threshImg[0:firstCol, 0:width].copy()
+    columnB = threshImg[firstCol:thirdCol, 0:width].copy()
+    columnC = threshImg[thirdCol:height, 0:width].copy()
 
     columnAPerc = whiteCalc(columnA)
     columnBPerc = whiteCalc(columnB)
@@ -59,17 +60,8 @@ def analyseImg(origImg, threshImg):
 
     # if not thresh mode show columns
     if not program_state.THRESH_MODE:
-        cv2.line(origImg, (0, quarter), (width, quarter), (0, 0, 255), 5) # 25% line
-        cv2.line(origImg, (0, threeQuarter), (width, threeQuarter), (0, 0, 255), 5) # 75% line
-
-        _, textHeight = cv2.getTextSize("A", cv2.FONT_HERSHEY_SIMPLEX, 3, 3)
-        quarterTxt = int(quarter / 2) + textHeight
-        midText = quarter * 2 + textHeight
-        threeQuarterTxt = threeQuarter + quarterTxt
-
-        cv2.putText(origImg, "A", (midWidth, quarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
-        cv2.putText(origImg, "B", (midWidth, midText), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
-        cv2.putText(origImg, "C", (midWidth, threeQuarterTxt), cv2.FONT_HERSHEY_SIMPLEX, 3, (0, 0, 255), 3)
+        cv2.line(origImg, (0, firstCol), (width, firstCol), (0, 0, 255), 5) # 25% line
+        cv2.line(origImg, (0, thirdCol), (width, thirdCol), (0, 0, 255), 5) # 75% line
 
     return totalPerc, columnAPerc, columnBPerc, columnCPerc
 

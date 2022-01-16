@@ -40,8 +40,6 @@ def main(camera, side, window, ignoreflags):
 
     if colBWhite < handle_config.REJECT_LEVEL:                                                              # if side is a reject show fail
         window.find_element("-SIDE{0}-STATUS-".format(side)).update('\nFAIL', background_color=("red"))
-    elif colBWhite < handle_config.BORDERLINE_LEVEL:                                                        # if side is borderline show warning
-        window.find_element("-SIDE{0}-STATUS-".format(side)).update('\nBORDERLINE', background_color=("orange"))
     else:                                                                                                   # if side is good show pass
         window.find_element('-SIDE{0}-STATUS-'.format(side)).update('\nPASS', background_color=('green'))
     
