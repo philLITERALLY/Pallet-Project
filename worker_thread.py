@@ -76,11 +76,21 @@ def runProgram(window):
                 aio.pulseOutput(3, 1, window)                                                       # pulse flip side 2 (OUT3 ON)
                 handle_count.plankPass(window)                                                      # update stats
 
-            else:                                  # if side 2 is better
-                aio.pulseOutput(2, 0, window)      # pulse lift up side 2 (OUT2 OFF)
-                handle_count.plankPass(window)     # update stats
+            else:                                                       # if side 2 is better
+                aio.pulseOutput(2, 0, window)                           # pulse lift up side 2 (OUT2 OFF)
+                handle_count.plankPass(window)                          # update stats
 
-            time.sleep(handle_config.AFTER_GRAB)                               # wait after image grab
+                if manualTesting:
+                    boardOut = waitKey()                                # wait for board to leave
+                    if not boardOut:
+                        continue
+                else:
+                    boardOutRH = aio.waitInputState(2, False, window)   # wait for no board side 2 RH
+                    boardOutLH = aio.waitInputState(3, False, window)   # wait for no board side 2 LH
+                    if not boardOutRH or not boardOutLH:
+                        continue
+
+            time.sleep(handle_config.AFTER_GRAB)                        # wait after image grab
 
         else:
 
