@@ -77,7 +77,7 @@ def runProgram(window):
                 handle_count.plankPass(window)                                                      # update stats
 
             else:                                                       # if side 2 is better
-                aio.pulseOutput(2, 0, window)                           # pulse lift up side 2 (OUT2 OFF)
+                aio.setOutput(2, 0, window)                             # set lift up side 2 (OUT2 OFF)
                 handle_count.plankPass(window)                          # update stats
 
                 if manualTesting:
@@ -89,6 +89,8 @@ def runProgram(window):
                     boardOutLH = aio.waitInputState(3, False, window)   # wait for no board side 2 LH
                     if not boardOutRH or not boardOutLH:
                         continue
+
+                aio.setOutput(2, 1, window)                             # set lift down side 2 (OUT2 ON)
 
             time.sleep(handle_config.AFTER_GRAB)                        # wait after image grab
 
